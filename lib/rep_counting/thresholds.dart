@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+
+import 'movement_phase.dart';
 
 class Thresholds {
   /// Internal angle of the hip, knee, and ankle
