@@ -19,6 +19,8 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
+  AutomaticRepCounter _repCounter =
+      AutomaticRepCounter(exerciseType: ExerciseType.squat);
 
   @override
   void dispose() async {
@@ -29,6 +31,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
 
   @override
   Widget build(BuildContext context) {
+    int reps = _repCounter.reps; // TODO do something with this
     return CameraView(
       title: 'Pose Detector',
       customPaint: _customPaint,
@@ -57,6 +60,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       // TODO: set _customPaint to draw landmarks on top of image
       _customPaint = null;
     }
+    _repCounter.updateRepCount(poses);
     _isBusy = false;
     if (mounted) {
       setState(() {});
