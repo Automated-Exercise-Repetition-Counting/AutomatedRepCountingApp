@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit_example/rep_counting/automatic_rep_counter.dart';
+import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'camera_view.dart';
@@ -61,6 +62,13 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Text(
+                "Movement Phase: ${_repCounter.avgMovementPhase == MovementPhase.top ? "Top" : "Bottom"}",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),

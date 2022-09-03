@@ -8,7 +8,7 @@ import './exercise_type.dart';
 import './movement_phase.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
-  static const windowSize = 10;
+  static const windowSize = 5;
 
   final ExerciseType exerciseType;
   final Queue<MovementPhase> prevMovementPhase = Queue<MovementPhase>();
@@ -20,8 +20,9 @@ class AutomaticRepCounter extends ChangeNotifier {
   AutomaticRepCounter({required this.exerciseType});
 
   int get reps => _reps;
+  MovementPhase get avgMovementPhase => _avgMovementPhase;
 
-  void updateRepCount(List<Pose> poses) async {
+  void updateRepCount(List<Pose> poses) {
     for (Pose pose in poses) {
       try {
         MovementPhase latestPhase = _threshold(pose);
