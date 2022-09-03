@@ -1,20 +1,14 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
+import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'exercise_type.dart';
 import 'movement_phase.dart';
-import 'state_machine_result.dart';
 import 'state_machines/squat_state_machine.dart';
 import 'thresholds.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
-  static const _windowSize = 3;
-
   final ExerciseType exerciseType;
-  final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
-  final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
   late final SquatStateMachine _exerciseStateMachine;
 
   int _reps = 0;
@@ -42,18 +36,8 @@ class AutomaticRepCounter extends ChangeNotifier {
   }
 
   void _changePhaseAndCountReps(MovementPhase latestPhase) {
-    _prevMovementPhase.addLast(latestPhase);
-
-    if (_prevMovementPhase.length <= _windowSize) {
-      // insufficient values to safely detect movement phase. return.
-      return;
-    }
-
-    _prevMovementPhase.removeFirst();
-
-    MovementPhase newAvgMvmtPhase = _getAvgMovementPhase();
     StateMachineResult result =
-        _exerciseStateMachine.movementPhaseStateMachine(newAvgMvmtPhase);
+        _exerciseStateMachine.getStateMachineResult(latestPhase);
 
     if (result.hasChangedPhase) {
       if (result.hasCompletedRep) {
@@ -61,18 +45,6 @@ class AutomaticRepCounter extends ChangeNotifier {
       }
       notifyListeners();
     }
-  }
-
-  MovementPhase _getAvgMovementPhase() {
-    _movementCounts.clear();
-    _prevMovementPhase.forEach((phase) {
-      _movementCounts[phase] = _movementCounts[phase] ?? 0 + 1;
-    });
-
-    // return the movement phase with the max count
-    return _movementCounts.entries
-        .reduce((e1, e2) => e1.value > e2.value ? e1 : e2)
-        .key;
   }
 
   // TODO: make better exception function
