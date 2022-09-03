@@ -4,14 +4,15 @@ import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class Thresholds {
+  /// Internal angle of the hip, knee, and ankle
+  static const num hipKneeAnkleAngleInternalThreshold =
+      1.91986; // (180 - 70) * (pi / 180);
+
   /// Returns the movement phase of the current frame based on the detections.
   static MovementPhase thresholdSquat(Pose pose) {
     List<num> kneeAngles = _squatAngles(pose);
     num leftKneeAngle = kneeAngles[0];
     num rightKneeAngle = kneeAngles[1];
-
-    // internal angle of the left hip, left knee, and left ankle
-    num hipKneeAnkleAngleInternalThreshold = 110 * pi / 180; // 180-70 degrees
 
     if (leftKneeAngle < hipKneeAnkleAngleInternalThreshold &&
         rightKneeAngle < hipKneeAnkleAngleInternalThreshold) {
