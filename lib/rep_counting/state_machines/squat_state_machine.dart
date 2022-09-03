@@ -6,7 +6,8 @@ import '../movement_phase.dart';
 class SquatStateMachine extends ExerciseStateMachine {
   SquatStateMachine() : super(SquatPhase.top);
 
-  StateMachineResult _movementPhaseStateMachine(
+  @override
+  StateMachineResult movementPhaseStateMachine(
       MovementPhase newAvgMovementPhase) {
     bool hasCompletedRep = false;
     bool hasChangedPhase = false;

@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
 
@@ -13,7 +14,8 @@ abstract class ExerciseStateMachine {
 
   /// A state machine that returns true if a rep has been completed.
   /// Returns false if no rep has been completed.
-  StateMachineResult _movementPhaseStateMachine(
+  @protected
+  StateMachineResult movementPhaseStateMachine(
       MovementPhase newAvgMovementPhase);
 
   StateMachineResult getStateMachineResult(MovementPhase latestPhase) {
@@ -27,7 +29,7 @@ abstract class ExerciseStateMachine {
     _prevMovementPhase.removeFirst();
 
     MovementPhase newAvgMvmtPhase = _getAvgMovementPhase();
-    return _movementPhaseStateMachine(newAvgMvmtPhase);
+    return movementPhaseStateMachine(newAvgMvmtPhase);
   }
 
   MovementPhase _getAvgMovementPhase() {
