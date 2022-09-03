@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
 import 'package:google_ml_kit_example/rep_counting/state_machines.dart';
 import 'package:google_ml_kit_example/rep_counting/thresholds.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -19,7 +20,6 @@ class AutomaticRepCounter extends ChangeNotifier {
   int _reps = 0;
   AutomaticRepCounter({required this.exerciseType}) {
     _exerciseStateMachine = ExerciseStateMachine(
-      notifyListeners: notifyListeners,
       exerciseType: exerciseType,
     );
   }
@@ -54,7 +54,15 @@ class AutomaticRepCounter extends ChangeNotifier {
     _prevMovementPhase.removeFirst();
 
     MovementPhase newAvgMvmtPhase = _getAvgMovementPhase();
-    _exerciseStateMachine.movementPhaseStateMachine(newAvgMvmtPhase);
+    StateMachineResult result =
+        _exerciseStateMachine.movementPhaseStateMachine(newAvgMvmtPhase);
+
+    if (result.hasChangedPhase) {
+      if (result.hasCompletedRep) {
+        _reps++;
+      }
+      notifyListeners();
+    }
   }
 
   MovementPhase _getAvgMovementPhase() {
