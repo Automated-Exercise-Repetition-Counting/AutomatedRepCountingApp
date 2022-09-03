@@ -6,7 +6,7 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'exercise_type.dart';
 import 'movement_phase.dart';
 import 'state_machine_result.dart';
-import 'state_machines.dart';
+import 'state_machines/squat_state_machine.dart';
 import 'thresholds.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
@@ -15,13 +15,11 @@ class AutomaticRepCounter extends ChangeNotifier {
   final ExerciseType exerciseType;
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
-  late final ExerciseStateMachine _exerciseStateMachine;
+  late final SquatStateMachine _exerciseStateMachine;
 
   int _reps = 0;
   AutomaticRepCounter({required this.exerciseType}) {
-    _exerciseStateMachine = ExerciseStateMachine(
-      exerciseType: exerciseType,
-    );
+    _exerciseStateMachine = SquatStateMachine();
   }
 
   int get reps => _reps;
