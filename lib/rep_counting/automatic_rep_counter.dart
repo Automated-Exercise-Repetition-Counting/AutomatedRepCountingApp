@@ -5,7 +5,7 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'exercise_type.dart';
 import 'movement_phase.dart';
 import 'state_machines/squat_state_machine.dart';
-import 'thresholds.dart';
+import 'thresholds/thresholds.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
   final ExerciseType exerciseType;
