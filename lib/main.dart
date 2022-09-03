@@ -17,13 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Skeleton App',
+      title: 'Flutter App',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: const Color.fromRGBO(81, 191, 192, 1),
               secondary: const Color.fromRGBO(81, 191, 192, 0.3)),
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: const HomePage(title: 'Flutter Skeleton App Page'),
+      home: const HomePage(title: 'Home'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
