@@ -20,12 +20,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Home(
+        exerciseType: ExerciseType.squat,
+      ),
     );
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  final ExerciseType exerciseType;
+  Home({required this.exerciseType});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late final AutomaticRepCounter _repCounter;
+
+  @override
+  void initState() {
+    super.initState();
+    _repCounter = AutomaticRepCounter(exerciseType: widget.exerciseType);
+    _repCounter.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,13 +65,13 @@ class Home extends StatelessWidget {
                   ExpansionTile(
                     title: const Text('Vision APIs'),
                     children: [
-                      CustomCard(
-                          'Pose Detection',
-                          PoseDetectorView(
-                              repCounter: AutomaticRepCounter(
-                                  exerciseType: ExerciseType.squat))),
+                      CustomCard('Pose Detection',
+                          PoseDetectorView(repCounter: _repCounter)),
                     ],
                   ),
+                  // Gets information from the repcounter
+                  Text("Reps: ${_repCounter.reps}"),
+                  Text("Phase: ${_repCounter.phase}"),
                 ],
               ),
             ),
