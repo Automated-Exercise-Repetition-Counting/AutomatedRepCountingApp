@@ -1,5 +1,5 @@
-name: google_ml_kit_example
-description: Demonstrates how to use the google_ml_kit plugin.
+name: automated_repetition_counting
+description: A simple workout logging app with automatic repetition counting
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -25,5 +25,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/ml/
+  # assets:
