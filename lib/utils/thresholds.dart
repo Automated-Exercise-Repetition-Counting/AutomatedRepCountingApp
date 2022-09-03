@@ -5,8 +5,9 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class Thresholds {
   /// Internal angle of the hip, knee, and ankle
-  static const num hipKneeAnkleAngleInternalThreshold =
+  static const num _hipKneeAnkleAngleInternalThreshold =
       1.91986; // (180 - 70) * (pi / 180);
+  static const double _minConfidence = 0.5;
 
   /// Returns the movement phase of the current frame based on the detections.
   static MovementPhase thresholdSquat(Pose pose) {
@@ -14,8 +15,8 @@ class Thresholds {
     num leftKneeAngle = kneeAngles[0];
     num rightKneeAngle = kneeAngles[1];
 
-    if (leftKneeAngle < hipKneeAnkleAngleInternalThreshold &&
-        rightKneeAngle < hipKneeAnkleAngleInternalThreshold) {
+    if (leftKneeAngle < _hipKneeAnkleAngleInternalThreshold &&
+        rightKneeAngle < _hipKneeAnkleAngleInternalThreshold) {
       return MovementPhase.bottom;
     } else {
       return MovementPhase.top;
@@ -30,12 +31,23 @@ class Thresholds {
       throw Exception('No pose detected');
     }
     try {
-      PoseLandmark leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
-      PoseLandmark rightKnee = pose.landmarks[PoseLandmarkType.rightKnee]!;
-      PoseLandmark leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
-      PoseLandmark rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle]!;
-      PoseLandmark leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
-      PoseLandmark rightHip = pose.landmarks[PoseLandmarkType.rightHip]!;
+      PoseLandmark leftKnee =
+          pose.landmarks[PoseLandmarkType.leftKnee] as PoseLandmark;
+      PoseLandmark rightKnee =
+          pose.landmarks[PoseLandmarkType.rightKnee] as PoseLandmark;
+      PoseLandmark leftAnkle =
+          pose.landmarks[PoseLandmarkType.leftAnkle] as PoseLandmark;
+      PoseLandmark rightAnkle =
+          pose.landmarks[PoseLandmarkType.rightAnkle] as PoseLandmark;
+      PoseLandmark leftHip =
+          pose.landmarks[PoseLandmarkType.leftHip] as PoseLandmark;
+      PoseLandmark rightHip =
+          pose.landmarks[PoseLandmarkType.rightHip] as PoseLandmark;
+
+      if (!_confidenceCheck(
+          [leftKnee, rightKnee, leftAnkle, rightAnkle, leftHip, rightHip])) {
+        throw StateError('Pose confidence too low');
+      }
       // Calculate the angle between the left hip, left knee, and left ankle
       double leftHipKneeAnkleAngle =
           _lawOfCosines(leftKnee, leftHip, leftAnkle);
@@ -44,9 +56,19 @@ class Thresholds {
       double rightHipKneeAnkleAngle =
           _lawOfCosines(rightKnee, rightHip, rightAnkle);
       return [leftHipKneeAnkleAngle, rightHipKneeAnkleAngle];
-    } catch (NullThrownError) {
+    } on TypeError {
       throw StateError('Insufficient pose information');
     }
+  }
+
+  /// Checks the confidence is above the [_minConfidence] threshold
+  static bool _confidenceCheck(List<PoseLandmark> landmarks) {
+    for (PoseLandmark landmark in landmarks) {
+      if (landmark.likelihood < _minConfidence) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Calculates the angle between three points,
