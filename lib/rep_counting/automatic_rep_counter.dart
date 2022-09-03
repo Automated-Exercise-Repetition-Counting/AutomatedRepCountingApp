@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:automated_repetition_counting/utils/thresholds.dart';
+import 'package:google_ml_kit_example/utils/thresholds.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import './exercise_type.dart';

@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/rep_counting/automatic_rep_counter.dart';
+import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
+import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'camera_view.dart';

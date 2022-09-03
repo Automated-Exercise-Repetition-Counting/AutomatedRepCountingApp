@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:automated_repetition_counting/rep_counting/movement_phase.dart';
-import 'package:automated_repetition_counting/rep_counting/movenet_keypoints.dart';
+import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
+import 'package:google_ml_kit_example/rep_counting/movenet_keypoints.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class Thresholds {
