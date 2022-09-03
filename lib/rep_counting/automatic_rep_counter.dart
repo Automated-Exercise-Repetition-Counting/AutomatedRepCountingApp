@@ -52,31 +52,15 @@ class AutomaticRepCounter extends ChangeNotifier {
   }
 
   MovementPhase _getAvgMovementPhase() {
-    int topCount = 0;
-    int bottomCount = 0;
-    int intermediateCount = 0;
+    movementCounts.clear();
+    prevMovementPhase.forEach((element) {
+      movementCounts[element] = movementCounts[element] ?? 0 + 1;
+    });
 
-    for (MovementPhase phase in prevMovementPhase) {
-      switch (phase) {
-        case MovementPhase.top:
-          topCount++;
-          break;
-        case MovementPhase.bottom:
-          bottomCount++;
-          break;
-        case MovementPhase.intermediate:
-          intermediateCount++;
-          break;
-      }
-    }
-
-    if (topCount > bottomCount && topCount > intermediateCount) {
-      return MovementPhase.top;
-    } else if (bottomCount > topCount && bottomCount > intermediateCount) {
-      return MovementPhase.bottom;
-    } else {
-      return MovementPhase.intermediate;
-    }
+    // return the movement phase with the max count
+    return movementCounts.entries
+        .reduce((e1, e2) => e1.value > e2.value ? e1 : e2)
+        .key;
   }
 
   void _movementPhaseStateMachine(MovementPhase newAvgMovementPhase) {
