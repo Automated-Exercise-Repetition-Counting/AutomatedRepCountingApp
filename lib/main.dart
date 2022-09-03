@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/rep_counting/automatic_rep_counter.dart';
+import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
 
 import 'vision_detector_views/pose_detector_view.dart';
 
@@ -42,7 +44,11 @@ class Home extends StatelessWidget {
                   ExpansionTile(
                     title: const Text('Vision APIs'),
                     children: [
-                      CustomCard('Pose Detection', PoseDetectorView()),
+                      CustomCard(
+                          'Pose Detection',
+                          PoseDetectorView(
+                              repCounter: AutomaticRepCounter(
+                                  exerciseType: ExerciseType.squat))),
                     ],
                   ),
                 ],
