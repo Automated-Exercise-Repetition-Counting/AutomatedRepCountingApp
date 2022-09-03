@@ -23,8 +23,10 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   void updateRepCount(List<Pose> poses) async {
     for (Pose pose in poses) {
-      MovementPhase latestPhase = _threshold(pose);
-      _changePhaseAndCountReps(latestPhase);
+      try {
+        MovementPhase latestPhase = _threshold(pose);
+        _changePhaseAndCountReps(latestPhase);
+      } on StateError {} // do nothing on StateError
     }
   }
 

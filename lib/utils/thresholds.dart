@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
-import 'package:google_ml_kit_example/rep_counting/movenet_keypoints.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class Thresholds {
@@ -24,17 +23,18 @@ class Thresholds {
 
   /// Returns the angles of the left and right knees,
   /// in the format [leftKneeAngle, rightKneeAngle].
+  /// Throws an error if the pose is invalid.
   static List<double> _squatAngles(Pose pose) {
     if (pose.landmarks.isEmpty) {
       throw Exception('No pose detected');
     }
     try {
-      PoseLandmark leftKnee = pose.landmarks[MovenetKeypoints.leftKnee]!;
-      PoseLandmark rightKnee = pose.landmarks[MovenetKeypoints.rightKnee]!;
-      PoseLandmark leftAnkle = pose.landmarks[MovenetKeypoints.leftAnkle]!;
-      PoseLandmark rightAnkle = pose.landmarks[MovenetKeypoints.rightAnkle]!;
-      PoseLandmark leftHip = pose.landmarks[MovenetKeypoints.leftHip]!;
-      PoseLandmark rightHip = pose.landmarks[MovenetKeypoints.rightHip]!;
+      PoseLandmark leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
+      PoseLandmark rightKnee = pose.landmarks[PoseLandmarkType.rightKnee]!;
+      PoseLandmark leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
+      PoseLandmark rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle]!;
+      PoseLandmark leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
+      PoseLandmark rightHip = pose.landmarks[PoseLandmarkType.rightHip]!;
       // Calculate the angle between the left hip, left knee, and left ankle
       double leftHipKneeAnkleAngle =
           _lawOfCosines(leftKnee, leftHip, leftAnkle);
@@ -44,7 +44,7 @@ class Thresholds {
           _lawOfCosines(rightKnee, rightHip, rightAnkle);
       return [leftHipKneeAnkleAngle, rightHipKneeAnkleAngle];
     } catch (NullThrownError) {
-      throw Exception('Unable to calculate pose location');
+      throw StateError('Insufficient pose information');
     }
   }
 
