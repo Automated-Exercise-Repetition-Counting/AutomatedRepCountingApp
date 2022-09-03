@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+import 'rep_counting_page.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class Exercise {
+  String name;
+  String asset;
+
+  Exercise(this.name, this.asset);
+}
+
+class HomePageState extends State<HomePage> {
+  final CarouselController _controller = CarouselController();
+  final List<String> _exercises = ["Squats", "Lunges", "Push-ups"];
+  final List<Color> _exerciseColors = [
+    const Color.fromRGBO(81, 191, 192, 1),
+    const Color.fromRGBO(248, 85, 66, 1),
+    const Color.fromRGBO(254, 196, 73, 1)
+  ];
+  var _reps = 1;
+  int _chosenExercise = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: Text(
+              'Choose an',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+          Text(
+            'Exercise',
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 40.0),
+            child: SingleChildScrollView(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _chosenExercise = index;
+                      });
+                    },
+                    enlargeCenterPage: true,
+                    height: 250),
+                items: _exercises
+                    .map((item) => Container(
+                        padding: const EdgeInsets.all(5.0),
+                        width: 400,
+                        decoration: BoxDecoration(
+                          color: _exerciseColors[_chosenExercise],
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                        child: Center(
+                          child: Wrap(children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 20.0, 10.0, 0),
+                                child: Text(item.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.none))),
+                            Image(
+                              image: AssetImage('assets/img/$item.png'),
+                              width: 170,
+                            )
+                          ]),
+                        )))
+                    .toList(),
+                carouselController: _controller,
+              ),
+            ),
+          ),
+          Text('Select a number of reps',
+              style: Theme.of(context).textTheme.subtitle1),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  iconSize: 30,
+                  onPressed: () {
+                    setState(() {
+                      if (_reps > 1) {
+                        _reps -= 1;
+                      }
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text('$_reps',
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 64)),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  iconSize: 30,
+                  onPressed: () {
+                    setState(() {
+                      _reps += 1;
+                    });
+                  },
+                )
+              ],
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                textStyle:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                primary: _exerciseColors[_chosenExercise],
+                padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CameraPage(
+                          reps: _reps,
+                          exerciseType: _exercises[_chosenExercise],
+                        )),
+              );
+            },
+            child: const Text('Begin'),
+          ),
+        ],
+      ),
+    ));
+  }
+}

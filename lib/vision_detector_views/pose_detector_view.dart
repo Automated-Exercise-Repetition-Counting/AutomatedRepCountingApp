@@ -28,9 +28,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   @override
   Widget build(BuildContext context) {
     return CameraView(
-      title: 'Pose Detector',
       customPaint: _customPaint,
-      text: _text,
       onImage: (inputImage) {
         processImage(inputImage);
       },
