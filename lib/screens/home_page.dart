@@ -26,8 +26,13 @@ class HomePageState extends State<HomePage> {
     const Color.fromRGBO(248, 85, 66, 1),
     const Color.fromRGBO(254, 196, 73, 1)
   ];
+  List<String> images = [
+    "assets/img/Squats.png",
+    "assets/img/s.png",
+    "assets/img/Push-ups.png",
+  ];
   var _reps = 1;
-  int _chosenExercise = 0;
+  int _chosenExerciseIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,38 +59,33 @@ class HomePageState extends State<HomePage> {
                 options: CarouselOptions(
                     onPageChanged: (index, reason) {
                       setState(() {
-                        _chosenExercise = index;
+                        _chosenExerciseIndex = index;
                       });
                     },
                     enlargeCenterPage: true,
-                    height: 250),
+                    viewportFraction: 0.7,
+                    height: 300),
                 items: _exercises
                     .map((item) => Container(
-                        padding: const EdgeInsets.all(5.0),
-                        width: 400,
-                        decoration: BoxDecoration(
-                          color: _exerciseColors[_chosenExercise],
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(12.0),
+                          padding: const EdgeInsets.all(5.0),
+                          width: 300,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/img/$item.png')),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12.0),
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Wrap(children: <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    10.0, 20.0, 10.0, 0),
-                                child: Text(item.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none))),
-                            Image(
-                              image: AssetImage('assets/img/$item.png'),
-                              width: 170,
-                            )
-                          ]),
-                        )))
+                          child: Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Text(item.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none))),
+                        ))
                     .toList(),
                 carouselController: _controller,
               ),
@@ -134,7 +134,7 @@ class HomePageState extends State<HomePage> {
                 ),
                 textStyle:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                primary: _exerciseColors[_chosenExercise],
+                primary: _exerciseColors[_chosenExerciseIndex],
                 padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
             onPressed: () {
               Navigator.push(
@@ -142,7 +142,7 @@ class HomePageState extends State<HomePage> {
                 MaterialPageRoute(
                     builder: (context) => CameraPage(
                           reps: _reps,
-                          exerciseType: _exercises[_chosenExercise],
+                          exerciseType: _exercises[_chosenExerciseIndex],
                         )),
               );
             },
