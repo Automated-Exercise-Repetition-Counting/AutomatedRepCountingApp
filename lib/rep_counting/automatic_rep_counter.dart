@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:google_ml_kit_example/rep_counting/state_machines.dart';
 import 'package:google_ml_kit_example/rep_counting/thresholds.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
@@ -8,18 +9,23 @@ import './exercise_type.dart';
 import './movement_phase.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
-  static const windowSize = 3;
+  static const _windowSize = 3;
 
   final ExerciseType exerciseType;
-  final Queue<MovementPhase> prevMovementPhase = Queue<MovementPhase>();
-  final Map<MovementPhase, int> movementCounts = HashMap<MovementPhase, int>();
-  SquatPhase _currentState = SquatPhase.top;
+  final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
+  final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
+  late final ExerciseStateMachine _exerciseStateMachine;
 
   int _reps = 0;
-  AutomaticRepCounter({required this.exerciseType});
+  AutomaticRepCounter({required this.exerciseType}) {
+    _exerciseStateMachine = ExerciseStateMachine(
+      notifyListeners: notifyListeners,
+      exerciseType: exerciseType,
+    );
+  }
 
   int get reps => _reps;
-  SquatPhase get phase => _currentState;
+  Enum get phase => _exerciseStateMachine.currentState;
 
   void updateRepCount(List<Pose> poses) {
     for (Pose pose in poses) {
@@ -38,59 +44,29 @@ class AutomaticRepCounter extends ChangeNotifier {
   }
 
   void _changePhaseAndCountReps(MovementPhase latestPhase) {
-    prevMovementPhase.addLast(latestPhase);
+    _prevMovementPhase.addLast(latestPhase);
 
-    if (prevMovementPhase.length <= windowSize) {
+    if (_prevMovementPhase.length <= _windowSize) {
       // insufficient values to safely detect movement phase. return.
       return;
     }
 
-    prevMovementPhase.removeFirst();
+    _prevMovementPhase.removeFirst();
 
     MovementPhase newAvgMvmtPhase = _getAvgMovementPhase();
-    _movementPhaseStateMachine(newAvgMvmtPhase);
+    _exerciseStateMachine.movementPhaseStateMachine(newAvgMvmtPhase);
   }
 
   MovementPhase _getAvgMovementPhase() {
-    movementCounts.clear();
-    prevMovementPhase.forEach((element) {
-      movementCounts[element] = movementCounts[element] ?? 0 + 1;
+    _movementCounts.clear();
+    _prevMovementPhase.forEach((phase) {
+      _movementCounts[phase] = _movementCounts[phase] ?? 0 + 1;
     });
 
     // return the movement phase with the max count
-    return movementCounts.entries
+    return _movementCounts.entries
         .reduce((e1, e2) => e1.value > e2.value ? e1 : e2)
         .key;
-  }
-
-  void _movementPhaseStateMachine(MovementPhase newAvgMovementPhase) {
-    switch (_currentState) {
-      case SquatPhase.top:
-        if (newAvgMovementPhase == MovementPhase.intermediate) {
-          _currentState = SquatPhase.desc;
-          notifyListeners();
-        }
-        break;
-      case SquatPhase.desc:
-        if (newAvgMovementPhase == MovementPhase.bottom) {
-          _currentState = SquatPhase.bottom;
-          notifyListeners();
-        }
-        break;
-      case SquatPhase.bottom:
-        if (newAvgMovementPhase == MovementPhase.intermediate) {
-          _currentState = SquatPhase.asc;
-          notifyListeners();
-        }
-        break;
-      case SquatPhase.asc:
-        if (newAvgMovementPhase == MovementPhase.top) {
-          _currentState = SquatPhase.top;
-          _reps++;
-          notifyListeners();
-        }
-        break;
-    }
   }
 
   // TODO: make better exception function
