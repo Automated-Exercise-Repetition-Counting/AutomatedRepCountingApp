@@ -64,7 +64,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
                 ),
               ),
               Text(
-                "Movement Phase: ${_repCounter.avgMovementPhase == MovementPhase.top ? "Top" : "Bottom"}",
+                "Squat Phase: ${_repCounter.phase}",
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,

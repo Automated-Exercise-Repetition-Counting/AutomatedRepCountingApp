@@ -2,4 +2,7 @@
 enum MovementPhase {
   top,
   bottom,
+  intermediate,
 }
+
+enum SquatPhase { top, desc, bottom, asc }

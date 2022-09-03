@@ -8,19 +8,18 @@ import './exercise_type.dart';
 import './movement_phase.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
-  static const windowSize = 5;
+  static const windowSize = 3;
 
   final ExerciseType exerciseType;
   final Queue<MovementPhase> prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> movementCounts = HashMap<MovementPhase, int>();
+  SquatPhase _currentState = SquatPhase.top;
 
   int _reps = 0;
-  MovementPhase _avgMovementPhase = MovementPhase.top;
-
   AutomaticRepCounter({required this.exerciseType});
 
   int get reps => _reps;
-  MovementPhase get avgMovementPhase => _avgMovementPhase;
+  SquatPhase get phase => _currentState;
 
   void updateRepCount(List<Pose> poses) {
     for (Pose pose in poses) {
@@ -40,43 +39,73 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   void _changePhaseAndCountReps(MovementPhase latestPhase) {
     prevMovementPhase.addLast(latestPhase);
-    movementCounts[latestPhase] = (movementCounts[latestPhase] ?? 0) + 1;
+
     if (prevMovementPhase.length <= windowSize) {
       // insufficient values to safely detect movement phase. return.
       return;
     }
 
-    MovementPhase earliestPhase = prevMovementPhase.removeFirst();
-    movementCounts[earliestPhase] = movementCounts.containsKey(earliestPhase)
-        ? movementCounts[earliestPhase]! - 1
-        : 0;
+    prevMovementPhase.removeFirst();
 
-    MovementPhase newAvgMvmtPhase = _get_avgMovementPhase();
-
-    if (newAvgMvmtPhase != _avgMovementPhase) {
-      if (newAvgMvmtPhase == MovementPhase.top) {
-        _reps++;
-      }
-      notifyListeners();
-    }
-
-    _avgMovementPhase = newAvgMvmtPhase;
+    MovementPhase newAvgMvmtPhase = _getAvgMovementPhase();
+    _movementPhaseStateMachine(newAvgMvmtPhase);
   }
 
-  MovementPhase _get_avgMovementPhase() {
-    int topCount = movementCounts.containsKey(MovementPhase.top)
-        ? movementCounts[MovementPhase.top]!
-        : 0;
-    int bottomCount = movementCounts.containsKey(MovementPhase.bottom)
-        ? movementCounts[MovementPhase.bottom]!
-        : 0;
+  MovementPhase _getAvgMovementPhase() {
+    int topCount = 0;
+    int bottomCount = 0;
+    int intermediateCount = 0;
 
-    if (topCount > bottomCount) {
+    for (MovementPhase phase in prevMovementPhase) {
+      switch (phase) {
+        case MovementPhase.top:
+          topCount++;
+          break;
+        case MovementPhase.bottom:
+          bottomCount++;
+          break;
+        case MovementPhase.intermediate:
+          intermediateCount++;
+          break;
+      }
+    }
+
+    if (topCount > bottomCount && topCount > intermediateCount) {
       return MovementPhase.top;
-    } else if (topCount < bottomCount) {
+    } else if (bottomCount > topCount && bottomCount > intermediateCount) {
       return MovementPhase.bottom;
     } else {
-      return MovementPhase.top;
+      return MovementPhase.intermediate;
+    }
+  }
+
+  void _movementPhaseStateMachine(MovementPhase newAvgMovementPhase) {
+    switch (_currentState) {
+      case SquatPhase.top:
+        if (newAvgMovementPhase == MovementPhase.intermediate) {
+          _currentState = SquatPhase.desc;
+          notifyListeners();
+        }
+        break;
+      case SquatPhase.desc:
+        if (newAvgMovementPhase == MovementPhase.bottom) {
+          _currentState = SquatPhase.bottom;
+          notifyListeners();
+        }
+        break;
+      case SquatPhase.bottom:
+        if (newAvgMovementPhase == MovementPhase.intermediate) {
+          _currentState = SquatPhase.asc;
+          notifyListeners();
+        }
+        break;
+      case SquatPhase.asc:
+        if (newAvgMovementPhase == MovementPhase.top) {
+          _currentState = SquatPhase.top;
+          _reps++;
+          notifyListeners();
+        }
+        break;
     }
   }
 

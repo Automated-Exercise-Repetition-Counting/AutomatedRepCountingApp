@@ -5,8 +5,9 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class Thresholds {
   /// Internal angle of the hip, knee, and ankle
-  static const num _hipKneeAnkleAngleInternalThreshold =
-      1.91986; // (180 - 70) * (pi / 180);
+  static const num _lowerThreshold = 1.91986; // (180 - 70) * (pi / 180);
+  static const num _upperThreshold = 2.61799; // (180-30) * (pi / 180);
+
   static const double _minConfidence = 0.5;
 
   /// Returns the movement phase of the current frame based on the detections.
@@ -15,11 +16,16 @@ class Thresholds {
     num leftKneeAngle = kneeAngles[0];
     num rightKneeAngle = kneeAngles[1];
 
-    if (leftKneeAngle < _hipKneeAnkleAngleInternalThreshold &&
-        rightKneeAngle < _hipKneeAnkleAngleInternalThreshold) {
+    if (leftKneeAngle > _upperThreshold && rightKneeAngle > _upperThreshold) {
+      // top
+      return MovementPhase.top;
+    } else if (leftKneeAngle < _lowerThreshold &&
+        rightKneeAngle < _lowerThreshold) {
+      // bottom
       return MovementPhase.bottom;
     } else {
-      return MovementPhase.top;
+      // intermediate
+      return MovementPhase.intermediate;
     }
   }
 
