@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_ml_kit_example/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercise.dart';
+import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
 import 'package:google_ml_kit_example/vision_detector_views/pose_detector_view.dart';
 
 List<CameraDescription> cameras = [];

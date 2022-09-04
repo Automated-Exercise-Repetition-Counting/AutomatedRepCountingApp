@@ -1,7 +1,7 @@
-import 'exercise_state_machine.dart';
-import 'state_machine_result.dart';
+import '../exercise_state_machine.dart';
+import '../state_machine_result.dart';
 
-import '../movement_phase.dart';
+import '../../movement_phase.dart';
 
 enum SquatPhase { top, desc, bottom, asc }
 

@@ -1,7 +1,7 @@
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
-import 'thresholds.dart';
-import '../movement_phase.dart';
+import '../thresholds.dart';
+import '../../movement_phase.dart';
 
 class SquatThresholds extends Thresholds {
   /// Internal angle of the hip, knee, and ankle
