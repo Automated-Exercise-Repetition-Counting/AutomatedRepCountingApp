@@ -1,8 +1,7 @@
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
-import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
-import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
+import '../movement_phase.dart';
+import 'state_machine_result.dart';
 
 abstract class ExerciseStateMachine {
   static const _windowSize = 3;
@@ -14,7 +13,6 @@ abstract class ExerciseStateMachine {
 
   /// A state machine that returns true if a rep has been completed.
   /// Returns false if no rep has been completed.
-  @protected
   StateMachineResult movementPhaseStateMachine(
       MovementPhase newAvgMovementPhase);
 

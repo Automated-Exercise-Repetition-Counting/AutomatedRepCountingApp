@@ -1,49 +1,28 @@
 import 'package:flutter/foundation.dart';
-import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
-import 'exercise_type.dart';
-import 'movement_phase.dart';
-import 'state_machines/squat_state_machine.dart';
-import 'thresholds/thresholds.dart';
+import 'exercise.dart';
+import 'state_machines/state_machine_result.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
-  final ExerciseType exerciseType;
-  late final SquatStateMachine _exerciseStateMachine;
-
+  late final Exercise exercise;
   int _reps = 0;
-  AutomaticRepCounter({required this.exerciseType}) {
-    _exerciseStateMachine = SquatStateMachine();
-  }
+  AutomaticRepCounter({required this.exercise});
 
   int get reps => _reps;
-  Enum get phase => _exerciseStateMachine.currentState;
+  Enum get phase => exercise.currentState;
 
   void updateRepCount(List<Pose> poses) {
     for (Pose pose in poses) {
       try {
-        MovementPhase latestPhase = _threshold(pose);
-        _changePhaseAndCountReps(latestPhase);
+        StateMachineResult result = exercise.updateStateMachine(pose);
+        if (result.hasChangedPhase) {
+          if (result.hasCompletedRep) {
+            _reps++;
+          }
+          notifyListeners();
+        }
       } on StateError {} // do nothing on StateError
-    }
-  }
-
-  MovementPhase _threshold(Pose pose) {
-    switch (exerciseType) {
-      case ExerciseType.squat:
-        return Thresholds.thresholdSquat(pose);
-    }
-  }
-
-  void _changePhaseAndCountReps(MovementPhase latestPhase) {
-    StateMachineResult result =
-        _exerciseStateMachine.getStateMachineResult(latestPhase);
-
-    if (result.hasChangedPhase) {
-      if (result.hasCompletedRep) {
-        _reps++;
-      }
-      notifyListeners();
     }
   }
 

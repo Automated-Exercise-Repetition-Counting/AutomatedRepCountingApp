@@ -1,8 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/rep_counting/automatic_rep_counter.dart';
-import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
 
+import 'rep_counting/automatic_rep_counter.dart';
+import 'rep_counting/exercise.dart';
 import 'vision_detector_views/pose_detector_view.dart';
 
 List<CameraDescription> cameras = [];
@@ -21,15 +21,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Home(
-        exerciseType: ExerciseType.squat,
+        exercise: SquatExercise(),
       ),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  final ExerciseType exerciseType;
-  Home({required this.exerciseType});
+  final Exercise exercise;
+  Home({required this.exercise});
 
   @override
   State<Home> createState() => _HomeState();
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _repCounter = AutomaticRepCounter(exerciseType: widget.exerciseType);
+    _repCounter = AutomaticRepCounter(exercise: widget.exercise);
     _repCounter.addListener(() {
       setState(() {});
     });

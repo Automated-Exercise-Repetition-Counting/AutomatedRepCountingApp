@@ -1,7 +1,9 @@
-import 'package:google_ml_kit_example/rep_counting/state_machines/exercise_state_machine.dart';
-import 'package:google_ml_kit_example/rep_counting/state_machine_result.dart';
+import 'exercise_state_machine.dart';
+import 'state_machine_result.dart';
 
 import '../movement_phase.dart';
+
+enum SquatPhase { top, desc, bottom, asc }
 
 class SquatStateMachine extends ExerciseStateMachine {
   SquatStateMachine() : super(SquatPhase.top);
