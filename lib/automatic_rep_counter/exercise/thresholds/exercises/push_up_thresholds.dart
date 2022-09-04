@@ -1,5 +1,6 @@
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
+import '../joint.dart';
 import '../thresholds.dart';
 import '../../movement_phase.dart';
 
@@ -10,9 +11,19 @@ class PushUpThresholds extends Thresholds {
 
   @override
   MovementPhase getMovementPhase(Pose pose) {
-    List<num> elbowAngles = getAngles(pose);
-    num leftElbowAngle = elbowAngles[0];
-    num rightElbowAngle = elbowAngles[1];
+    double leftElbowAngle = Joint(
+            joint: PoseLandmarkType.leftElbow,
+            start: PoseLandmarkType.leftShoulder,
+            end: PoseLandmarkType.leftWrist,
+            pose: pose)
+        .angle;
+
+    double rightElbowAngle = Joint(
+            joint: PoseLandmarkType.rightElbow,
+            start: PoseLandmarkType.rightShoulder,
+            end: PoseLandmarkType.rightWrist,
+            pose: pose)
+        .angle;
 
     if (leftElbowAngle > _upperThreshold && rightElbowAngle > _upperThreshold) {
       // top
@@ -24,47 +35,6 @@ class PushUpThresholds extends Thresholds {
     } else {
       // intermediate
       return MovementPhase.intermediate;
-    }
-  }
-
-  @override
-  List<double> getAngles(Pose pose) {
-    if (pose.landmarks.isEmpty) {
-      throw Exception('No pose detected');
-    }
-    try {
-      PoseLandmark leftElbow =
-          pose.landmarks[PoseLandmarkType.leftElbow] as PoseLandmark;
-      PoseLandmark rightElbow =
-          pose.landmarks[PoseLandmarkType.rightElbow] as PoseLandmark;
-      PoseLandmark leftWrist =
-          pose.landmarks[PoseLandmarkType.leftWrist] as PoseLandmark;
-      PoseLandmark rightWrist =
-          pose.landmarks[PoseLandmarkType.rightWrist] as PoseLandmark;
-      PoseLandmark leftShoulder =
-          pose.landmarks[PoseLandmarkType.leftShoulder] as PoseLandmark;
-      PoseLandmark rightShoulder =
-          pose.landmarks[PoseLandmarkType.rightShoulder] as PoseLandmark;
-
-      if (!confidenceCheck([
-        leftElbow,
-        rightElbow,
-        leftWrist,
-        rightWrist,
-        leftShoulder,
-        rightShoulder
-      ])) {
-        throw StateError('Pose confidence too low');
-      }
-      // Calculate the angle between the left hip, left knee, and left ankle
-      double leftElbowAngle = lawOfCosines(leftElbow, leftShoulder, leftWrist);
-
-      // Calculate the angle between the right hip, right knee, and right ankle
-      double rightElbowAngle =
-          lawOfCosines(rightElbow, rightShoulder, rightWrist);
-      return [leftElbowAngle, rightElbowAngle];
-    } on TypeError {
-      throw StateError('Insufficient pose information');
     }
   }
 }
