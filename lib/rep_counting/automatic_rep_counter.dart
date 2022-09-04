@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
-import 'exercise.dart';
-import 'state_machines/state_machine_result.dart';
+import 'exercise/state_machines/state_machine_result.dart';
+import 'exercise/exercise.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
   late final Exercise exercise;

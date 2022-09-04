@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'rep_counting/automatic_rep_counter.dart';
-import 'rep_counting/exercise.dart';
+import 'rep_counting/exercise/exercise.dart';
 import 'vision_detector_views/pose_detector_view.dart';
 
 List<CameraDescription> cameras = [];
