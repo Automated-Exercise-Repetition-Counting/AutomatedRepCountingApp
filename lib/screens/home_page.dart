@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
 
 import 'rep_counting_page.dart';
 
@@ -11,25 +12,13 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class Exercise {
-  String name;
-  String asset;
-
-  Exercise(this.name, this.asset);
-}
-
 class HomePageState extends State<HomePage> {
   final CarouselController _controller = CarouselController();
-  final List<String> _exercises = ["Squats", "Lunges", "Push-ups"];
+  List<ExerciseType> _exerciseTypes = ExerciseType.values;
   final List<Color> _exerciseColors = [
     const Color.fromRGBO(81, 191, 192, 1),
     const Color.fromRGBO(248, 85, 66, 1),
     const Color.fromRGBO(254, 196, 73, 1)
-  ];
-  List<String> images = [
-    "assets/img/Squats.png",
-    "assets/img/s.png",
-    "assets/img/Push-ups.png",
   ];
   var _reps = 1;
   int _chosenExerciseIndex = 0;
@@ -65,7 +54,7 @@ class HomePageState extends State<HomePage> {
                     enlargeCenterPage: true,
                     viewportFraction: 0.7,
                     height: 300),
-                items: _exercises
+                items: _exerciseTypes
                     .map((item) => Container(
                           padding: const EdgeInsets.all(5.0),
                           width: 300,
@@ -142,7 +131,7 @@ class HomePageState extends State<HomePage> {
                 MaterialPageRoute(
                     builder: (context) => CameraPage(
                           reps: _reps,
-                          exerciseType: _exercises[_chosenExerciseIndex],
+                          exerciseType: _exerciseTypes[_chosenExerciseIndex],
                         )),
               );
             },

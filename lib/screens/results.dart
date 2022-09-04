@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
 import '../widgets/circular_progress_with_image.dart';
 import 'home_page.dart';
 
@@ -11,7 +12,7 @@ class ResultsPage extends StatefulWidget {
       : super(key: key);
   final int desiredReps;
   final int countedReps;
-  final String exerciseType;
+  final ExerciseType exerciseType;
 
   @override
   ResultsPageState createState() => ResultsPageState();
@@ -35,7 +36,7 @@ class ResultsPageState extends State<ResultsPage> {
           CircularProgressWithImage(
               countedReps: widget.countedReps,
               desiredReps: widget.desiredReps,
-              exerciseType: widget.exerciseType),
+              exerciseType: widget.exerciseType.toString()),
           Column(children: <Widget>[
             Text('Number of reps counted',
                 style: Theme.of(context).textTheme.headline6),
