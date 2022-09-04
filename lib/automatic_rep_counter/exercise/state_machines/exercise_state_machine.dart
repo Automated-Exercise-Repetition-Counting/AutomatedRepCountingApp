@@ -9,7 +9,7 @@ abstract class ExerciseStateMachine {
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
 
-  ExerciseStateMachine(Enum this.currentState);
+  ExerciseStateMachine(this.currentState);
 
   /// A state machine that returns true if a rep has been completed.
   /// Returns false if no rep has been completed.
