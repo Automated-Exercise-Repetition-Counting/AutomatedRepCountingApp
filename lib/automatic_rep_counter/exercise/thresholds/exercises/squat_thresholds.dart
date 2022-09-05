@@ -6,7 +6,7 @@ import '../../movement_phase.dart';
 
 class SquatThresholds extends Thresholds {
   /// Internal angle of the hip, knee, and ankle
-  static const num _lowerThreshold = 1.91986; // (180 - 70) * (pi / 180);
+  static const num _lowerThreshold = 2.26893; // (130) * (pi / 180);
   static const num _upperThreshold = 2.61799; // (180-30) * (pi / 180);
 
   @override
