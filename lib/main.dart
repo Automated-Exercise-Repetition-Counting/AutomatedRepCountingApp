@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,7 @@ import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/p
 import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
 import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
 import 'package:google_ml_kit_example/vision_detector_views/pose_detector_view.dart';
+import 'package:native_opencv/native_opencv.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -37,6 +40,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late AutomaticRepCounter _repCounter;
+
+  final nativeOpenCv = NativeOpencv();
 
   @override
   void initState() {
@@ -84,6 +89,10 @@ class _HomeState extends State<Home> {
               ElevatedButton(
                   onPressed: () => startNewActivity(PushUpExercise()),
                   child: Text("Push Ups")),
+              ElevatedButton(
+                  onPressed: () =>
+                      log('--> OpenCV Version: ${nativeOpenCv.cvVersion()}'),
+                  child: Text("OpenCV")),
             ],
           ),
         ),
