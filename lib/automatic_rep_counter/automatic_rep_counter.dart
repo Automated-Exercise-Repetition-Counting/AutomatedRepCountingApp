@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'exercise/state_machines/state_machine_result.dart';
 import 'exercise/exercise.dart';
+import 'optical_flow/optical_flow_calculator.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
   late final Exercise exercise;
+  final int _unconfidenceCountThreshold = 10;
+
   int _reps = 0;
+  int _unconfidenceCount = 0;
   AutomaticRepCounter({required this.exercise});
 
   int get reps => _reps;
@@ -15,18 +18,30 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   void updateRepCount(List<Pose> poses, OpticalFlowDirection flowDirection) {
     for (Pose pose in poses) {
+      StateMachineResult result;
       try {
-        StateMachineResult result = exercise.updateStateMachine(pose);
-        if (result.hasChangedPhase) {
-          if (result.hasCompletedRep) {
-            _reps++;
+        result = exercise.updateStateMachinePose(pose);
+        _unconfidenceCount = 0;
+      } on StateError {
+        if (_unconfidenceCount > _unconfidenceCountThreshold) {
+          if (flowDirection == OpticalFlowDirection.none) {
+            return;
           }
-          notifyListeners();
+          result = exercise.updateStateMachineOF(flowDirection);
+          _unconfidenceCount = 0;
+        } else {
+          _unconfidenceCount++;
+          return;
         }
-      } on StateError {} // do nothing on StateError
-    }
+      }
 
-    // TODO do something with flowDirection
+      if (result.hasChangedPhase) {
+        if (result.hasCompletedRep) {
+          _reps++;
+        }
+        notifyListeners();
+      }
+    }
   }
 
   // TODO: make better exception function
