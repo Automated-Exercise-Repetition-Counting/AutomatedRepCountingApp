@@ -10,6 +10,13 @@ class OpticalFlowCalculator {
   bool canCalculate = true;
   final int windowSize = 5;
   final double movementThreshold = 5.0;
+  final bool yOnly;
+  final bool xOnly;
+  int lastExecution = DateTime.now().millisecondsSinceEpoch;
+
+  OpticalFlowCalculator({this.yOnly = false, this.xOnly = false}) {
+    assert(!(yOnly && xOnly), "Can't set both yOnly and xOnly");
+  }
 
   void dispose() {
     canCalculate = false;
@@ -44,6 +51,13 @@ class OpticalFlowCalculator {
   }
 
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
+    int curTime = DateTime.now().millisecondsSinceEpoch;
+
+    if (curTime - lastExecution < 50) {
+      return OpticalFlowDirection.none;
+    }
+    lastExecution = curTime;
+
     if (!canCalculate) {
       return OpticalFlowDirection.none;
     }
@@ -57,27 +71,33 @@ class OpticalFlowCalculator {
     double x = res[0];
     double y = res[1];
 
-    OpticalFlowDirection currentDirection = OpticalFlowDirection.stationary;
+    OpticalFlowDirection currentDirectionX = OpticalFlowDirection.stationary;
+    OpticalFlowDirection currentDirectionY = OpticalFlowDirection.stationary;
 
-    if (y.abs() > movementThreshold /*|| y.abs() > movementThreshold*/) {
-      // if (x.abs() > y.abs()) {
-      // if (x > 0) {
-      //   currentDirection = OpticalFlowDirection.right;
-      // } else {
-      //   currentDirection = OpticalFlowDirection.left;
-      // }
-      // currentDirection = OpticalFlowDirection.stationary;
-      // } else {
-      if (y > 0) {
-        currentDirection = OpticalFlowDirection.down;
-      } else {
-        currentDirection = OpticalFlowDirection.up;
-      }
-      // }
+    if (x.abs() > movementThreshold) {
+      currentDirectionX =
+          x > 0 ? OpticalFlowDirection.right : OpticalFlowDirection.left;
     }
 
-    // add to list
-    _directions.add(currentDirection);
+    if (y.abs() > movementThreshold) {
+      currentDirectionY =
+          y > 0 ? OpticalFlowDirection.down : OpticalFlowDirection.up;
+    }
+
+    if (xOnly) {
+      _directions.add(currentDirectionX);
+    } else if (yOnly) {
+      _directions.add(currentDirectionY);
+    } else if (currentDirectionX != currentDirectionY) {
+      if (currentDirectionX == OpticalFlowDirection.stationary) {
+        _directions.add(currentDirectionY);
+      } else if (currentDirectionY == OpticalFlowDirection.stationary) {
+        _directions.add(currentDirectionX);
+      } else {
+        _directions.add(currentDirectionX);
+        _directions.add(currentDirectionY);
+      }
+    }
 
     Map<OpticalFlowDirection, int> directionCount = {};
 

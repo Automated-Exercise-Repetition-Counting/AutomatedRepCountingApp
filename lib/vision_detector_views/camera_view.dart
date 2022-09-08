@@ -44,9 +44,8 @@ class _CameraViewState extends State<CameraView> {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   final bool _allowPicker = true;
   bool _changingCameraLens = false;
-  final OpticalFlowCalculator _opticalFlowCalculator = OpticalFlowCalculator();
-  // store current time
-  int initTime = DateTime.now().millisecondsSinceEpoch;
+  final OpticalFlowCalculator _opticalFlowCalculator =
+      OpticalFlowCalculator(yOnly: true);
 
   @override
   void initState() {
@@ -350,12 +349,10 @@ class _CameraViewState extends State<CameraView> {
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
-    int curTime = DateTime.now().millisecondsSinceEpoch;
-    if (curTime - initTime > 50) {
-      var res =
-          _opticalFlowCalculator.determineFlow(image, imageRotation.rawValue);
+    var res =
+        _opticalFlowCalculator.determineFlow(image, imageRotation.rawValue);
+    if (res != OpticalFlowDirection.none) {
       log(res.toString());
-      initTime = curTime;
     }
 
     widget.onImage(inputImage);
