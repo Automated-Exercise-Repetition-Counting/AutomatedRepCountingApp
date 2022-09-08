@@ -1,11 +1,12 @@
 import 'dart:collection';
 
+import './vertical_exercise_phase.dart';
 import '../movement_phase.dart';
 import 'state_machine_result.dart';
 
 abstract class ExerciseStateMachine {
   static const _windowSize = 3;
-  Enum currentState;
+  VerticalExercisePhase currentState;
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
 

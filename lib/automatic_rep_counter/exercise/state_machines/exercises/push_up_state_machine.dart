@@ -1,12 +1,11 @@
 import '../exercise_state_machine.dart';
 import '../state_machine_result.dart';
+import '../vertical_exercise_phase.dart';
 
 import '../../movement_phase.dart';
 
-enum PushUpPhase { top, desc, bottom, asc }
-
 class PushUpStateMachine extends ExerciseStateMachine {
-  PushUpStateMachine() : super(PushUpPhase.top);
+  PushUpStateMachine() : super(VerticalExercisePhase.top);
 
   @override
   StateMachineResult movementPhaseStateMachine(
@@ -15,27 +14,27 @@ class PushUpStateMachine extends ExerciseStateMachine {
     bool hasChangedPhase = false;
 
     switch (currentState) {
-      case PushUpPhase.top:
+      case VerticalExercisePhase.top:
         if (newAvgMovementPhase == MovementPhase.intermediate) {
-          currentState = PushUpPhase.desc;
+          currentState = VerticalExercisePhase.desc;
           hasChangedPhase = true;
         }
         break;
-      case PushUpPhase.desc:
+      case VerticalExercisePhase.desc:
         if (newAvgMovementPhase == MovementPhase.bottom) {
-          currentState = PushUpPhase.bottom;
+          currentState = VerticalExercisePhase.bottom;
           hasChangedPhase = true;
         }
         break;
-      case PushUpPhase.bottom:
+      case VerticalExercisePhase.bottom:
         if (newAvgMovementPhase == MovementPhase.intermediate) {
-          currentState = PushUpPhase.asc;
+          currentState = VerticalExercisePhase.asc;
           hasChangedPhase = true;
         }
         break;
-      case PushUpPhase.asc:
+      case VerticalExercisePhase.asc:
         if (newAvgMovementPhase == MovementPhase.top) {
-          currentState = PushUpPhase.top;
+          currentState = VerticalExercisePhase.top;
           hasChangedPhase = hasCompletedRep = true;
         }
         break;
