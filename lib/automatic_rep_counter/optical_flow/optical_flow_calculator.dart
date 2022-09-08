@@ -4,6 +4,10 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:native_opencv/native_opencv.dart';
 
+/// Calculates the optical flow from given [CameraImage]s.
+/// The optical flow is calculated using the Lucas-Kanade method.
+/// This is achieved through the use of the [NativeOpencv] plugin,
+/// which is a wrapper around the OpenCV library.
 class OpticalFlowCalculator {
   static const int _msDelayBetweenExecutions = 40;
   static const double _movementThreshold = 5.0;
@@ -25,6 +29,8 @@ class OpticalFlowCalculator {
     _canCalculate = false;
   }
 
+  /// Calculates the optical flow from the given [CameraImage].
+  /// Uses the NativeOpencv plugin to calculate the optical flow.
   Float32List? _detect(CameraImage image, int rotation) {
     // On Android the image format is YUV and we get a buffer per channel,
     // in iOS the format is BGRA and we get a single buffer for all channels.
@@ -53,6 +59,11 @@ class OpticalFlowCalculator {
     }
   }
 
+  /// Calculates the optical flow from the given [CameraImage].
+  /// Returns the [OpticalFlowDirection] of the movement between the
+  /// current and previous [CameraImage].
+  /// If the movement is too small or invalid, returns
+  /// [OpticalFlowDirection.none].
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
     int curTime = DateTime.now().millisecondsSinceEpoch;
 
