@@ -8,7 +8,7 @@ class OpticalFlowCalculator {
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
 
-  Float32List? _detect(CameraImage image) {
+  Float32List? _detect(CameraImage image, int rotation) {
     // On Android the image format is YUV and we get a buffer per channel,
     // in iOS the format is BGRA and we get a single buffer for all channels.
     // So the yBuffer variable on Android will be just the Y channel but on iOS it will be
@@ -26,18 +26,18 @@ class OpticalFlowCalculator {
     // make sure we have a detector
     if (_nativeOpencv == null) {
       _nativeOpencv = NativeOpencv();
-      _nativeOpencv!
-          .initCalculator(image.width, image.height, yBuffer, uBuffer, vBuffer);
+      _nativeOpencv!.initCalculator(
+          image.width, image.height, rotation, yBuffer, uBuffer, vBuffer);
       return null;
     } else {
       Float32List res = _nativeOpencv!.opticalFlowIteration(
-          image.width, image.height, yBuffer, uBuffer, vBuffer);
+          image.width, image.height, rotation, yBuffer, uBuffer, vBuffer);
       return res;
     }
   }
 
-  OpticalFlowDirection determineFlow(CameraImage image) {
-    Float32List? res = _detect(image);
+  OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
+    Float32List? res = _detect(image, rotation);
     bool invalidResult =
         res == null || res.length != 2 || res[0].isNaN || res[1].isNaN;
     if (invalidResult) {

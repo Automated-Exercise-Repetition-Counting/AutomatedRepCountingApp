@@ -311,12 +311,6 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future _processCameraImage(CameraImage image) async {
-    // wait 5s before starting
-    if (DateTime.now().millisecondsSinceEpoch - initTime > 5000) {
-      var res = _opticalFlowCalculator.determineFlow(image);
-      log(res.toString());
-    }
-
     final WriteBuffer allBytes = WriteBuffer();
     for (final Plane plane in image.planes) {
       allBytes.putUint8List(plane.bytes);
@@ -354,6 +348,14 @@ class _CameraViewState extends State<CameraView> {
 
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
+
+    int curTime = DateTime.now().millisecondsSinceEpoch;
+    if (curTime - initTime > 100) {
+      var res =
+          _opticalFlowCalculator.determineFlow(image, imageRotation.rawValue);
+      log(res.toString());
+      initTime = curTime;
+    }
 
     widget.onImage(inputImage);
   }
