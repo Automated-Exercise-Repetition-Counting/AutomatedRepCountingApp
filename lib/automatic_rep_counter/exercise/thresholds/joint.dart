@@ -56,9 +56,9 @@ class Joint {
     }
   }
 
-  /// Checks the confidence is above the [minConfidence] threshold
+  /// Checks the confidence is above the [minLikelihood] threshold
   /// for the given landmark.
   bool _confidenceCheck(PoseLandmark landmark) {
-    return landmark.likelihood >= Thresholds.minConfidence;
+    return landmark.likelihood >= Thresholds.minLikelihood;
   }
 }
