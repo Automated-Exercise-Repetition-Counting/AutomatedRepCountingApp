@@ -18,7 +18,7 @@ dependencies:
   path_provider: ^2.0.11
   google_mlkit_pose_detection: ^0.4.0
   native_opencv:
-    path: D:/Coding/native_opencv
+    path: native_opencv
 
 
 dev_dependencies:
