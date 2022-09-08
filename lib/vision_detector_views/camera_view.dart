@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -42,6 +44,9 @@ class _CameraViewState extends State<CameraView> {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   final bool _allowPicker = true;
   bool _changingCameraLens = false;
+  final OpticalFlowCalculator _opticalFlowCalculator = OpticalFlowCalculator();
+  // store current time
+  int initTime = DateTime.now().millisecondsSinceEpoch;
 
   @override
   void initState() {
@@ -306,6 +311,12 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future _processCameraImage(CameraImage image) async {
+    // wait 5s before starting
+    if (DateTime.now().millisecondsSinceEpoch - initTime > 5000) {
+      var res = _opticalFlowCalculator.determineFlow(image);
+      log(res.toString());
+    }
+
     final WriteBuffer allBytes = WriteBuffer();
     for (final Plane plane in image.planes) {
       allBytes.putUint8List(plane.bytes);
