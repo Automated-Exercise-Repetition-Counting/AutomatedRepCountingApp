@@ -1,6 +1,6 @@
-import 'package:google_ml_kit_example/automatic_rep_counter/exercise/thresholds/thresholds.dart';
-import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'dart:math';
+import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'thresholds.dart';
 
 class Joint {
   late final PoseLandmark jointPoint;

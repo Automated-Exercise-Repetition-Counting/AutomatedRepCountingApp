@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit_example/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:google_ml_kit_example/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
