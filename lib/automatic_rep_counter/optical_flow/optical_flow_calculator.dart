@@ -5,13 +5,16 @@ import 'package:camera/camera.dart';
 import 'package:native_opencv/native_opencv.dart';
 
 class OpticalFlowCalculator {
+  static const int msDelayBetweenExecutions = 40;
+  static const double movementThreshold = 5.0;
+  static const int windowSize = 5;
+
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
-  bool canCalculate = true;
-  final int windowSize = 5;
-  final double movementThreshold = 5.0;
-  final bool yOnly;
   final bool xOnly;
+  final bool yOnly;
+
+  bool canCalculate = true;
   int lastExecution = DateTime.now().millisecondsSinceEpoch;
 
   OpticalFlowCalculator({this.yOnly = false, this.xOnly = false}) {
@@ -53,7 +56,7 @@ class OpticalFlowCalculator {
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
     int curTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (curTime - lastExecution < 50) {
+    if (curTime - lastExecution < msDelayBetweenExecutions) {
       return OpticalFlowDirection.none;
     }
     lastExecution = curTime;
