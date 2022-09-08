@@ -77,8 +77,12 @@ class OpticalFlowCalculator {
     }
 
     Float32List? res = _detect(image, rotation);
-    bool invalidResult =
-        res == null || res.length != 2 || res[0].isNaN || res[1].isNaN;
+    bool invalidResult = res == null ||
+        res.length != 2 ||
+        res[0].isNaN ||
+        res[1].isNaN ||
+        res[0].isInfinite ||
+        res[1].isInfinite;
     if (invalidResult) {
       return OpticalFlowDirection.none;
     }
