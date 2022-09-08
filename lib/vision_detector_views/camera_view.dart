@@ -78,6 +78,7 @@ class _CameraViewState extends State<CameraView> {
   @override
   void dispose() {
     _stopLiveFeed();
+    _opticalFlowCalculator.dispose();
     super.dispose();
   }
 
@@ -350,7 +351,7 @@ class _CameraViewState extends State<CameraView> {
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
     int curTime = DateTime.now().millisecondsSinceEpoch;
-    if (curTime - initTime > 100) {
+    if (curTime - initTime > 50) {
       var res =
           _opticalFlowCalculator.determineFlow(image, imageRotation.rawValue);
       log(res.toString());

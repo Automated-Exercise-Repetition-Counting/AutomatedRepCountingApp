@@ -7,6 +7,13 @@ import 'package:native_opencv/native_opencv.dart';
 class OpticalFlowCalculator {
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
+  bool canCalculate = true;
+  final int windowSize = 5;
+  final double movementThreshold = 5.0;
+
+  void dispose() {
+    canCalculate = false;
+  }
 
   Float32List? _detect(CameraImage image, int rotation) {
     // On Android the image format is YUV and we get a buffer per channel,
@@ -37,6 +44,10 @@ class OpticalFlowCalculator {
   }
 
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
+    if (!canCalculate) {
+      return OpticalFlowDirection.none;
+    }
+
     Float32List? res = _detect(image, rotation);
     bool invalidResult =
         res == null || res.length != 2 || res[0].isNaN || res[1].isNaN;
@@ -46,28 +57,27 @@ class OpticalFlowCalculator {
     double x = res[0];
     double y = res[1];
 
-    double movementThreshold = 2.0;
     OpticalFlowDirection currentDirection = OpticalFlowDirection.stationary;
-    // calculate optical flow
 
-    if (x.abs() > movementThreshold || y.abs() > movementThreshold) {
-      if (x.abs() > y.abs()) {
-        if (x > 0) {
-          currentDirection = OpticalFlowDirection.right;
-        } else {
-          currentDirection = OpticalFlowDirection.left;
-        }
+    if (y.abs() > movementThreshold /*|| y.abs() > movementThreshold*/) {
+      // if (x.abs() > y.abs()) {
+      // if (x > 0) {
+      //   currentDirection = OpticalFlowDirection.right;
+      // } else {
+      //   currentDirection = OpticalFlowDirection.left;
+      // }
+      // currentDirection = OpticalFlowDirection.stationary;
+      // } else {
+      if (y > 0) {
+        currentDirection = OpticalFlowDirection.down;
       } else {
-        if (y > 0) {
-          currentDirection = OpticalFlowDirection.down;
-        } else {
-          currentDirection = OpticalFlowDirection.up;
-        }
+        currentDirection = OpticalFlowDirection.up;
       }
+      // }
     }
 
     // add to list
-    _directions.insert(0, currentDirection);
+    _directions.add(currentDirection);
 
     Map<OpticalFlowDirection, int> directionCount = {};
 
@@ -75,8 +85,9 @@ class OpticalFlowCalculator {
       directionCount[direction] = (directionCount[direction] ?? 0) + 1;
     }
 
-    // remove old directions
-    _directions.removeLast();
+    if (_directions.length > windowSize) {
+      _directions.removeAt(0);
+    }
 
     // return max direction
     return directionCount.entries
