@@ -5,24 +5,24 @@ import 'package:camera/camera.dart';
 import 'package:native_opencv/native_opencv.dart';
 
 class OpticalFlowCalculator {
-  static const int msDelayBetweenExecutions = 40;
-  static const double movementThreshold = 5.0;
-  static const int windowSize = 5;
+  static const int _msDelayBetweenExecutions = 40;
+  static const double _movementThreshold = 5.0;
+  static const int _windowSize = 5;
 
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
   final bool xOnly;
   final bool yOnly;
 
-  bool canCalculate = true;
-  int lastExecution = DateTime.now().millisecondsSinceEpoch;
+  bool _canCalculate = true;
+  int _lastExecution = DateTime.now().millisecondsSinceEpoch;
 
   OpticalFlowCalculator({this.yOnly = false, this.xOnly = false}) {
     assert(!(yOnly && xOnly), "Can't set both yOnly and xOnly");
   }
 
   void dispose() {
-    canCalculate = false;
+    _canCalculate = false;
   }
 
   Float32List? _detect(CameraImage image, int rotation) {
@@ -56,12 +56,12 @@ class OpticalFlowCalculator {
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
     int curTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (curTime - lastExecution < msDelayBetweenExecutions) {
+    if (curTime - _lastExecution < _msDelayBetweenExecutions) {
       return OpticalFlowDirection.none;
     }
-    lastExecution = curTime;
+    _lastExecution = curTime;
 
-    if (!canCalculate) {
+    if (!_canCalculate) {
       return OpticalFlowDirection.none;
     }
 
@@ -77,12 +77,12 @@ class OpticalFlowCalculator {
     OpticalFlowDirection currentDirectionX = OpticalFlowDirection.stationary;
     OpticalFlowDirection currentDirectionY = OpticalFlowDirection.stationary;
 
-    if (x.abs() > movementThreshold) {
+    if (x.abs() > _movementThreshold) {
       currentDirectionX =
           x > 0 ? OpticalFlowDirection.right : OpticalFlowDirection.left;
     }
 
-    if (y.abs() > movementThreshold) {
+    if (y.abs() > _movementThreshold) {
       currentDirectionY =
           y > 0 ? OpticalFlowDirection.down : OpticalFlowDirection.up;
     }
@@ -108,7 +108,7 @@ class OpticalFlowCalculator {
       directionCount[direction] = (directionCount[direction] ?? 0) + 1;
     }
 
-    if (_directions.length > windowSize) {
+    if (_directions.length > _windowSize) {
       _directions.removeAt(0);
     }
 
