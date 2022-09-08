@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -26,7 +25,7 @@ class CameraView extends StatefulWidget {
   final String title;
   final CustomPaint? customPaint;
   final String? text;
-  final Function(InputImage inputImage) onImage;
+  final Function(InputImage inputImage, {CameraImage cameraImage}) onImage;
   final Function(ScreenMode mode)? onScreenModeChanged;
   final CameraLensDirection initialDirection;
 
@@ -44,8 +43,6 @@ class _CameraViewState extends State<CameraView> {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   final bool _allowPicker = true;
   bool _changingCameraLens = false;
-  final OpticalFlowCalculator _opticalFlowCalculator =
-      OpticalFlowCalculator(yOnly: true);
 
   @override
   void initState() {
@@ -77,7 +74,6 @@ class _CameraViewState extends State<CameraView> {
   @override
   void dispose() {
     _stopLiveFeed();
-    _opticalFlowCalculator.dispose();
     super.dispose();
   }
 
@@ -185,7 +181,7 @@ class _CameraViewState extends State<CameraView> {
                   ? null
                   : (maxZoomLevel - 1).toInt(),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -349,12 +345,6 @@ class _CameraViewState extends State<CameraView> {
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
-    var res =
-        _opticalFlowCalculator.determineFlow(image, imageRotation.rawValue);
-    if (res != OpticalFlowDirection.none) {
-      log(res.toString());
-    }
-
-    widget.onImage(inputImage);
+    widget.onImage(inputImage, cameraImage: image);
   }
 }

@@ -11,7 +11,7 @@ import 'package:native_opencv/native_opencv.dart';
 class OpticalFlowCalculator {
   static const int _msDelayBetweenExecutions = 40;
   static const double _movementThreshold = 5.0;
-  static const int _windowSize = 5;
+  static const int _windowSize = 15;
 
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
