@@ -15,9 +15,9 @@ class Joint {
       required PoseLandmarkType start,
       required PoseLandmarkType end,
       required Pose pose}) {
-    this.jointPoint = _convertToPoseLandmark(joint, pose);
-    this.startPoint = _convertToPoseLandmark(start, pose);
-    this.endPoint = _convertToPoseLandmark(end, pose);
+    jointPoint = _convertToPoseLandmark(joint, pose);
+    startPoint = _convertToPoseLandmark(start, pose);
+    endPoint = _convertToPoseLandmark(end, pose);
     _angle = _getAngle();
   }
 

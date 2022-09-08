@@ -2,16 +2,17 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/automatic_rep_counter.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:whaikaha/automatic_rep_counter/automatic_rep_counter.dart';
+import 'package:whaikaha/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 
 import 'camera_view.dart';
 import 'painters/pose_painter.dart';
 
 class PoseDetectorView extends StatefulWidget {
   final AutomaticRepCounter repCounter;
-  PoseDetectorView({required this.repCounter});
+  const PoseDetectorView({Key? key, required this.repCounter})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _PoseDetectorViewState();
 }
@@ -63,7 +64,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             children: [
               Text(
                 'Reps: $reps',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -71,13 +72,13 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
               ),
               Text(
                 "Squat Phase: ${_repCounter.phase}",
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
               Text("Flow Direction: $_flowDirection",
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 30,
                       fontWeight: FontWeight.bold)),

@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import 'package:google_ml_kit_example/automatic_rep_counter/automatic_rep_counter.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercise.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
-import 'package:google_ml_kit_example/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
-import 'package:google_ml_kit_example/vision_detector_views/pose_detector_view.dart';
 import 'package:native_opencv/native_opencv.dart';
+import 'package:whaikaha/automatic_rep_counter/automatic_rep_counter.dart';
+import 'package:whaikaha/automatic_rep_counter/exercise/exercise.dart';
+import 'package:whaikaha/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
+import 'package:whaikaha/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
+import 'package:whaikaha/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:whaikaha/vision_detector_views/pose_detector_view.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -18,13 +18,15 @@ Future<void> main() async {
 
   cameras = await availableCameras();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Home(),
     );
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Home extends StatefulWidget {
-  Home();
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -71,7 +73,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Google ML Kit Demo App'),
+        title: const Text('Google ML Kit Demo App'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -82,17 +84,17 @@ class _HomeState extends State<Home> {
             children: [
               ElevatedButton(
                   onPressed: () => startNewActivity(SquatExercise()),
-                  child: Text("Squats")),
+                  child: const Text("Squats")),
               ElevatedButton(
                   onPressed: () => startNewActivity(PullUpExercise()),
-                  child: Text("Pull Ups")),
+                  child: const Text("Pull Ups")),
               ElevatedButton(
                   onPressed: () => startNewActivity(PushUpExercise()),
-                  child: Text("Push Ups")),
+                  child: const Text("Push Ups")),
               ElevatedButton(
                   onPressed: () =>
                       log('--> OpenCV Version: ${nativeOpenCv.cvVersion()}'),
-                  child: Text("OpenCV")),
+                  child: const Text("OpenCV")),
             ],
           ),
         ),

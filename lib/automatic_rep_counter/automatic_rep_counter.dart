@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
@@ -46,6 +48,6 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   // TODO: make better exception function
   void exceptionFn(Object e) {
-    print(e);
+    log(e.toString());
   }
 }

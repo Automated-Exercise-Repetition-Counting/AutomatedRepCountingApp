@@ -61,9 +61,9 @@ abstract class ExerciseStateMachine {
 
   MovementPhase _getAvgMovementPhase() {
     _movementCounts.clear();
-    _prevMovementPhase.forEach((phase) {
+    for (var phase in _prevMovementPhase) {
       _movementCounts[phase] = _movementCounts[phase] ?? 0 + 1;
-    });
+    }
 
     // return the movement phase with the max count
     return _movementCounts.entries
