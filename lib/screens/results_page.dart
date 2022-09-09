@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../rep_counting/exercise_type.dart';
 import '../widgets/circular_progress_with_image.dart';
 import 'home_nav.dart';
 
@@ -8,13 +7,11 @@ class ResultsPage extends StatefulWidget {
       {Key? key,
       required this.exerciseName,
       required this.desiredReps,
-      required this.countedReps,
-      required this.exerciseType})
+      required this.countedReps})
       : super(key: key);
   final String exerciseName;
   final int desiredReps;
   final int countedReps;
-  final ExerciseType exerciseType;
 
   @override
   ResultsPageState createState() => ResultsPageState();
@@ -54,9 +51,9 @@ class ResultsPageState extends State<ResultsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   textStyle: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.w500),
-                  primary: Theme.of(context).colorScheme.primary,
                   padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
               onPressed: () {
                 Navigator.push(

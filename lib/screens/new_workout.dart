@@ -21,7 +21,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
         flexibleSpace: SafeArea(
             child: Padding(
                 padding: const EdgeInsets.all(30), child: buildAppBar())),
-        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
@@ -30,12 +30,12 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
           child: Column(children: [
         Padding(padding: const EdgeInsets.only(top: 50), child: buildTitle()),
         Text(widget.workoutTitle,
-            style: TextStyle(fontSize: 36, fontWeight: FontWeight.w300)),
+            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w300)),
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(children: [
               Lottie.asset("assets/lottie/workout_empty.json", width: 250),
-              Text("Your workout is empty")
+              const Text("Your workout is empty")
             ])),
         Padding(padding: const EdgeInsets.only(top: 50), child: buildButton()),
       ])),
@@ -55,7 +55,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
   Widget buildButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          textStyle: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           padding: const EdgeInsets.fromLTRB(70, 12, 70, 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
@@ -73,7 +73,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
     return Row(
       children: <Widget>[
         TextButton(
-            child: Text('Cancel',
+            child: const Text('Cancel',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
               Navigator.push(
@@ -84,7 +84,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
             }),
         const Spacer(),
         TextButton(
-            child: Text('Save',
+            child: const Text('Save',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
               Navigator.push(

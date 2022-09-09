@@ -1,0 +1,3 @@
+[submodule "native_opencv"]
+	path = native_opencv
+	url = https://github.com/Automated-Exercise-Repetition-Counting/native_opencv

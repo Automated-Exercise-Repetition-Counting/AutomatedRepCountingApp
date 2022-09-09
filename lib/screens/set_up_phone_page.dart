@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../rep_counting/exercise_type.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'rep_counting_page.dart';
 
 class SetUpPage extends StatefulWidget {
@@ -11,7 +11,7 @@ class SetUpPage extends StatefulWidget {
       : super(key: key);
   final String exerciseName;
   final int reps;
-  final ExerciseType exerciseType;
+  final Exercise exerciseType;
 
   @override
   SetUpPageState createState() => SetUpPageState();
@@ -32,7 +32,7 @@ class SetUpPageState extends State<SetUpPage> {
                 Navigator.pop(context);
               });
             },
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             color: Colors.white,
           ),
         ],
@@ -41,7 +41,7 @@ class SetUpPageState extends State<SetUpPage> {
         padding: const EdgeInsets.fromLTRB(50, 20, 50, 100),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
             Widget>[
-          Text(
+          const Text(
             'Get your phone into position',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -49,11 +49,11 @@ class SetUpPageState extends State<SetUpPage> {
                 fontSize: 28,
                 decoration: TextDecoration.none),
           ),
-          Spacer(),
+          const Spacer(),
           Row(
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(right: 15),
+                padding: EdgeInsets.only(right: 15),
                 child: Icon(Icons.timer_10, color: Colors.white, size: 34),
               ),
               Flexible(
@@ -67,11 +67,11 @@ class SetUpPageState extends State<SetUpPage> {
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(right: 15),
+                padding: EdgeInsets.only(right: 15),
                 child: Icon(Icons.accessibility, color: Colors.white, size: 34),
               ),
               Flexible(
@@ -83,10 +83,10 @@ class SetUpPageState extends State<SetUpPage> {
               ),
             ],
           ),
-          Spacer(),
-          Row(children: [
+          const Spacer(),
+          Row(children: const [
             Padding(
-                padding: const EdgeInsets.only(right: 15),
+                padding: EdgeInsets.only(right: 15),
                 child:
                     Icon(Icons.exposure_plus_1, color: Colors.white, size: 34)),
             Flexible(
@@ -98,10 +98,10 @@ class SetUpPageState extends State<SetUpPage> {
                       decoration: TextDecoration.none)),
             ),
           ]),
-          Spacer(),
-          Row(children: [
+          const Spacer(),
+          Row(children: const [
             Padding(
-              padding: const EdgeInsets.only(right: 15),
+              padding: EdgeInsets.only(right: 15),
               child: Icon(Icons.swap_vert, color: Colors.white, size: 34),
             ),
             Flexible(
@@ -113,10 +113,10 @@ class SetUpPageState extends State<SetUpPage> {
                       decoration: TextDecoration.none)),
             ),
           ]),
-          Spacer(),
-          Row(children: [
+          const Spacer(),
+          Row(children: const [
             Padding(
-              padding: const EdgeInsets.only(right: 15),
+              padding: EdgeInsets.only(right: 15),
               child: Icon(Icons.check_rounded, color: Colors.white, size: 34),
             ),
             Flexible(
@@ -128,17 +128,17 @@ class SetUpPageState extends State<SetUpPage> {
                       decoration: TextDecoration.none)),
             ),
           ]),
-          Spacer(),
+          const Spacer(),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 textStyle: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
                 ),
-                primary: Color.fromARGB(255, 255, 255, 255),
                 padding: const EdgeInsets.fromLTRB(70, 10, 70, 10)),
             onPressed: () {
               Navigator.push(

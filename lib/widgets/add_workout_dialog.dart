@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../screens/new_workout.dart';
 
 class AddWorkoutDialog extends StatefulWidget {
+  const AddWorkoutDialog({Key? key}) : super(key: key);
+
   @override
   AddWorkoutDialogState createState() => AddWorkoutDialogState();
 }
@@ -40,12 +42,12 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
       child: Column(
         children: <Widget>[
           Padding(padding: const EdgeInsets.all(5), child: buildButtons()),
-          Padding(
-              padding: const EdgeInsets.only(top: 20),
+          const Padding(
+              padding: EdgeInsets.only(top: 20),
               child: Text('Create a',
                   style: TextStyle(color: Colors.white, fontSize: 20))),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 30),
+          const Padding(
+              padding: EdgeInsets.only(bottom: 30),
               child: Text('Workout',
                   style: TextStyle(color: Colors.white, fontSize: 36))),
           buildTextField(),
@@ -94,13 +96,13 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
           controller: controller,
           maxLength: 20,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(color: Colors.white, fontSize: 20),
           decoration: InputDecoration(
-              counterStyle: TextStyle(color: Colors.white),
+              counterStyle: const TextStyle(color: Colors.white),
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
               ),
-              focusedBorder: UnderlineInputBorder(
+              focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
               border: InputBorder.none,

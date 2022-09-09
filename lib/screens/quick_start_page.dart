@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import '../rep_counting/exercise_type.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
 import 'set_up_phone_page.dart';
 
 class QuickStartPage extends StatefulWidget {
@@ -13,8 +16,12 @@ class QuickStartPage extends StatefulWidget {
 
 class QuickStartPageState extends State<QuickStartPage> {
   final CarouselController _controller = CarouselController();
-  List<String> _exerciseNames = ['Squats', 'Pull-ups', 'Push-ups'];
-  List<ExerciseType> _exerciseTypes = ExerciseType.values;
+  final List<String> _exerciseNames = ['Squats', 'Pull-ups', 'Push-ups'];
+  final List<Exercise> _exerciseTypes = [
+    SquatExercise(),
+    PullUpExercise(),
+    PushUpExercise()
+  ];
   var _reps = 1;
   int _chosenExerciseIndex = 0;
 
@@ -79,7 +86,7 @@ class QuickStartPageState extends State<QuickStartPage> {
                     child: Stack(
                       children: [
                         Container(
-                          foregroundDecoration: BoxDecoration(
+                          foregroundDecoration: const BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
                                 Colors.transparent,
@@ -92,7 +99,7 @@ class QuickStartPageState extends State<QuickStartPage> {
                               stops: [0, 0.2, 0.5, 1],
                             ),
                           ),
-                          child: (Image.asset('assets/img/${item}.png',
+                          child: (Image.asset('assets/img/$item.png',
                               width: 250, height: 250, fit: BoxFit.fill)),
                         ),
                         Column(
@@ -181,7 +188,7 @@ class QuickStartPageState extends State<QuickStartPage> {
   Widget buildButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          textStyle: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           padding: const EdgeInsets.fromLTRB(70, 12, 70, 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),

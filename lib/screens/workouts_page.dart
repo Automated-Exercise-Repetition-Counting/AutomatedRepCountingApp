@@ -43,7 +43,7 @@ class WorkoutPageState extends State<WorkoutPage> {
               padding: const EdgeInsets.only(top: 90),
               child: Container(
                 padding: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -83,9 +83,9 @@ class WorkoutPageState extends State<WorkoutPage> {
                   color:
                       Theme.of(context).colorScheme.primary.withOpacity(0.2)),
               child: Column(
-                children: [
+                children: const [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 5.0),
+                    padding: EdgeInsets.fromLTRB(0, 15.0, 0, 5.0),
                     child: Text(
                       'Create a new workout',
                       style: TextStyle(
@@ -96,7 +96,7 @@ class WorkoutPageState extends State<WorkoutPage> {
                   ),
                   Flexible(
                     child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'You can create and edit your own workout by choosing from various exercises.',
                           textAlign: TextAlign.center,

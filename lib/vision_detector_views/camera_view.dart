@@ -7,7 +7,7 @@ import '../main.dart';
 enum ScreenMode { liveFeed, gallery }
 
 class CameraView extends StatefulWidget {
-  CameraView(
+  const CameraView(
       {Key? key,
       required this.customPaint,
       this.text,
@@ -18,7 +18,7 @@ class CameraView extends StatefulWidget {
 
   final CustomPaint? customPaint;
   final String? text;
-  final Function(InputImage inputImage) onImage;
+  final Function(InputImage inputImage, {CameraImage cameraImage}) onImage;
   final Function(ScreenMode mode)? onScreenModeChanged;
   final CameraLensDirection initialDirection;
 
@@ -161,6 +161,6 @@ class _CameraViewState extends State<CameraView> {
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
-    widget.onImage(inputImage);
+    widget.onImage(inputImage, cameraImage: image);
   }
 }

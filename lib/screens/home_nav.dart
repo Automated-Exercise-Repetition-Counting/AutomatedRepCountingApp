@@ -14,7 +14,12 @@ class HomeNav extends StatefulWidget {
 }
 
 class HomeNavState extends State<HomeNav> {
-  final pages = [HomePage(), QuickStartPage(), WorkoutPage(), ProfilePage()];
+  final pages = [
+    const HomePage(),
+    const QuickStartPage(),
+    const WorkoutPage(),
+    const ProfilePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +45,13 @@ class HomeNavState extends State<HomeNav> {
             ]),
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
       bottomNavigationBar: Container(
-        decoration: new BoxDecoration(
-          borderRadius: new BorderRadius.circular(30.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0),
           color: Theme.of(context).colorScheme.primary,
         ),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -61,28 +66,28 @@ class HomeNavState extends State<HomeNav> {
               setState(() => widget.currentIndex = index),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
-              icon: Icon(CustomIcons.home),
-              title: Text('Home'),
+              icon: const Icon(CustomIcons.home),
+              title: const Text('Home'),
               activeColor: Colors.white,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(CustomIcons.lightning),
-              title: Text('Quick Start'),
+              icon: const Icon(CustomIcons.lightning),
+              title: const Text('Quick Start'),
               activeColor: Colors.white,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(CustomIcons.dumbbell),
-              title: Text(
+              icon: const Icon(CustomIcons.dumbbell),
+              title: const Text(
                 'Workouts',
               ),
               activeColor: Colors.white,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
-              icon: Icon(CustomIcons.user),
-              title: Text('Profile'),
+              icon: const Icon(CustomIcons.user),
+              title: const Text('Profile'),
               activeColor: Colors.white,
               textAlign: TextAlign.center,
             ),

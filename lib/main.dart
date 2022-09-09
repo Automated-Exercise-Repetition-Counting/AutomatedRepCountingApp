@@ -9,7 +9,7 @@ Future<void> main() async {
 
   cameras = await availableCameras();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {

@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_controller.dart';
-import '../rep_counting/automatic_rep_counter.dart';
-import '../rep_counting/exercise_type.dart';
-import '../rep_counting/movement_phase.dart';
+import 'package:puioio/automatic_rep_counter/exercise/movement_phase.dart';
+import '../automatic_rep_counter/automatic_rep_counter.dart';
+import '../automatic_rep_counter/exercise/exercise.dart';
 import '../vision_detector_views/pose_detector_view.dart';
 import 'home_nav.dart';
 import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
-  RepCountingPage(
+  const RepCountingPage(
       {Key? key,
       required this.exerciseName,
       required this.reps,
@@ -17,7 +17,7 @@ class RepCountingPage extends StatefulWidget {
       : super(key: key);
   final String exerciseName;
   final int reps;
-  final ExerciseType exerciseType;
+  final Exercise exerciseType;
 
   @override
   RepCountingPageState createState() => RepCountingPageState();
@@ -34,7 +34,7 @@ class RepCountingPageState extends State<RepCountingPage> {
   @override
   void initState() {
     super.initState();
-    _repCounter = AutomaticRepCounter(exerciseType: ExerciseType.squat);
+    _repCounter = AutomaticRepCounter(exercise: widget.exerciseType);
     _repCounter.addListener(() {
       setState(() {});
     });
@@ -43,11 +43,11 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (_) {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
-        if (_seconds > 1)
+        if (_seconds > 1) {
           _seconds--;
-        else {
+        } else {
           stopTimer();
         }
       });
@@ -104,8 +104,8 @@ class RepCountingPageState extends State<RepCountingPage> {
         backgroundColor: Colors.white.withOpacity(0.5),
         body: Center(
           child: Text(
-            '${_seconds}',
-            style: TextStyle(fontSize: 100, color: Colors.black),
+            '$_seconds',
+            style: const TextStyle(fontSize: 100, color: Colors.black),
           ),
         ),
       ),
@@ -143,8 +143,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                       builder: (context) => ResultsPage(
                           exerciseName: widget.exerciseName,
                           desiredReps: widget.reps,
-                          countedReps: _repCounter.reps,
-                          exerciseType: widget.exerciseType)),
+                          countedReps: _repCounter.reps)),
                 );
               });
             },
@@ -174,19 +173,19 @@ class RepCountingPageState extends State<RepCountingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(widget.exerciseName,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 40,
                           fontWeight: FontWeight.w300)),
                   Text(
-                    "Movement Phase: ${_repCounter.avgMovementPhase == MovementPhase.top ? "Top" : "Bottom"}",
-                    style: TextStyle(
+                    "Movement Phase: ${_repCounter.phase == MovementPhase.top ? "Top" : "Bottom"}",
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
                 ]),
-            Spacer(),
+            const Spacer(),
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

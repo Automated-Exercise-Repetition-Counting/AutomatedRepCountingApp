@@ -6,7 +6,8 @@ class CircularProgressWithImage extends StatefulWidget {
       {Key? key,
       required this.countedReps,
       required this.desiredReps,
-      required this.exerciseType});
+      required this.exerciseType})
+      : super(key: key);
   final int countedReps;
   final int desiredReps;
   final String exerciseType;
@@ -27,7 +28,7 @@ class CircularProgressWithImageState extends State<CircularProgressWithImage> {
             maximum: 100,
             showLabels: false,
             showTicks: false,
-            axisLineStyle: AxisLineStyle(
+            axisLineStyle: const AxisLineStyle(
               thickness: 0.15,
               cornerStyle: CornerStyle.bothCurve,
               color: Color.fromRGBO(81, 191, 192, 0.3),
