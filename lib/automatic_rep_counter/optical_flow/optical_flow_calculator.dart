@@ -3,16 +3,13 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:native_opencv/native_opencv.dart';
+import '../hyperparameters.dart';
 
 /// Calculates the optical flow from given [CameraImage]s.
 /// The optical flow is calculated using the Lucas-Kanade method.
 /// This is achieved through the use of the [NativeOpencv] plugin,
 /// which is a wrapper around the OpenCV library.
 class OpticalFlowCalculator {
-  static const int _msDelayBetweenExecutions = 40;
-  static const double _movementThreshold = 5.0;
-  static const int _windowSize = 15;
-
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
   final bool xOnly;
@@ -67,7 +64,7 @@ class OpticalFlowCalculator {
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
     int curTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (curTime - _lastExecution < _msDelayBetweenExecutions) {
+    if (curTime - _lastExecution < msDelayBetweenExecutionsOF) {
       return OpticalFlowDirection.none;
     }
     _lastExecution = curTime;
@@ -92,12 +89,12 @@ class OpticalFlowCalculator {
     OpticalFlowDirection currentDirectionX = OpticalFlowDirection.stationary;
     OpticalFlowDirection currentDirectionY = OpticalFlowDirection.stationary;
 
-    if (x.abs() > _movementThreshold) {
+    if (x.abs() > movementThresholdOF) {
       currentDirectionX =
           x > 0 ? OpticalFlowDirection.right : OpticalFlowDirection.left;
     }
 
-    if (y.abs() > _movementThreshold) {
+    if (y.abs() > movementThresholdOF) {
       currentDirectionY =
           y > 0 ? OpticalFlowDirection.down : OpticalFlowDirection.up;
     }
@@ -123,7 +120,7 @@ class OpticalFlowCalculator {
       directionCount[direction] = (directionCount[direction] ?? 0) + 1;
     }
 
-    if (_directions.length > _windowSize) {
+    if (_directions.length > windowSizeOF) {
       _directions.removeAt(0);
     }
 

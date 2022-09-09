@@ -1,12 +1,12 @@
 import 'dart:collection';
 
-import '../../optical_flow/optical_flow_calculator.dart';
-import '../movement_phase.dart';
 import 'state_machine_result.dart';
 import 'vertical_exercise_phase.dart';
+import '../movement_phase.dart';
+import '../../hyperparameters.dart';
+import '../../optical_flow/optical_flow_calculator.dart';
 
 abstract class ExerciseStateMachine {
-  static const _windowSize = 3;
   VerticalExercisePhase currentState;
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
@@ -48,7 +48,7 @@ abstract class ExerciseStateMachine {
   StateMachineResult getStateMachineResult(MovementPhase latestPhase) {
     _prevMovementPhase.addLast(latestPhase);
 
-    if (_prevMovementPhase.length <= _windowSize) {
+    if (_prevMovementPhase.length <= windowSizePD) {
       // insufficient values to safely detect movement phase. return.
       return StateMachineResult(false, false);
     }

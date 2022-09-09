@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import 'thresholds.dart';
+import '../../hyperparameters.dart';
 
 class Joint {
   late final PoseLandmark jointPoint;
@@ -59,6 +59,6 @@ class Joint {
   /// Checks the confidence is above the [minLikelihood] threshold
   /// for the given landmark.
   bool _confidenceCheck(PoseLandmark landmark) {
-    return landmark.likelihood >= Thresholds.minLikelihood;
+    return landmark.likelihood >= minPoseLikelihoodPD;
   }
 }

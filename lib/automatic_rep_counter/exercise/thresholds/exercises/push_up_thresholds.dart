@@ -1,13 +1,15 @@
+import 'dart:math' show pi;
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import '../joint.dart';
 import '../thresholds.dart';
 import '../../movement_phase.dart';
+import '../../../hyperparameters.dart';
 
 class PushUpThresholds extends Thresholds {
   /// Internal angle of the hip, knee, and ankle
-  static const num _lowerThreshold = 2.26893; // (130) * (pi / 180);
-  static const num _upperThreshold = 2.61799; // (180-30) * (pi / 180);
+  static const num _lowerThreshold = pushUpLowerAngle * (pi / 180);
+  static const num _upperThreshold = pushUpUpperAngle * (pi / 180);
 
   @override
   MovementPhase getMovementPhase(Pose pose) {
