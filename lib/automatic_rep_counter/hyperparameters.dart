@@ -2,8 +2,8 @@
  * Hyperparameters for Automatic Rep Counter
  */
 
-/// number of unconfident reps before switching from pose detection
-/// to Optical Flow
+/// number of unconfident pose detections before switching
+/// from pose detection to Optical Flow
 const int switchToOFThreshold = 10;
 
 /*
