@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import 'package:whaikaha/automatic_rep_counter/automatic_rep_counter.dart';
-import 'package:whaikaha/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
+import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
+import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 
 import 'camera_view.dart';
 import 'painters/pose_painter.dart';

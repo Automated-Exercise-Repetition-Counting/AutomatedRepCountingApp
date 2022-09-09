@@ -4,12 +4,12 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'package:native_opencv/native_opencv.dart';
-import 'package:whaikaha/automatic_rep_counter/automatic_rep_counter.dart';
-import 'package:whaikaha/automatic_rep_counter/exercise/exercise.dart';
-import 'package:whaikaha/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
-import 'package:whaikaha/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
-import 'package:whaikaha/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
-import 'package:whaikaha/vision_detector_views/pose_detector_view.dart';
+import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:puioio/vision_detector_views/pose_detector_view.dart';
 
 List<CameraDescription> cameras = [];
 
