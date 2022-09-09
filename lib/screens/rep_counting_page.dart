@@ -6,7 +6,7 @@ import '../rep_counting/exercise_type.dart';
 import '../rep_counting/movement_phase.dart';
 import '../vision_detector_views/pose_detector_view.dart';
 import 'home_nav.dart';
-import 'results.dart';
+import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
   RepCountingPage(
