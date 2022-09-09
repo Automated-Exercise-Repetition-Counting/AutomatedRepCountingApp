@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
+import 'package:google_ml_kit_example/screens/home_nav.dart';
 import '../widgets/circular_progress_with_image.dart';
-import 'home_page.dart';
 
 class ResultsPage extends StatefulWidget {
   const ResultsPage(
       {Key? key,
+      required this.exerciseName,
       required this.desiredReps,
       required this.countedReps,
       required this.exerciseType})
       : super(key: key);
+  final String exerciseName;
   final int desiredReps;
   final int countedReps;
   final ExerciseType exerciseType;
@@ -36,7 +38,7 @@ class ResultsPageState extends State<ResultsPage> {
           CircularProgressWithImage(
               countedReps: widget.countedReps,
               desiredReps: widget.desiredReps,
-              exerciseType: widget.exerciseType.toString()),
+              exerciseType: widget.exerciseName),
           Column(children: <Widget>[
             Text('Number of reps counted',
                 style: Theme.of(context).textTheme.headline6),
@@ -59,8 +61,7 @@ class ResultsPageState extends State<ResultsPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage(title: 'Home page')),
+                  MaterialPageRoute(builder: (context) => const HomeNav()),
                 );
               },
               child: const Text('Done'),

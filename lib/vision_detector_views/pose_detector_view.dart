@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/rep_counting/automatic_rep_counter.dart';
-import 'package:google_ml_kit_example/rep_counting/movement_phase.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-
+import '../rep_counting/automatic_rep_counter.dart';
 import 'camera_view.dart';
 import 'painters/pose_painter.dart';
 
@@ -40,7 +38,6 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
 
   @override
   Widget build(BuildContext context) {
-    int reps = _repCounter.reps; // TODO do something with this
     return Stack(
       children: <Widget>[
         CameraView(
