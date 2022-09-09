@@ -5,6 +5,7 @@ import '../rep_counting/automatic_rep_counter.dart';
 import '../rep_counting/exercise_type.dart';
 import '../rep_counting/movement_phase.dart';
 import '../vision_detector_views/pose_detector_view.dart';
+import 'home_nav.dart';
 import 'results.dart';
 
 class RepCountingPage extends StatefulWidget {
@@ -27,7 +28,6 @@ class RepCountingPageState extends State<RepCountingPage> {
   late CountdownController countdownController;
   static const _maxSeconds = 10;
   int _seconds = _maxSeconds;
-  int _countedReps = 0;
   Timer? timer;
   late bool _isRunning;
 
@@ -58,31 +58,43 @@ class RepCountingPageState extends State<RepCountingPage> {
     timer?.cancel();
   }
 
+  void goBack() {
+    setState(() {
+      stopTimer();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeNav(currentIndex: 1)),
+      );
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    _countedReps = _repCounter.reps;
-    return Scaffold(
-        body: Stack(
-      children: [
-        PoseDetectorView(repCounter: _repCounter),
-        buildTimer(),
-        Visibility(
-          visible: !_isRunning,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
-            child: Column(
-              children: <Widget>[
-                buildButtons(),
-                const Spacer(),
-                buildDisplay(),
-              ],
+  Widget build(BuildContext context) => WillPopScope(
+      onWillPop: () async {
+        goBack();
+        return false;
+      },
+      child: Scaffold(
+          body: Stack(
+        children: [
+          PoseDetectorView(repCounter: _repCounter),
+          buildTimer(),
+          Visibility(
+            visible: !_isRunning,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
+              child: Column(
+                children: <Widget>[
+                  buildButtons(),
+                  const Spacer(),
+                  buildDisplay(),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ));
-  }
+        ],
+      )));
 
   Widget buildTimer() {
     _isRunning = timer == null ? false : timer!.isActive;
@@ -111,9 +123,7 @@ class RepCountingPageState extends State<RepCountingPage> {
             iconSize: 30,
             color: Colors.black,
             onPressed: () {
-              setState(() {
-                Navigator.pop(context);
-              });
+              goBack();
             },
           ),
         ),
@@ -133,7 +143,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                       builder: (context) => ResultsPage(
                           exerciseName: widget.exerciseName,
                           desiredReps: widget.reps,
-                          countedReps: _countedReps,
+                          countedReps: _repCounter.reps,
                           exerciseType: widget.exerciseType)),
                 );
               });
@@ -157,23 +167,36 @@ class RepCountingPageState extends State<RepCountingPage> {
           ),
         ),
         child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(_countedReps.toString(),
-                    style: Theme.of(context).textTheme.headline2),
-                Text('out of ${widget.reps}',
-                    style: Theme.of(context).textTheme.subtitle2),
-                Text(
-                  "Movement Phase: ${_repCounter.avgMovementPhase == MovementPhase.top ? "Top" : "Bottom"}",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-              ]),
-        ),
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(children: [
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(widget.exerciseName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w300)),
+                  Text(
+                    "Movement Phase: ${_repCounter.avgMovementPhase == MovementPhase.top ? "Top" : "Bottom"}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ]),
+            Spacer(),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(_repCounter.reps.toString(),
+                      style: Theme.of(context).textTheme.headline3),
+                  Text('out of ${widget.reps}',
+                      style: Theme.of(context).textTheme.subtitle2),
+                ]),
+          ]),
+        )),
       ),
     );
   }

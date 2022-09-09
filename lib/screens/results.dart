@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/rep_counting/exercise_type.dart';
-import 'package:google_ml_kit_example/screens/home_nav.dart';
+import '../rep_counting/exercise_type.dart';
 import '../widgets/circular_progress_with_image.dart';
+import 'home_nav.dart';
 
 class ResultsPage extends StatefulWidget {
   const ResultsPage(
@@ -61,7 +61,8 @@ class ResultsPageState extends State<ResultsPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeNav()),
+                  MaterialPageRoute(
+                      builder: (context) => HomeNav(currentIndex: 1)),
                 );
               },
               child: const Text('Done'),

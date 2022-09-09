@@ -22,10 +22,11 @@ class QuickStartPageState extends State<QuickStartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Scaffold(
-      backgroundColor: Color.fromARGB(255, 240, 240, 240),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
+          child: Padding(
+        padding: const EdgeInsets.only(top: 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             buildTitle(),
             buildCarousel(),
@@ -33,7 +34,7 @@ class QuickStartPageState extends State<QuickStartPage> {
             buildButton()
           ],
         ),
-      ),
+      )),
     ));
   }
 

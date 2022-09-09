@@ -30,7 +30,7 @@ class CircularProgressWithImageState extends State<CircularProgressWithImage> {
             axisLineStyle: AxisLineStyle(
               thickness: 0.15,
               cornerStyle: CornerStyle.bothCurve,
-              color: Theme.of(context).colorScheme.secondary,
+              color: Color.fromRGBO(81, 191, 192, 0.3),
               thicknessUnit: GaugeSizeUnit.factor,
             ),
             pointers: <GaugePointer>[

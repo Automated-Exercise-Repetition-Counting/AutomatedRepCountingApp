@@ -26,9 +26,11 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: const Color.fromRGBO(81, 191, 192, 1),
-              secondary: const Color.fromRGBO(81, 191, 192, 0.3)),
+              background: const Color.fromARGB(255, 240, 240, 240)),
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: HomeNav(),
+      home: HomeNav(
+        currentIndex: 0,
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

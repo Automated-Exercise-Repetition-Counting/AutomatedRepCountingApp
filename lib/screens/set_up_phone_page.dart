@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/screens/rep_counting_page.dart';
-
 import '../rep_counting/exercise_type.dart';
+import 'rep_counting_page.dart';
 
 class SetUpPage extends StatefulWidget {
   const SetUpPage(
@@ -22,7 +21,7 @@ class SetUpPageState extends State<SetUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(81, 191, 192, 1),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,

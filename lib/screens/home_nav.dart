@@ -7,24 +7,24 @@ import 'quick_start_page.dart';
 import 'workouts_page.dart';
 
 class HomeNav extends StatefulWidget {
-  const HomeNav({Key? key}) : super(key: key);
-
+  HomeNav({Key? key, required this.currentIndex}) : super(key: key);
+  int currentIndex;
   @override
   HomeNavState createState() => HomeNavState();
 }
 
 class HomeNavState extends State<HomeNav> {
-  int _currentIndex = 0;
   final pages = [HomePage(), QuickStartPage(), WorkoutPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: pages),
+      body: IndexedStack(index: widget.currentIndex, children: pages),
       appBar: AppBar(
+        toolbarHeight: 100,
         flexibleSpace: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 40),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Padding(
                   padding: const EdgeInsets.only(right: 10),
@@ -33,10 +33,10 @@ class HomeNavState extends State<HomeNav> {
                     color: Theme.of(context).colorScheme.primary,
                     size: 30,
                   )),
-              Text('RepetitionCounter',
+              Text('Pūioio',
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 20))
+                      fontSize: 25))
             ]),
           ),
         ),
@@ -51,13 +51,14 @@ class HomeNavState extends State<HomeNav> {
         ),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: BottomNavyBar(
-          selectedIndex: _currentIndex,
+          selectedIndex: widget.currentIndex,
           showElevation: false,
           containerHeight: 65,
           backgroundColor: Theme.of(context).colorScheme.primary,
           itemCornerRadius: 24,
           curve: Curves.ease,
-          onItemSelected: (index) => setState(() => _currentIndex = index),
+          onItemSelected: (index) =>
+              setState(() => widget.currentIndex = index),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
               icon: Icon(CustomIcons.home),
