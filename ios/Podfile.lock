@@ -1,0 +1,166 @@
+PODS:
+  - camera_avfoundation (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - google_mlkit_commons (0.2.0):
+    - Flutter
+    - MLKitVision
+  - google_mlkit_pose_detection (0.4.0):
+    - Flutter
+    - google_mlkit_commons
+    - GoogleMLKit/PoseDetection (~> 3.1.0)
+    - GoogleMLKit/PoseDetectionAccurate (~> 3.1.0)
+  - GoogleDataTransport (9.2.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMLKit/MLKitCore (3.1.0):
+    - MLKitCommon (~> 7.0.0)
+  - GoogleMLKit/PoseDetection (3.1.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitPoseDetection (~> 1.0.0-beta9)
+  - GoogleMLKit/PoseDetectionAccurate (3.1.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitPoseDetectionAccurate (~> 1.0.0-beta9)
+  - GoogleToolboxForMac/DebugUtils (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - GoogleToolboxForMac/Defines (2.3.2)
+  - GoogleToolboxForMac/Logger (2.3.2):
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSData+zlib (2.3.2)":
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.3.2)":
+    - GoogleToolboxForMac/DebugUtils (= 2.3.2)
+    - GoogleToolboxForMac/Defines (= 2.3.2)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.3.2)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.3.2)"
+  - GoogleUtilities/Environment (7.7.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.7.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilitiesComponents (1.1.0):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.7.2)
+  - image_picker_ios (0.0.1):
+    - Flutter
+  - MLImage (1.0.0-beta3)
+  - MLKitCommon (7.0.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - GoogleUtilitiesComponents (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.12)
+  - MLKitPoseDetection (1.0.0-beta9):
+    - MLKitCommon (~> 7.0)
+    - MLKitPoseDetectionCommon (= 1.0.0-beta9)
+    - MLKitXenoCommon (= 1.0.0-beta9)
+  - MLKitPoseDetectionAccurate (1.0.0-beta9):
+    - MLKitCommon (~> 7.0)
+    - MLKitPoseDetectionCommon (= 1.0.0-beta9)
+    - MLKitXenoCommon (= 1.0.0-beta9)
+  - MLKitPoseDetectionCommon (1.0.0-beta9):
+    - MLKitCommon (~> 7.0)
+    - MLKitXenoCommon (= 1.0.0-beta9)
+  - MLKitVision (4.1.0):
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+    - MLImage (= 1.0.0-beta3)
+    - MLKitCommon (~> 7.0)
+    - Protobuf (~> 3.12)
+  - MLKitXenoCommon (1.0.0-beta9):
+    - MLKitCommon (~> 7.0)
+    - MLKitVision (~> 4.1)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
+  - native_opencv (0.0.1):
+    - Flutter
+    - OpenCV (= 4.3.0)
+  - OpenCV (4.3.0)
+  - path_provider_ios (0.0.1):
+    - Flutter
+  - PromisesObjC (2.1.1)
+  - Protobuf (3.21.5)
+
+DEPENDENCIES:
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - Flutter (from `Flutter`)
+  - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
+  - google_mlkit_pose_detection (from `.symlinks/plugins/google_mlkit_pose_detection/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - native_opencv (from `.symlinks/plugins/native_opencv/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - GoogleDataTransport
+    - GoogleMLKit
+    - GoogleToolboxForMac
+    - GoogleUtilities
+    - GoogleUtilitiesComponents
+    - GTMSessionFetcher
+    - MLImage
+    - MLKitCommon
+    - MLKitPoseDetection
+    - MLKitPoseDetectionAccurate
+    - MLKitPoseDetectionCommon
+    - MLKitVision
+    - MLKitXenoCommon
+    - nanopb
+    - OpenCV
+    - PromisesObjC
+    - Protobuf
+
+EXTERNAL SOURCES:
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
+  Flutter:
+    :path: Flutter
+  google_mlkit_commons:
+    :path: ".symlinks/plugins/google_mlkit_commons/ios"
+  google_mlkit_pose_detection:
+    :path: ".symlinks/plugins/google_mlkit_pose_detection/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
+  native_opencv:
+    :path: ".symlinks/plugins/native_opencv/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+
+SPEC CHECKSUMS:
+  camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
+  google_mlkit_pose_detection: 85f892b3863bfabfd6ffda66729b5dafb2c00162
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
+  GoogleMLKit: 9d072522949ff0ef4dae5359feaf3db2ef2fa658
+  GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
+  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
+  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
+  MLKitCommon: 20f4aca0ec2bb37cef2b9c211b50586817bac5d3
+  MLKitPoseDetection: b277372e68c4d69122cc98925299ba0a19b2b157
+  MLKitPoseDetectionAccurate: 8e84f8fee3e77a47830adf8252fcf9b5c39c1825
+  MLKitPoseDetectionCommon: 46537ed5597b359f496470a7e5cc3bf5db4f55db
+  MLKitVision: 639a171d937241f3fcf92bc1b3ef8f179f49916c
+  MLKitXenoCommon: 319d30f77375ba4ff66279917b9657578f530bd6
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  native_opencv: ab8b4bcfa5ca37eaa2634098698b3ea494e3b1fb
+  OpenCV: 681e0451c1e54c5930a8922277f817ed5d5ab459
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
+
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+
+COCOAPODS: 1.11.3
