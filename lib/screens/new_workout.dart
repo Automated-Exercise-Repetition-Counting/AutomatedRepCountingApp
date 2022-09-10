@@ -27,29 +27,38 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
-          child: Column(children: [
-        Padding(padding: const EdgeInsets.only(top: 50), child: buildTitle()),
-        Text(widget.workoutTitle,
-            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w300)),
-        Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(children: [
-              Lottie.asset("assets/lottie/workout_empty.json", width: 250),
-              const Text("Your workout is empty")
-            ])),
-        Padding(padding: const EdgeInsets.only(top: 50), child: buildButton()),
-      ])),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+            buildTitle(),
+            buildEmptyAnimation(),
+            const SizedBox(height: 50),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 70.0),
+                child: buildButton()),
+          ])),
     );
   }
 
   Widget buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Text(
-        'New Workout',
-        style: Theme.of(context).textTheme.headline6,
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Text(
+          'New Workout',
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
-    );
+      Text(widget.workoutTitle,
+          style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w300)),
+    ]);
+  }
+
+  Widget buildEmptyAnimation() {
+    return Column(children: [
+      Lottie.asset("assets/lottie/workout_empty.json", width: 250),
+      const Text("Your workout is empty")
+    ]);
   }
 
   Widget buildButton() {

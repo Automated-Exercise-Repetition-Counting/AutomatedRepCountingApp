@@ -94,6 +94,7 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
         padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         child: TextField(
           controller: controller,
+          cursorColor: Colors.white,
           maxLength: 20,
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.white, fontSize: 20),

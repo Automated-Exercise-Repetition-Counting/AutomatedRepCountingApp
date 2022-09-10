@@ -28,21 +28,16 @@ class QuickStartPageState extends State<QuickStartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: <Widget>[
-            buildTitle(),
-            buildCarousel(),
-            buildRepSetter(),
-            buildButton()
-          ],
-        ),
-      )),
-    ));
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildTitle(),
+          buildCarousel(),
+          buildRepSetter(),
+        ],
+      ),
+    );
   }
 
   Widget buildTitle() {
@@ -65,71 +60,67 @@ class QuickStartPageState extends State<QuickStartPage> {
 
   Widget buildCarousel() {
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 10.0),
-        child: SingleChildScrollView(
-          child: CarouselSlider(
-            options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _chosenExerciseIndex = index;
-                  });
-                },
-                enlargeCenterPage: true,
-                viewportFraction: 0.7,
-                aspectRatio: 1 / 1,
-                height: 240),
-            items: _exerciseNames
-                .map(
-                  (item) => ClipRRect(
-                    borderRadius: BorderRadius.circular(30), // Image border
-                    child: Stack(
-                      children: [
-                        Container(
-                          foregroundDecoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.transparent,
-                                Color.fromARGB(255, 72, 72, 72)
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0, 0.2, 0.5, 1],
-                            ),
+      SingleChildScrollView(
+        child: CarouselSlider(
+          options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _chosenExerciseIndex = index;
+                });
+              },
+              enlargeCenterPage: true,
+              viewportFraction: 0.6,
+              height: 220),
+          items: _exerciseNames
+              .map(
+                (item) => ClipRRect(
+                  borderRadius: BorderRadius.circular(30), // Image border
+                  child: Stack(
+                    children: [
+                      Container(
+                        foregroundDecoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.transparent,
+                              Colors.transparent,
+                              Colors.transparent,
+                              Color.fromARGB(255, 72, 72, 72)
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0, 0.2, 0.5, 1],
                           ),
-                          child: (Image.asset('assets/img/$item.png',
-                              width: 250, height: 250, fit: BoxFit.fill)),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Center(
-                              child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 35),
-                                  child: Text(item.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 1.5,
-                                          decoration: TextDecoration.none))),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                        child: (Image.asset('assets/img/$item.png',
+                            width: 250, height: 250, fit: BoxFit.fill)),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Center(
+                            child: Padding(
+                                padding: const EdgeInsets.only(bottom: 35),
+                                child: Text(item.toString(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 1.5,
+                                        decoration: TextDecoration.none))),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                )
-                .toList(),
-            carouselController: _controller,
-          ),
+                ),
+              )
+              .toList(),
+          carouselController: _controller,
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(top: 10),
         child: DotsIndicator(
           dotsCount: 3,
           position: _chosenExerciseIndex.toDouble(),
@@ -181,7 +172,11 @@ class QuickStartPageState extends State<QuickStartPage> {
             ),
           ],
         ),
-      )
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: buildButton(),
+      ),
     ]);
   }
 
