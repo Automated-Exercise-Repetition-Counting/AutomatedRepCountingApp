@@ -1,5 +1,11 @@
 /*
+ * ******************************************
  * Hyperparameters for Automatic Rep Counter
+ * ******************************************
+ */
+
+/*
+ * Automatic Rep Counter Hyperparameters
  */
 
 /// number of unconfident pose detections before switching
@@ -11,7 +17,7 @@ const int switchToOFThreshold = 10;
  */
 
 /// Minimum likelihood of a keypoint being in the image
-const double minPoseLikelihoodPD = 0.9;
+const double minPoseLikelihoodPD = 0.7;
 
 /// Sliding window size
 const double windowSizePD = 3;
@@ -28,6 +34,10 @@ const double movementThresholdOF = 5.0;
 
 /// Sliding window size
 const int windowSizeOF = 15;
+
+/// Note that the native_opencv library also has a movement threshold for
+/// OpticalFlow, which is the amount of movement needed before corners
+/// are added into the average.
 
 /*
  * Exercise Hyperparams
