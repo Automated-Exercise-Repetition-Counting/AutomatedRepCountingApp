@@ -77,7 +77,7 @@ class RepCountingPageState extends State<RepCountingPage> {
       child: Scaffold(
           body: Stack(
         children: [
-          PoseDetectorView(repCounter: _repCounter),
+          AutomaticRepCounterView(repCounter: _repCounter),
           buildTimer(),
           Visibility(
             visible: !_isRunning,

@@ -9,15 +9,15 @@ import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculato
 import 'camera_view.dart';
 import 'painters/pose_painter.dart';
 
-class PoseDetectorView extends StatefulWidget {
+class AutomaticRepCounterView extends StatefulWidget {
   final AutomaticRepCounter repCounter;
-  const PoseDetectorView({Key? key, required this.repCounter})
+  const AutomaticRepCounterView({Key? key, required this.repCounter})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => _PoseDetectorViewState();
+  State<StatefulWidget> createState() => _AutomaticRepCounterViewState();
 }
 
-class _PoseDetectorViewState extends State<PoseDetectorView> {
+class _AutomaticRepCounterViewState extends State<AutomaticRepCounterView> {
   final PoseDetector _poseDetector =
       PoseDetector(options: PoseDetectorOptions());
   bool _canProcess = true;
