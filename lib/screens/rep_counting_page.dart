@@ -4,7 +4,7 @@ import 'package:flutter_countdown_timer/countdown_controller.dart';
 import 'package:puioio/automatic_rep_counter/exercise/movement_phase.dart';
 import '../automatic_rep_counter/automatic_rep_counter.dart';
 import '../automatic_rep_counter/exercise/exercise.dart';
-import '../vision_detector_views/pose_detector_view.dart';
+import '../vision_detector_views/automatic_rep_counter_view.dart';
 import 'home_nav.dart';
 import 'results_page.dart';
 
@@ -25,11 +25,11 @@ class RepCountingPage extends StatefulWidget {
 
 class RepCountingPageState extends State<RepCountingPage> {
   late final AutomaticRepCounter _repCounter;
+  late AutomaticRepCounterView _repCounterView;
   late CountdownController countdownController;
   static const _maxSeconds = 10;
   int _seconds = _maxSeconds;
   Timer? timer;
-  late bool _isRunning;
 
   @override
   void initState() {
@@ -38,8 +38,9 @@ class RepCountingPageState extends State<RepCountingPage> {
     _repCounter.addListener(() {
       setState(() {});
     });
+    _repCounterView =
+        AutomaticRepCounterView(repCounter: _repCounter, canCount: false);
     startTimer();
-    _isRunning = true;
   }
 
   void startTimer() {
@@ -54,8 +55,14 @@ class RepCountingPageState extends State<RepCountingPage> {
     });
   }
 
+  bool _timerIsRunning() => timer != null && timer!.isActive;
+
   void stopTimer() {
     timer?.cancel();
+    setState(() {
+      _repCounterView =
+          AutomaticRepCounterView(repCounter: _repCounter, canCount: false);
+    });
   }
 
   void goBack() {
@@ -77,10 +84,10 @@ class RepCountingPageState extends State<RepCountingPage> {
       child: Scaffold(
           body: Stack(
         children: [
-          AutomaticRepCounterView(repCounter: _repCounter),
+          _repCounterView,
           buildTimer(),
           Visibility(
-            visible: !_isRunning,
+            visible: !_timerIsRunning(),
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
@@ -97,9 +104,8 @@ class RepCountingPageState extends State<RepCountingPage> {
       )));
 
   Widget buildTimer() {
-    _isRunning = timer == null ? false : timer!.isActive;
     return Visibility(
-      visible: _isRunning,
+      visible: _timerIsRunning(),
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.5),
         body: Center(
