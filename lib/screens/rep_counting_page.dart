@@ -178,7 +178,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                           fontSize: 40,
                           fontWeight: FontWeight.w300)),
                   Text(
-                    "Movement Phase: ${_repCounter.phase == MovementPhase.top ? "Top" : "Bottom"}",
+                    "Movement Phase: ${_repCounter.phase.name}",
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
