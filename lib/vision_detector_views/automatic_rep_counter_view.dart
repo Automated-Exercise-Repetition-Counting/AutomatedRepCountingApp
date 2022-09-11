@@ -11,11 +11,8 @@ import 'painters/pose_painter.dart';
 
 class AutomaticRepCounterView extends StatefulWidget {
   final AutomaticRepCounter repCounter;
-  final bool canCount;
-  const AutomaticRepCounterView(
-      {Key? key, required this.repCounter, required this.canCount})
+  const AutomaticRepCounterView({Key? key, required this.repCounter})
       : super(key: key);
-
   @override
   State<StatefulWidget> createState() => _AutomaticRepCounterViewState();
 }
@@ -82,11 +79,8 @@ class _AutomaticRepCounterViewState extends State<AutomaticRepCounterView> {
       // TODO: set _customPaint to draw landmarks on top of image
       _customPaint = null;
     }
-
-    if (widget.canCount) {
     if (cameraImage != null) {
-        OpticalFlowDirection newDirection =
-            _opticalFlowCalculator.determineFlow(
+      OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
           cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
 
       if (newDirection != _flowDirection) {
@@ -100,7 +94,6 @@ class _AutomaticRepCounterViewState extends State<AutomaticRepCounterView> {
       poses,
       _flowDirection,
     );
-    }
     _isBusy = false;
     if (mounted) {
       setState(() {});
