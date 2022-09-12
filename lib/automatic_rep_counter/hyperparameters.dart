@@ -8,6 +8,9 @@
  * Automatic Rep Counter Hyperparameters
  */
 
+// Time after which to pause counting if PD is failing
+const int noPoseDetectionTimeout = 1000;
+
 /*
  * Pose Detection Hyperparams
  */
