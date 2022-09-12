@@ -12,8 +12,17 @@ import '../hyperparameters.dart';
 class OpticalFlowCalculator {
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
+  final Map<OpticalFlowDirection, int> _directionCount = {};
   final bool xOnly;
   final bool yOnly;
+
+  void _incrementDirectionCount(OpticalFlowDirection direction) {
+    if (_directionCount.containsKey(direction)) {
+      _directionCount[direction] = _directionCount[direction]! + 1;
+    } else {
+      _directionCount[direction] = 1;
+    }
+  }
 
   bool _canCalculate = true;
   int _lastExecution = DateTime.now().millisecondsSinceEpoch;
@@ -101,31 +110,33 @@ class OpticalFlowCalculator {
 
     if (xOnly) {
       _directions.add(currentDirectionX);
+      _incrementDirectionCount(currentDirectionX);
     } else if (yOnly) {
       _directions.add(currentDirectionY);
+      _incrementDirectionCount(currentDirectionY);
     } else if (currentDirectionX != currentDirectionY) {
       if (currentDirectionX == OpticalFlowDirection.stationary) {
         _directions.add(currentDirectionY);
+        _incrementDirectionCount(currentDirectionY);
       } else if (currentDirectionY == OpticalFlowDirection.stationary) {
         _directions.add(currentDirectionX);
+        _incrementDirectionCount(currentDirectionX);
       } else {
         _directions.add(currentDirectionX);
         _directions.add(currentDirectionY);
+
+        _incrementDirectionCount(currentDirectionX);
+        _incrementDirectionCount(currentDirectionY);
       }
     }
 
-    Map<OpticalFlowDirection, int> directionCount = {};
-
-    for (OpticalFlowDirection direction in _directions) {
-      directionCount[direction] = (directionCount[direction] ?? 0) + 1;
-    }
-
-    if (_directions.length > windowSizeOF) {
-      _directions.removeAt(0);
+    while (_directions.length > windowSizeOF) {
+      OpticalFlowDirection removedOFDir = _directions.removeAt(0);
+      _directionCount[removedOFDir] = (_directionCount[removedOFDir] ?? 1) - 1;
     }
 
     // return max direction
-    return directionCount.entries
+    return _directionCount.entries
         .reduce((a, b) => a.value > b.value ? a : b)
         .key;
   }
