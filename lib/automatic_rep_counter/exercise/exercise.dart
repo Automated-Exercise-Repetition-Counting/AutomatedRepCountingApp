@@ -5,12 +5,10 @@ import 'thresholds/thresholds.dart';
 import '../optical_flow/optical_flow_calculator.dart';
 
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import '../hyperparameters.dart';
 
 abstract class Exercise {
   final ExerciseStateMachine _exerciseStateMachine;
   final Thresholds _thresholds;
-  int _unconfidenceCount = 0;
 
   Exercise(this._exerciseStateMachine, this._thresholds);
 
@@ -22,14 +20,9 @@ abstract class Exercise {
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     try {
       result = _updateStateMachinePose(pose, flowDirection);
-      _unconfidenceCount = 0;
     } on StateError {
-      if (_unconfidenceCount > switchToOFThreshold &&
-          flowDirection != OpticalFlowDirection.none) {
+      if (flowDirection != OpticalFlowDirection.none) {
         result = _updateStateMachineOF(flowDirection);
-        _unconfidenceCount = 0;
-      } else {
-        _unconfidenceCount++;
       }
     }
     return result;
