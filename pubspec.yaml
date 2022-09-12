@@ -19,7 +19,6 @@ dependencies:
   google_mlkit_pose_detection: ^0.4.0
   carousel_slider: ^4.1.1
   syncfusion_flutter_gauges: ^20.2.46
-  flutter_countdown_timer: ^4.1.0
   bottom_navy_bar: ^6.0.0
   dots_indicator: ^2.1.0
   lottie: ^1.4.2

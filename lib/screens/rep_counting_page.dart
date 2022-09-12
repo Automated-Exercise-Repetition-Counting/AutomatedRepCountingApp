@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/countdown_controller.dart';
-import 'package:puioio/automatic_rep_counter/exercise/movement_phase.dart';
-import '../automatic_rep_counter/automatic_rep_counter.dart';
-import '../automatic_rep_counter/exercise/exercise.dart';
-import '../vision_detector_views/pose_detector_view.dart';
+import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+
+import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
+import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/vision_detector_views/camera_view.dart';
+import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
+
 import 'home_nav.dart';
 import 'results_page.dart';
 
@@ -25,11 +29,20 @@ class RepCountingPage extends StatefulWidget {
 
 class RepCountingPageState extends State<RepCountingPage> {
   late final AutomaticRepCounter _repCounter;
-  late CountdownController countdownController;
   static const _maxSeconds = 10;
   int _seconds = _maxSeconds;
   Timer? timer;
-  late bool _isRunning;
+
+  final PoseDetector _poseDetector =
+      PoseDetector(options: PoseDetectorOptions());
+  bool _canProcess = true;
+  bool _isBusy = false;
+  CustomPaint? _customPaint;
+  final OpticalFlowCalculator _opticalFlowCalculator =
+      OpticalFlowCalculator(yOnly: true);
+  OpticalFlowDirection _flowDirection = OpticalFlowDirection.none;
+
+  bool get _timerActive => timer?.isActive ?? true;
 
   @override
   void initState() {
@@ -39,7 +52,13 @@ class RepCountingPageState extends State<RepCountingPage> {
       setState(() {});
     });
     startTimer();
-    _isRunning = true;
+  }
+
+  @override
+  void dispose() {
+    _canProcess = false;
+    _poseDetector.close();
+    super.dispose();
   }
 
   void startTimer() {
@@ -77,10 +96,15 @@ class RepCountingPageState extends State<RepCountingPage> {
       child: Scaffold(
           body: Stack(
         children: [
-          PoseDetectorView(repCounter: _repCounter),
+          CameraView(
+            customPaint: _customPaint,
+            onImage: (InputImage inputImage, {CameraImage? cameraImage}) {
+              processImage(inputImage, cameraImage);
+            },
+          ),
           buildTimer(),
           Visibility(
-            visible: !_isRunning,
+            visible: !_timerActive,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
@@ -97,9 +121,8 @@ class RepCountingPageState extends State<RepCountingPage> {
       )));
 
   Widget buildTimer() {
-    _isRunning = timer == null ? false : timer!.isActive;
     return Visibility(
-      visible: _isRunning,
+      visible: _timerActive,
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.5),
         body: Center(
@@ -198,5 +221,43 @@ class RepCountingPageState extends State<RepCountingPage> {
         )),
       ),
     );
+  }
+
+  Future<void> processImage(
+      InputImage inputImage, CameraImage? cameraImage) async {
+    if (!_canProcess) return;
+    if (_isBusy) return;
+    _isBusy = true;
+    final poses = await _poseDetector.processImage(inputImage);
+    if (inputImage.inputImageData?.size != null &&
+        inputImage.inputImageData?.imageRotation != null) {
+      final painter = PosePainter(poses, inputImage.inputImageData!.size,
+          inputImage.inputImageData!.imageRotation);
+      _customPaint = CustomPaint(painter: painter);
+    } else {
+      _customPaint = null;
+    }
+    if (cameraImage != null) {
+      OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
+          cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
+
+      if (newDirection != _flowDirection) {
+        setState(() {
+          _flowDirection = newDirection;
+        });
+      }
+    }
+
+    if (!_timerActive) {
+      _repCounter.updateRepCount(
+        poses,
+        _flowDirection,
+      );
+    }
+
+    _isBusy = false;
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
