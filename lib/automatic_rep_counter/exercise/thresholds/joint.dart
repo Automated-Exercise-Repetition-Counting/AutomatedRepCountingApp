@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:vector_math/vector_math.dart';
 import '../../hyperparameters.dart';
 
 class Joint {
@@ -21,26 +22,14 @@ class Joint {
     _angle = _getAngle();
   }
 
-  /// Calculates the angle between three points,
-  /// as per https://stackoverflow.com/a/1211243/16521305
   double _getAngle() {
-    double p12 = _distanceBetweenPoints(
-        jointPoint.x, jointPoint.y, startPoint.x, startPoint.y);
-    double p13 = _distanceBetweenPoints(
-        jointPoint.x, jointPoint.y, endPoint.x, endPoint.y);
-    double p23 = _distanceBetweenPoints(
-        startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+    Vector2 a =
+        Vector2(jointPoint.x - startPoint.x, jointPoint.y - startPoint.y);
 
-    // returns the dot product of the two vectors
-    num numerator = pow(p12, 2) + pow(p13, 2) - pow(p23, 2);
-    double denominator = 2 * p12 * p13;
+    Vector2 b = Vector2(jointPoint.x - endPoint.x, jointPoint.y - endPoint.y);
 
-    return acos(numerator / denominator);
-  }
-
-  /// Calculates the distance between two points.
-  double _distanceBetweenPoints(x1, y1, x2, y2) {
-    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    // calculate angle between vectors
+    return acos(a.dot(b) / (a.length * b.length));
   }
 
   /// Converts a PoseLandmarkType to a PoseLandmark.

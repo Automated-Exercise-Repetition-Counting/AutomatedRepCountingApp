@@ -24,6 +24,7 @@ dependencies:
   lottie: ^1.4.2
   native_opencv:
     path: native_opencv
+  vector_math: ^2.1.2
 
 dev_dependencies:
   flutter_lints: ^1.0.4
