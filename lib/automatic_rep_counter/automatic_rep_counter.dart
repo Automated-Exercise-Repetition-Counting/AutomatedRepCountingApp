@@ -11,7 +11,7 @@ import 'hyperparameters.dart';
 class AutomaticRepCounter extends ChangeNotifier {
   late final Exercise exercise;
   int _reps = 0;
-  int _lastPDTime = DateTime.now().millisecondsSinceEpoch;
+  int? _lastPDTime;
   bool _isPaused = false;
   AutomaticRepCounter({required this.exercise});
 
@@ -26,13 +26,13 @@ class AutomaticRepCounter extends ChangeNotifier {
       Pose pose, OpticalFlowDirection flowDirection) {
     StateMachineResult result =
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
     try {
       result = exercise.updateStateMachinePose(pose, flowDirection);
-      _lastPDTime = DateTime.now().millisecondsSinceEpoch;
+      _lastPDTime = currentTime;
       _isPaused = false;
     } on StateError {
-      if (DateTime.now().millisecondsSinceEpoch - _lastPDTime >
-          noPoseDetectionTimeout) {
+      if (currentTime - (_lastPDTime ?? currentTime) > noPoseDetectionTimeout) {
         _isPaused = true;
         notifyListeners();
       } else {
