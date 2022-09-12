@@ -16,6 +16,9 @@ const double minPoseLikelihoodPD = 0.9;
 /// Sliding window size
 const double windowSizePD = 3;
 
+/// Amount of movement between detections to be considered jumping points
+double jumpThresholdPD = 100;
+
 /* 
  * Optical Flow Hyperparams
  */

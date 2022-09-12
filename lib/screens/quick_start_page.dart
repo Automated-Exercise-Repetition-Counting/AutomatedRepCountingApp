@@ -19,8 +19,8 @@ class QuickStartPageState extends State<QuickStartPage> {
   final List<String> _exerciseNames = ['Squats', 'Pull-ups', 'Push-ups'];
   final List<Exercise> _exerciseTypes = [
     SquatExercise(),
-    PullUpExercise(),
-    PushUpExercise()
+    // PullUpExercise(),
+    // PushUpExercise()
   ];
   var _reps = 1;
   int _chosenExerciseIndex = 0;

@@ -1,5 +1,6 @@
-import 'dart:math' show pi;
+import 'dart:developer';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:vector_math/vector_math.dart';
 
 import '../joint.dart';
 import '../thresholds.dart';
@@ -8,24 +9,36 @@ import '../../../hyperparameters.dart';
 
 class SquatThresholds extends Thresholds {
   /// Internal angle of the hip, knee, and ankle
-  static const num _lowerThreshold = squatLowerAngle * (pi / 180);
-  static const num _upperThreshold = squatUpperAngle * (pi / 180);
+  static const num _lowerThreshold = squatLowerAngle * degrees2Radians;
+  static const num _upperThreshold = squatUpperAngle * degrees2Radians;
+  late Joint _leftKnee;
+  late Joint _rightKnee;
+  Joint? _prevLeftKnee;
+  Joint? _prevRightKnee;
 
   @override
   MovementPhase getMovementPhase(Pose pose) {
-    double leftKneeAngle = Joint(
-            joint: PoseLandmarkType.leftKnee,
-            start: PoseLandmarkType.leftHip,
-            end: PoseLandmarkType.leftAnkle,
-            pose: pose)
-        .angle;
+    _leftKnee = Joint(
+        joint: PoseLandmarkType.leftKnee,
+        start: PoseLandmarkType.leftHip,
+        end: PoseLandmarkType.leftAnkle,
+        pose: pose);
+    double leftKneeAngle = _leftKnee.angle;
 
-    double rightKneeAngle = Joint(
-            joint: PoseLandmarkType.rightKnee,
-            start: PoseLandmarkType.rightHip,
-            end: PoseLandmarkType.rightAnkle,
-            pose: pose)
-        .angle;
+    _rightKnee = Joint(
+        joint: PoseLandmarkType.rightKnee,
+        start: PoseLandmarkType.rightHip,
+        end: PoseLandmarkType.rightAnkle,
+        pose: pose);
+    double rightKneeAngle = _rightKnee.angle;
+
+    if (_prevLeftKnee == null || _prevRightKnee == null) {
+      _prevLeftKnee = _leftKnee;
+      _prevRightKnee = _rightKnee;
+      return MovementPhase.top;
+    }
+
+    checkForJumping();
 
     if (leftKneeAngle > _upperThreshold && rightKneeAngle > _upperThreshold) {
       // top
@@ -37,6 +50,19 @@ class SquatThresholds extends Thresholds {
     } else {
       // intermediate
       return MovementPhase.intermediate;
+    }
+  }
+
+  @override
+  void checkForJumping() {
+    double leftDistance =
+        (_leftKnee.startVector - _prevLeftKnee!.startVector).length;
+    double rightDistance =
+        (_rightKnee.startVector - _prevRightKnee!.startVector).length;
+
+    if (leftDistance > jumpThresholdPD || rightDistance > jumpThresholdPD) {
+      log("Jumping detected with LD: $leftDistance, RD: $rightDistance");
+      throw StateError('Jumping detected');
     }
   }
 }

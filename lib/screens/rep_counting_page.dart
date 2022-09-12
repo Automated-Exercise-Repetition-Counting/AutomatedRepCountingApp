@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:puioio/automatic_rep_counter/hyperparameters.dart';
 
 import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
@@ -234,6 +236,8 @@ class RepCountingPageState extends State<RepCountingPage> {
       final painter = PosePainter(poses, inputImage.inputImageData!.size,
           inputImage.inputImageData!.imageRotation);
       _customPaint = CustomPaint(painter: painter);
+      jumpThresholdPD = inputImage.inputImageData!.size.aspectRatio * 100;
+      log("Jump threshold: $jumpThresholdPD");
     } else {
       _customPaint = null;
     }
@@ -249,10 +253,7 @@ class RepCountingPageState extends State<RepCountingPage> {
     }
 
     if (!_timerActive) {
-      _repCounter.updateRepCount(
-        poses,
-        _flowDirection,
-      );
+      _repCounter.updateRepCount(poses, _flowDirection);
     }
 
     _isBusy = false;
