@@ -27,36 +27,33 @@ abstract class ExerciseStateMachine {
       OpticalFlowDirection opticalFlowDirection) {
     StateMachineResult result =
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
+
+    bool prevOFStillOrDown =
+        (_prevDirection == OpticalFlowDirection.stationary ||
+            _prevDirection == OpticalFlowDirection.down);
+    bool prevOFStillOrUp = (_prevDirection == OpticalFlowDirection.stationary ||
+        _prevDirection == OpticalFlowDirection.up);
+
+    bool atBottom = (currentState == VerticalExercisePhase.bottom);
+    bool atTop = (currentState == VerticalExercisePhase.top);
+    bool alreadyAscending = (currentState == VerticalExercisePhase.asc);
+    bool alreadyDescending = (currentState == VerticalExercisePhase.desc);
+
     switch (opticalFlowDirection) {
       case OpticalFlowDirection.up:
-        if ((_prevDirection == OpticalFlowDirection.stationary ||
-                    _prevDirection == OpticalFlowDirection.up) &&
-                currentState == VerticalExercisePhase.bottom ||
-            currentState == VerticalExercisePhase.asc) {
+        if ((prevOFStillOrUp && atBottom) || alreadyAscending) {
           result = movementPhaseStateMachine(MovementPhase.intermediate);
         }
         break;
       case OpticalFlowDirection.down:
-        if ((_prevDirection == OpticalFlowDirection.stationary ||
-                    _prevDirection == OpticalFlowDirection.down) &&
-                currentState == VerticalExercisePhase.top ||
-            currentState == VerticalExercisePhase.desc) {
+        if ((prevOFStillOrDown && atTop) || alreadyDescending) {
           result = movementPhaseStateMachine(MovementPhase.intermediate);
         }
         break;
       case OpticalFlowDirection.stationary:
-        bool atBottom = currentState == VerticalExercisePhase.desc &&
-                (_prevDirection == OpticalFlowDirection.down ||
-                    _prevDirection == OpticalFlowDirection.stationary) ||
-            currentState == VerticalExercisePhase.bottom;
-        bool atTop = currentState == VerticalExercisePhase.asc &&
-                (_prevDirection == OpticalFlowDirection.up ||
-                    _prevDirection == OpticalFlowDirection.stationary) ||
-            currentState == VerticalExercisePhase.top;
-
-        if (atBottom) {
+        if ((prevOFStillOrDown && alreadyDescending) || atBottom) {
           result = movementPhaseStateMachine(MovementPhase.bottom);
-        } else if (atTop) {
+        } else if ((prevOFStillOrUp && alreadyAscending) || atTop) {
           result = movementPhaseStateMachine(MovementPhase.top);
         }
         break;
