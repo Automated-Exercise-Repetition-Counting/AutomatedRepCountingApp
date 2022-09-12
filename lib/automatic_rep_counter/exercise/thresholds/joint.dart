@@ -8,8 +8,12 @@ class Joint {
   late final PoseLandmark startPoint;
   late final PoseLandmark endPoint;
   late final double _angle;
+  late final Vector2 _startVector;
+  late final Vector2 _endVector;
 
   double get angle => _angle;
+  Vector2 get startVector => _startVector;
+  Vector2 get endVector => _endVector;
 
   Joint(
       {required PoseLandmarkType joint,
@@ -19,17 +23,17 @@ class Joint {
     jointPoint = _convertToPoseLandmark(joint, pose);
     startPoint = _convertToPoseLandmark(start, pose);
     endPoint = _convertToPoseLandmark(end, pose);
+
+    _startVector =
+        Vector2(jointPoint.x - startPoint.x, jointPoint.y - startPoint.y);
+    _endVector = Vector2(jointPoint.x - endPoint.x, jointPoint.y - endPoint.y);
     _angle = _getAngle();
   }
 
   double _getAngle() {
-    Vector2 a =
-        Vector2(jointPoint.x - startPoint.x, jointPoint.y - startPoint.y);
-
-    Vector2 b = Vector2(jointPoint.x - endPoint.x, jointPoint.y - endPoint.y);
-
     // calculate angle between vectors
-    return acos(a.dot(b) / (a.length * b.length));
+    return acos(
+        startVector.dot(endVector) / (startVector.length * endVector.length));
   }
 
   /// Converts a PoseLandmarkType to a PoseLandmark.
