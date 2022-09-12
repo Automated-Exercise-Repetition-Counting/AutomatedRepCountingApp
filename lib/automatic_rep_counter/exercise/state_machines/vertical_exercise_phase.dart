@@ -1,1 +1,1 @@
-enum VerticalExercisePhase { top, desc, bottom, asc }
+enum VerticalExercisePhase { top, descending, bottom, ascending }

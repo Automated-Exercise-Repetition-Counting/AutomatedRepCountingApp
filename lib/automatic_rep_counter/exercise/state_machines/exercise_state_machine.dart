@@ -36,8 +36,8 @@ abstract class ExerciseStateMachine {
 
     bool atBottom = (currentState == VerticalExercisePhase.bottom);
     bool atTop = (currentState == VerticalExercisePhase.top);
-    bool alreadyAscending = (currentState == VerticalExercisePhase.asc);
-    bool alreadyDescending = (currentState == VerticalExercisePhase.desc);
+    bool alreadyAscending = (currentState == VerticalExercisePhase.ascending);
+    bool alreadyDescending = (currentState == VerticalExercisePhase.descending);
 
     switch (opticalFlowDirection) {
       case OpticalFlowDirection.up:
