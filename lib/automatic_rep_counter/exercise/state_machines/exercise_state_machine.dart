@@ -10,6 +10,7 @@ abstract class ExerciseStateMachine {
   VerticalExercisePhase currentState;
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
+  OpticalFlowDirection _prevDirection = OpticalFlowDirection.none;
 
   ExerciseStateMachine(this.currentState);
 
@@ -18,21 +19,39 @@ abstract class ExerciseStateMachine {
   StateMachineResult movementPhaseStateMachine(
       MovementPhase newAvgMovementPhase);
 
+  set opticalFlowDirection(OpticalFlowDirection direction) {
+    _prevDirection = direction;
+  }
+
   StateMachineResult getStateMachineResultOF(
       OpticalFlowDirection opticalFlowDirection) {
     StateMachineResult result =
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     switch (opticalFlowDirection) {
       case OpticalFlowDirection.up:
+        if ((_prevDirection == OpticalFlowDirection.stationary ||
+                    _prevDirection == OpticalFlowDirection.up) &&
+                currentState == VerticalExercisePhase.bottom ||
+            currentState == VerticalExercisePhase.asc) {
           result = movementPhaseStateMachine(MovementPhase.intermediate);
+        }
         break;
       case OpticalFlowDirection.down:
+        if ((_prevDirection == OpticalFlowDirection.stationary ||
+                    _prevDirection == OpticalFlowDirection.down) &&
+                currentState == VerticalExercisePhase.top ||
+            currentState == VerticalExercisePhase.desc) {
           result = movementPhaseStateMachine(MovementPhase.intermediate);
+        }
         break;
       case OpticalFlowDirection.stationary:
-        bool atTop = currentState == VerticalExercisePhase.desc ||
+        bool atBottom = currentState == VerticalExercisePhase.desc &&
+                (_prevDirection == OpticalFlowDirection.down ||
+                    _prevDirection == OpticalFlowDirection.stationary) ||
             currentState == VerticalExercisePhase.bottom;
-        bool atBottom = currentState == VerticalExercisePhase.asc ||
+        bool atTop = currentState == VerticalExercisePhase.asc &&
+                (_prevDirection == OpticalFlowDirection.up ||
+                    _prevDirection == OpticalFlowDirection.stationary) ||
             currentState == VerticalExercisePhase.top;
 
         if (atBottom) {
@@ -44,10 +63,11 @@ abstract class ExerciseStateMachine {
       default:
         break;
     }
+    _prevDirection = opticalFlowDirection;
     return result;
   }
 
-  StateMachineResult getStateMachineResult(MovementPhase latestPhase) {
+  StateMachineResult getStateMachineResultPD(MovementPhase latestPhase) {
     _prevMovementPhase.addLast(latestPhase);
 
     if (_prevMovementPhase.length <= windowSizePD) {

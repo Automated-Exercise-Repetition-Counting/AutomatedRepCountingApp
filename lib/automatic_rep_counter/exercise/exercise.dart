@@ -21,25 +21,30 @@ abstract class Exercise {
     StateMachineResult result =
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     try {
-      result = updateStateMachinePose(pose);
+      result = _updateStateMachinePose(pose, flowDirection);
       _unconfidenceCount = 0;
     } on StateError {
       if (_unconfidenceCount > switchToOFThreshold &&
           flowDirection != OpticalFlowDirection.none) {
-        result = updateStateMachineOF(flowDirection);
+        result = _updateStateMachineOF(flowDirection);
         _unconfidenceCount = 0;
+      } else {
+        _unconfidenceCount++;
       }
-      _unconfidenceCount++;
     }
     return result;
   }
 
-  StateMachineResult updateStateMachinePose(Pose pose) {
+  StateMachineResult _updateStateMachinePose(
+      Pose pose, OpticalFlowDirection flowDirection) {
     MovementPhase latestPhase = _thresholds.getMovementPhase(pose);
-    return _exerciseStateMachine.getStateMachineResultPD(latestPhase);
+    StateMachineResult result =
+        _exerciseStateMachine.getStateMachineResultPD(latestPhase);
+    _exerciseStateMachine.opticalFlowDirection = flowDirection;
+    return result;
   }
 
-  StateMachineResult updateStateMachineOF(OpticalFlowDirection direction) {
+  StateMachineResult _updateStateMachineOF(OpticalFlowDirection direction) {
     return _exerciseStateMachine.getStateMachineResultOF(direction);
   }
 }
