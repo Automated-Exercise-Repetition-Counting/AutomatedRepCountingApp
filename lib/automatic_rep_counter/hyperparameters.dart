@@ -10,7 +10,7 @@
 const double minPoseLikelihoodPD = 0.9;
 
 /// Sliding window size
-const double windowSizePD = 3;
+const double windowSizePD = 1;
 
 /* 
  * Optical Flow Hyperparams
