@@ -20,29 +20,31 @@ abstract class ExerciseStateMachine {
 
   StateMachineResult getStateMachineResultOF(
       OpticalFlowDirection opticalFlowDirection) {
+    StateMachineResult result =
+        StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     switch (opticalFlowDirection) {
       case OpticalFlowDirection.up:
-        return movementPhaseStateMachine(MovementPhase.intermediate);
-
+          result = movementPhaseStateMachine(MovementPhase.intermediate);
+        break;
       case OpticalFlowDirection.down:
-        return movementPhaseStateMachine(MovementPhase.intermediate);
-
+          result = movementPhaseStateMachine(MovementPhase.intermediate);
+        break;
       case OpticalFlowDirection.stationary:
         bool atTop = currentState == VerticalExercisePhase.desc ||
             currentState == VerticalExercisePhase.bottom;
         bool atBottom = currentState == VerticalExercisePhase.asc ||
             currentState == VerticalExercisePhase.top;
 
-        if (atTop) {
-          return movementPhaseStateMachine(MovementPhase.bottom);
-        } else if (atBottom) {
-          return movementPhaseStateMachine(MovementPhase.top);
+        if (atBottom) {
+          result = movementPhaseStateMachine(MovementPhase.bottom);
+        } else if (atTop) {
+          result = movementPhaseStateMachine(MovementPhase.top);
         }
-        return StateMachineResult(false, false);
-
+        break;
       default:
-        return StateMachineResult(false, false);
+        break;
     }
+    return result;
   }
 
   StateMachineResult getStateMachineResult(MovementPhase latestPhase) {
@@ -50,7 +52,7 @@ abstract class ExerciseStateMachine {
 
     if (_prevMovementPhase.length <= windowSizePD) {
       // insufficient values to safely detect movement phase. return.
-      return StateMachineResult(false, false);
+      return StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     }
 
     _prevMovementPhase.removeFirst();

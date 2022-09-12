@@ -18,7 +18,8 @@ abstract class Exercise {
 
   StateMachineResult updateStateMachine(
       Pose pose, OpticalFlowDirection flowDirection) {
-    StateMachineResult result = StateMachineResult(false, false);
+    StateMachineResult result =
+        StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     try {
       result = updateStateMachinePose(pose);
       _unconfidenceCount = 0;
