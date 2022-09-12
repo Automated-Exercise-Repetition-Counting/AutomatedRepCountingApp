@@ -105,7 +105,10 @@ class RepCountingPageState extends State<RepCountingPage> {
           ),
           buildTimer(),
           Visibility(
-            visible: !_timerActive,
+            // TODO: change this to a more useful way of displaying that the
+            // counting is paused, with a message to the user (or maybe)
+            // a pause icon.
+            visible: !_timerActive && !_repCounter.isPaused,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
