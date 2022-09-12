@@ -19,9 +19,6 @@ class AutomaticRepCounter extends ChangeNotifier {
   Enum get phase => exercise.currentState;
   bool get isPaused => _isPaused;
 
-  // create a timer
-  // when the timer is done, call onTimeout
-
   StateMachineResult updateStateMachine(
       Pose pose, OpticalFlowDirection flowDirection) {
     StateMachineResult result =
