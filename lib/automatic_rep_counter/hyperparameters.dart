@@ -8,10 +8,6 @@
  * Automatic Rep Counter Hyperparameters
  */
 
-/// number of unconfident pose detections before switching
-/// from pose detection to Optical Flow
-const int switchToOFThreshold = 10;
-
 /*
  * Pose Detection Hyperparams
  */
@@ -20,20 +16,20 @@ const int switchToOFThreshold = 10;
 const double minPoseLikelihoodPD = 0.7;
 
 /// Sliding window size
-const double windowSizePD = 3;
+const double windowSizePD = 1;
 
 /* 
  * Optical Flow Hyperparams
  */
 
 /// number of frames to skip before calculating optical flow
-const int msDelayBetweenExecutionsOF = 40;
+const int msDelayBetweenExecutionsOF = 10;
 
 /// Threshold to classify points as moving
-const double movementThresholdOF = 5.0;
+const double movementThresholdOF = 5;
 
 /// Sliding window size
-const int windowSizeOF = 15;
+const int windowSizeOF = 3;
 
 /// Note that the native_opencv library also has a movement threshold for
 /// OpticalFlow, which is the amount of movement needed before corners

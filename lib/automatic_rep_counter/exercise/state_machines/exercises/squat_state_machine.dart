@@ -39,6 +39,7 @@ class SquatStateMachine extends ExerciseStateMachine {
         }
         break;
     }
-    return StateMachineResult(hasChangedPhase, hasCompletedRep);
+    return StateMachineResult(
+        hasChangedPhase: hasChangedPhase, hasCompletedRep: hasCompletedRep);
   }
 }

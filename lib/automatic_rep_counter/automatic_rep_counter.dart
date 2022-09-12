@@ -6,12 +6,10 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'exercise/state_machines/state_machine_result.dart';
 import 'exercise/exercise.dart';
 import 'optical_flow/optical_flow_calculator.dart';
-import 'hyperparameters.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
   late final Exercise exercise;
   int _reps = 0;
-  int _unconfidenceCount = 0;
   AutomaticRepCounter({required this.exercise});
 
   int get reps => _reps;
@@ -19,22 +17,8 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   void updateRepCount(List<Pose> poses, OpticalFlowDirection flowDirection) {
     for (Pose pose in poses) {
-      StateMachineResult result;
-      try {
-        result = exercise.updateStateMachinePose(pose);
-        _unconfidenceCount = 0;
-      } on StateError {
-        if (_unconfidenceCount > switchToOFThreshold) {
-          if (flowDirection == OpticalFlowDirection.none) {
-            return;
-          }
-          result = exercise.updateStateMachineOF(flowDirection);
-          _unconfidenceCount = 0;
-        } else {
-          _unconfidenceCount++;
-          return;
-        }
-      }
+      StateMachineResult result =
+          exercise.updateStateMachine(pose, flowDirection);
 
       if (result.hasChangedPhase) {
         if (result.hasCompletedRep) {

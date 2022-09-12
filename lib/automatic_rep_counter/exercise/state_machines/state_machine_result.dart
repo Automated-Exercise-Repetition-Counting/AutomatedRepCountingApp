@@ -2,5 +2,6 @@ class StateMachineResult {
   final bool hasCompletedRep;
   final bool hasChangedPhase;
 
-  StateMachineResult(this.hasCompletedRep, this.hasChangedPhase);
+  StateMachineResult(
+      {required this.hasCompletedRep, required this.hasChangedPhase});
 }
