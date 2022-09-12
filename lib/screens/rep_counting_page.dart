@@ -8,6 +8,7 @@ import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
+import 'package:puioio/utils/utils.dart';
 
 import 'home_nav.dart';
 import 'results_page.dart';
@@ -201,7 +202,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                           fontSize: 40,
                           fontWeight: FontWeight.w300)),
                   Text(
-                    "Movement Phase: ${_repCounter.phase.name}",
+                    "Movement Phase: ${_repCounter.phase.titleName}",
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
