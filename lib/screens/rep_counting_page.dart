@@ -124,12 +124,16 @@ class RepCountingPageState extends State<RepCountingPage> {
     return Visibility(
       visible: _timerActive,
       child: Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.5),
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         body: Center(
-          child: Text(
-            '$_seconds',
-            style: const TextStyle(fontSize: 100, color: Colors.black),
-          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Text('Ready in',
+                style: TextStyle(fontSize: 36, color: Colors.white)),
+            Text(
+              '$_seconds',
+              style: const TextStyle(fontSize: 136, color: Colors.white),
+            ),
+          ]),
         ),
       ),
     );
