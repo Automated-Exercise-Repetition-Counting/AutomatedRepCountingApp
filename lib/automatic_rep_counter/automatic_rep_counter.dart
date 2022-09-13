@@ -29,7 +29,7 @@ class AutomaticRepCounter extends ChangeNotifier {
       _lastPDTime = currentTime;
       _isPaused = false;
     } on StateError {
-      if (currentTime - (_lastPDTime ?? currentTime) > noPoseDetectionTimeout) {
+      if (currentTime - (_lastPDTime ?? 0) > noPoseDetectionTimeout) {
         _isPaused = true;
         notifyListeners();
       } else {
