@@ -3,20 +3,26 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:native_opencv/native_opencv.dart';
+import '../hyperparameters.dart';
 
 /// Calculates the optical flow from given [CameraImage]s.
 /// The optical flow is calculated using the Lucas-Kanade method.
 /// This is achieved through the use of the [NativeOpencv] plugin,
 /// which is a wrapper around the OpenCV library.
 class OpticalFlowCalculator {
-  static const int _msDelayBetweenExecutions = 40;
-  static const double _movementThreshold = 5.0;
-  static const int _windowSize = 15;
-
   NativeOpencv? _nativeOpencv;
   final List<OpticalFlowDirection> _directions = [];
+  final Map<OpticalFlowDirection, int> _directionCount = {};
   final bool xOnly;
   final bool yOnly;
+
+  void _incrementDirectionCount(OpticalFlowDirection direction) {
+    if (_directionCount.containsKey(direction)) {
+      _directionCount[direction] = _directionCount[direction]! + 1;
+    } else {
+      _directionCount[direction] = 1;
+    }
+  }
 
   bool _canCalculate = true;
   int _lastExecution = DateTime.now().millisecondsSinceEpoch;
@@ -67,7 +73,7 @@ class OpticalFlowCalculator {
   OpticalFlowDirection determineFlow(CameraImage image, int rotation) {
     int curTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (curTime - _lastExecution < _msDelayBetweenExecutions) {
+    if (curTime - _lastExecution < msDelayBetweenExecutionsOF) {
       return OpticalFlowDirection.none;
     }
     _lastExecution = curTime;
@@ -92,43 +98,45 @@ class OpticalFlowCalculator {
     OpticalFlowDirection currentDirectionX = OpticalFlowDirection.stationary;
     OpticalFlowDirection currentDirectionY = OpticalFlowDirection.stationary;
 
-    if (x.abs() > _movementThreshold) {
+    if (x.abs() > movementThresholdOF) {
       currentDirectionX =
           x > 0 ? OpticalFlowDirection.right : OpticalFlowDirection.left;
     }
 
-    if (y.abs() > _movementThreshold) {
+    if (y.abs() > movementThresholdOF) {
       currentDirectionY =
           y > 0 ? OpticalFlowDirection.down : OpticalFlowDirection.up;
     }
 
     if (xOnly) {
       _directions.add(currentDirectionX);
+      _incrementDirectionCount(currentDirectionX);
     } else if (yOnly) {
       _directions.add(currentDirectionY);
+      _incrementDirectionCount(currentDirectionY);
     } else if (currentDirectionX != currentDirectionY) {
       if (currentDirectionX == OpticalFlowDirection.stationary) {
         _directions.add(currentDirectionY);
+        _incrementDirectionCount(currentDirectionY);
       } else if (currentDirectionY == OpticalFlowDirection.stationary) {
         _directions.add(currentDirectionX);
+        _incrementDirectionCount(currentDirectionX);
       } else {
         _directions.add(currentDirectionX);
         _directions.add(currentDirectionY);
+
+        _incrementDirectionCount(currentDirectionX);
+        _incrementDirectionCount(currentDirectionY);
       }
     }
 
-    Map<OpticalFlowDirection, int> directionCount = {};
-
-    for (OpticalFlowDirection direction in _directions) {
-      directionCount[direction] = (directionCount[direction] ?? 0) + 1;
-    }
-
-    if (_directions.length > _windowSize) {
-      _directions.removeAt(0);
+    while (_directions.length > windowSizeOF) {
+      OpticalFlowDirection removedOFDir = _directions.removeAt(0);
+      _directionCount[removedOFDir] = (_directionCount[removedOFDir] ?? 1) - 1;
     }
 
     // return max direction
-    return directionCount.entries
+    return _directionCount.entries
         .reduce((a, b) => a.value > b.value ? a : b)
         .key;
   }

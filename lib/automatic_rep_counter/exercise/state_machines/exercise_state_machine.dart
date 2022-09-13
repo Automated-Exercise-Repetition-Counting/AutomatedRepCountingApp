@@ -1,15 +1,16 @@
 import 'dart:collection';
 
-import '../../optical_flow/optical_flow_calculator.dart';
-import '../movement_phase.dart';
 import 'state_machine_result.dart';
 import 'vertical_exercise_phase.dart';
+import '../movement_phase.dart';
+import '../../hyperparameters.dart';
+import '../../optical_flow/optical_flow_calculator.dart';
 
 abstract class ExerciseStateMachine {
-  static const _windowSize = 3;
   VerticalExercisePhase currentState;
   final Queue<MovementPhase> _prevMovementPhase = Queue<MovementPhase>();
   final Map<MovementPhase, int> _movementCounts = HashMap<MovementPhase, int>();
+  OpticalFlowDirection _prevDirection = OpticalFlowDirection.none;
 
   ExerciseStateMachine(this.currentState);
 
@@ -18,39 +19,57 @@ abstract class ExerciseStateMachine {
   StateMachineResult movementPhaseStateMachine(
       MovementPhase newAvgMovementPhase);
 
-  StateMachineResult getStateMachineResultOF(
-      OpticalFlowDirection opticalFlowDirection) {
-    switch (opticalFlowDirection) {
-      case OpticalFlowDirection.up:
-        return movementPhaseStateMachine(MovementPhase.intermediate);
-
-      case OpticalFlowDirection.down:
-        return movementPhaseStateMachine(MovementPhase.intermediate);
-
-      case OpticalFlowDirection.stationary:
-        bool atTop = currentState == VerticalExercisePhase.desc ||
-            currentState == VerticalExercisePhase.bottom;
-        bool atBottom = currentState == VerticalExercisePhase.asc ||
-            currentState == VerticalExercisePhase.top;
-
-        if (atTop) {
-          return movementPhaseStateMachine(MovementPhase.bottom);
-        } else if (atBottom) {
-          return movementPhaseStateMachine(MovementPhase.top);
-        }
-        return StateMachineResult(false, false);
-
-      default:
-        return StateMachineResult(false, false);
-    }
+  set opticalFlowDirection(OpticalFlowDirection direction) {
+    _prevDirection = direction;
   }
 
-  StateMachineResult getStateMachineResult(MovementPhase latestPhase) {
+  StateMachineResult getStateMachineResultOF(
+      OpticalFlowDirection opticalFlowDirection) {
+    StateMachineResult result =
+        StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
+
+    bool prevOFStillOrDown =
+        (_prevDirection == OpticalFlowDirection.stationary ||
+            _prevDirection == OpticalFlowDirection.down);
+    bool prevOFStillOrUp = (_prevDirection == OpticalFlowDirection.stationary ||
+        _prevDirection == OpticalFlowDirection.up);
+
+    bool atBottom = (currentState == VerticalExercisePhase.bottom);
+    bool atTop = (currentState == VerticalExercisePhase.top);
+    bool alreadyAscending = (currentState == VerticalExercisePhase.ascending);
+    bool alreadyDescending = (currentState == VerticalExercisePhase.descending);
+
+    switch (opticalFlowDirection) {
+      case OpticalFlowDirection.up:
+        if ((prevOFStillOrUp && atBottom) || alreadyAscending) {
+          result = movementPhaseStateMachine(MovementPhase.intermediate);
+        }
+        break;
+      case OpticalFlowDirection.down:
+        if ((prevOFStillOrDown && atTop) || alreadyDescending) {
+          result = movementPhaseStateMachine(MovementPhase.intermediate);
+        }
+        break;
+      case OpticalFlowDirection.stationary:
+        if ((prevOFStillOrDown && alreadyDescending) || atBottom) {
+          result = movementPhaseStateMachine(MovementPhase.bottom);
+        } else if ((prevOFStillOrUp && alreadyAscending) || atTop) {
+          result = movementPhaseStateMachine(MovementPhase.top);
+        }
+        break;
+      default:
+        break;
+    }
+    _prevDirection = opticalFlowDirection;
+    return result;
+  }
+
+  StateMachineResult getStateMachineResultPD(MovementPhase latestPhase) {
     _prevMovementPhase.addLast(latestPhase);
 
-    if (_prevMovementPhase.length <= _windowSize) {
+    if (_prevMovementPhase.length <= windowSizePD) {
       // insufficient values to safely detect movement phase. return.
-      return StateMachineResult(false, false);
+      return StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     }
 
     _prevMovementPhase.removeFirst();

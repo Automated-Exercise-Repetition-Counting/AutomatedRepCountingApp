@@ -1,4 +1,4 @@
-package com.example.puioio
+package com.puioio.puioio
 
 import io.flutter.embedding.android.FlutterActivity
 

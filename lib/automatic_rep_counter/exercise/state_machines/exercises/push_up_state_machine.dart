@@ -16,11 +16,11 @@ class PushUpStateMachine extends ExerciseStateMachine {
     switch (currentState) {
       case VerticalExercisePhase.top:
         if (newAvgMovementPhase == MovementPhase.intermediate) {
-          currentState = VerticalExercisePhase.desc;
+          currentState = VerticalExercisePhase.descending;
           hasChangedPhase = true;
         }
         break;
-      case VerticalExercisePhase.desc:
+      case VerticalExercisePhase.descending:
         if (newAvgMovementPhase == MovementPhase.bottom) {
           currentState = VerticalExercisePhase.bottom;
           hasChangedPhase = true;
@@ -28,17 +28,18 @@ class PushUpStateMachine extends ExerciseStateMachine {
         break;
       case VerticalExercisePhase.bottom:
         if (newAvgMovementPhase == MovementPhase.intermediate) {
-          currentState = VerticalExercisePhase.asc;
+          currentState = VerticalExercisePhase.ascending;
           hasChangedPhase = true;
         }
         break;
-      case VerticalExercisePhase.asc:
+      case VerticalExercisePhase.ascending:
         if (newAvgMovementPhase == MovementPhase.top) {
           currentState = VerticalExercisePhase.top;
           hasChangedPhase = hasCompletedRep = true;
         }
         break;
     }
-    return StateMachineResult(hasChangedPhase, hasCompletedRep);
+    return StateMachineResult(
+        hasChangedPhase: hasChangedPhase, hasCompletedRep: hasCompletedRep);
   }
 }

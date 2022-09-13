@@ -16,9 +16,13 @@ abstract class Exercise {
   Enum get currentState => _exerciseStateMachine.currentState;
   String get name => _name;
 
-  StateMachineResult updateStateMachinePose(Pose pose) {
+  StateMachineResult updateStateMachinePose(
+      Pose pose, OpticalFlowDirection flowDirection) {
     MovementPhase latestPhase = _thresholds.getMovementPhase(pose);
-    return _exerciseStateMachine.getStateMachineResult(latestPhase);
+    StateMachineResult result =
+        _exerciseStateMachine.getStateMachineResultPD(latestPhase);
+    _exerciseStateMachine.opticalFlowDirection = flowDirection;
+    return result;
   }
 
   StateMachineResult updateStateMachineOF(OpticalFlowDirection direction) {
