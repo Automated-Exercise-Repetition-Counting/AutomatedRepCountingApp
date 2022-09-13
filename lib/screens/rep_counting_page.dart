@@ -78,10 +78,10 @@ class RepCountingPageState extends State<RepCountingPage> {
   void goBack() {
     setState(() {
       stopTimer();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeNav(currentIndex: 1)),
-      );
+      int count = 0;
+      Navigator.popUntil(context, (route) {
+        return count++ == 2;
+      });
     });
   }
 

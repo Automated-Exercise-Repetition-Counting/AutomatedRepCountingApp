@@ -75,6 +75,7 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
           iconSize: 25,
           color: Colors.white,
           onPressed: () {
+            FocusScope.of(context).unfocus();
             controller.text.isEmpty
                 ? null
                 : Navigator.push(

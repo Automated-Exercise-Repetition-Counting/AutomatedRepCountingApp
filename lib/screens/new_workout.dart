@@ -41,6 +41,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 100,
         flexibleSpace: SafeArea(
@@ -64,7 +65,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
             Padding(
                 padding: const EdgeInsets.only(bottom: 70.0),
                 child: AppButton(
-                  buttonText: 'Begin',
+                  buttonText: 'Add Exercise',
                   buttonTextColor: Colors.white,
                   buttonColor: Theme.of(context).colorScheme.primary,
                   callback: () {
@@ -106,21 +107,20 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
             child: const Text('Cancel',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomeNav(currentIndex: 2)),
-              );
+              int count = 0;
+              Navigator.popUntil(context, (route) {
+                return count++ == 2;
+              });
             }),
         const Spacer(),
         TextButton(
             child: const Text('Save',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeNav(currentIndex: 2)));
+              int count = 0;
+              Navigator.popUntil(context, (route) {
+                return count++ == 2;
+              });
             }),
       ],
     );

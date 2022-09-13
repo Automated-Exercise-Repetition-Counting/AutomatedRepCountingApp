@@ -56,11 +56,10 @@ class ResultsPageState extends State<ResultsPage> {
                       fontSize: 24, fontWeight: FontWeight.w500),
                   padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeNav(currentIndex: 1)),
-                );
+                int count = 0;
+                Navigator.popUntil(context, (route) {
+                  return count++ == 3;
+                });
               },
               child: const Text('Done'),
             ),

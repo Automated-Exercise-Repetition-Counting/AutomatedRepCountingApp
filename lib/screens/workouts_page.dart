@@ -66,8 +66,6 @@ class WorkoutPageState extends State<WorkoutPage> {
                       color: Colors.white,
                       onPressed: () async {
                         openDialog();
-                        // final workoutTitle = await openDialog();
-                        // workoutTitle == null || workoutTitle.isEmpty ? null : Navigation;
                       },
                     ))),
               ))),
