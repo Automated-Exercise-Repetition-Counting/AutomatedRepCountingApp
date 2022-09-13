@@ -152,6 +152,7 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void completeExercise() {
+    _canProcess = false;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
