@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
@@ -100,10 +101,8 @@ class RepCountingPageState extends State<RepCountingPage> {
             },
           ),
           buildTimer(),
+          buildCountingPaused(),
           Visibility(
-            // TODO: change this to a more useful way of displaying that the
-            // counting is paused, with a message to the user (or maybe)
-            // a pause icon.
             visible: !_timerActive && !_repCounter.isPaused,
             child: Container(
               width: double.infinity,
@@ -124,13 +123,54 @@ class RepCountingPageState extends State<RepCountingPage> {
     return Visibility(
       visible: _timerActive,
       child: Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.5),
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         body: Center(
-          child: Text(
-            '$_seconds',
-            style: const TextStyle(fontSize: 100, color: Colors.black),
-          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Text('Ready in',
+                style: TextStyle(fontSize: 36, color: Colors.white)),
+            Text(
+              '$_seconds',
+              style: const TextStyle(fontSize: 136, color: Colors.white),
+            ),
+          ]),
         ),
+      ),
+    );
+  }
+
+  Widget buildCountingPaused() {
+    return Visibility(
+      visible: _repCounter.isPaused,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+        body: Center(
+            child: SizedBox(
+          width: 250,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Stack(alignment: AlignmentDirectional.center, children: [
+              const Icon(Icons.accessibility_rounded,
+                  color: Colors.white, size: 150),
+              Lottie.asset("assets/lottie/scan.json", width: 150)
+            ]),
+            const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text("We've lost you!",
+                    style: TextStyle(
+                        fontSize: 36,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600))),
+            const Flexible(
+                child: Text(
+              'Make sure your whole body is in frame, and the workout will automatically continue',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  height: 1.2),
+            )),
+          ]),
+        )),
       ),
     );
   }
