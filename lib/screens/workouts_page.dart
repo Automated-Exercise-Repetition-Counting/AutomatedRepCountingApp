@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/widgets/title_block.dart';
 import '../widgets/add_workout_dialog.dart';
 
 class WorkoutPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class WorkoutPageState extends State<WorkoutPage> {
   Future<String?> openDialog() => showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddWorkoutDialog();
+        return const AddWorkoutDialog();
       });
 
   @override
@@ -22,17 +23,13 @@ class WorkoutPageState extends State<WorkoutPage> {
       body: Center(
           child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(children: [buildTitle(), buildCreateWorkout()]))),
-    );
-  }
-
-  Widget buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Text(
-        'Workouts',
-        style: Theme.of(context).textTheme.headline6,
-      ),
+              child: Column(children: [
+                const TitleBlock(
+                  title: 'Workouts',
+                  subtitle: '',
+                ),
+                buildCreateWorkout()
+              ]))),
     );
   }
 

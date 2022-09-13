@@ -10,12 +10,8 @@ import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
   const RepCountingPage(
-      {Key? key,
-      required this.exerciseName,
-      required this.reps,
-      required this.exerciseType})
+      {Key? key, required this.reps, required this.exerciseType})
       : super(key: key);
-  final String exerciseName;
   final int reps;
   final Exercise exerciseType;
 
@@ -141,7 +137,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ResultsPage(
-                          exerciseName: widget.exerciseName,
+                          exerciseName: widget.exerciseType.name,
                           desiredReps: widget.reps,
                           countedReps: _repCounter.reps)),
                 );
@@ -172,7 +168,7 @@ class RepCountingPageState extends State<RepCountingPage> {
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(widget.exerciseName,
+                  Text(widget.exerciseType.name,
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 40,
