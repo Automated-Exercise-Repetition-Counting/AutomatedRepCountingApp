@@ -50,9 +50,23 @@ class RepCountingPageState extends State<RepCountingPage> {
     super.initState();
     _repCounter = AutomaticRepCounter(exercise: widget.exerciseType);
     _repCounter.addListener(() {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     startTimer();
+  }
+
+  @override
+  void deactivate() {
+    _canProcess = false;
+    super.deactivate();
+  }
+
+  @override
+  void activate() {
+    _canProcess = true;
+    super.activate();
   }
 
   @override
@@ -79,13 +93,11 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void goBack() {
-    setState(() {
-      stopTimer();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeNav(currentIndex: 1)),
-      );
-    });
+    stopTimer();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeNav(currentIndex: 1)),
+    );
   }
 
   @override
@@ -139,6 +151,17 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
+  void completeExercise() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ResultsPage(
+              exerciseName: widget.exerciseName,
+              desiredReps: widget.reps,
+              countedReps: _repCounter.reps)),
+    );
+  }
+
   Widget buildButtons() {
     return Row(
       children: <Widget>[
@@ -162,18 +185,7 @@ class RepCountingPageState extends State<RepCountingPage> {
             icon: const Icon(Icons.check),
             iconSize: 25,
             color: Colors.black,
-            onPressed: () {
-              setState(() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ResultsPage(
-                          exerciseName: widget.exerciseName,
-                          desiredReps: widget.reps,
-                          countedReps: _repCounter.reps)),
-                );
-              });
-            },
+            onPressed: completeExercise,
           ),
         ),
       ],
@@ -244,24 +256,23 @@ class RepCountingPageState extends State<RepCountingPage> {
     if (cameraImage != null) {
       OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
           cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
-
-      if (newDirection != _flowDirection) {
-        setState(() {
-          _flowDirection = newDirection;
-        });
-      }
+      _flowDirection = newDirection;
     }
 
-    if (!_timerActive) {
-      _repCounter.updateRepCount(
-        poses,
-        _flowDirection,
-      );
-    }
-
-    _isBusy = false;
     if (mounted) {
+      if (!_timerActive) {
+        _repCounter.updateRepCount(
+          poses,
+          _flowDirection,
+        );
+
+        if (_repCounter.reps >= widget.reps) {
+          completeExercise();
+        }
+      }
+
       setState(() {});
     }
+    _isBusy = false;
   }
 }
