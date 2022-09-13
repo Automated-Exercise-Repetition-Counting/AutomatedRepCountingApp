@@ -9,10 +9,12 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 abstract class Exercise {
   final ExerciseStateMachine _exerciseStateMachine;
   final Thresholds _thresholds;
+  final String _name = "";
 
   Exercise(this._exerciseStateMachine, this._thresholds);
 
   Enum get currentState => _exerciseStateMachine.currentState;
+  String get name => _name;
 
   StateMachineResult updateStateMachinePose(
       Pose pose, OpticalFlowDirection flowDirection) {

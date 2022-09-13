@@ -4,4 +4,7 @@ import '../exercise.dart';
 
 class PullUpExercise extends Exercise {
   PullUpExercise() : super(PullUpStateMachine(), PullUpThresholds());
+
+  @override
+  String get name => "Pull-ups";
 }
