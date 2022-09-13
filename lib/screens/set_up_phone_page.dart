@@ -75,7 +75,8 @@ class SetUpPageState extends State<SetUpPage> {
                 child: Icon(Icons.accessibility, color: Colors.white, size: 34),
               ),
               Flexible(
-                child: Text('Position yourself 2m away from the phone',
+                child: Text(
+                    'Position yourself away from the phone so your whole body is visible',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
