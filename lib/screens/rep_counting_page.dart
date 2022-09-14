@@ -144,8 +144,7 @@ class RepCountingPageState extends State<RepCountingPage> {
           !_isInFrame
               ? const SizedBox(
                   width: 250,
-                  child: Flexible(
-                      child: Text(
+                  child: Text(
                     'Make sure your whole body is in frame!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -153,7 +152,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.w300,
                         height: 1.2),
-                  )),
+                  ),
                 )
               : const SizedBox.shrink()
         ]),
