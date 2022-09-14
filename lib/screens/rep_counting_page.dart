@@ -38,6 +38,7 @@ class RepCountingPageState extends State<RepCountingPage> {
   final OpticalFlowCalculator _opticalFlowCalculator =
       OpticalFlowCalculator(yOnly: true);
   OpticalFlowDirection _flowDirection = OpticalFlowDirection.none;
+  bool _isInFrame = true;
 
   bool get _timerActive => timer?.isActive ?? true;
 
@@ -114,7 +115,7 @@ class RepCountingPageState extends State<RepCountingPage> {
           buildTimer(),
           buildCountingPaused(),
           Visibility(
-            visible: !_timerActive && !_repCounter.isPaused,
+            visible: !_timerActive,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
@@ -143,6 +144,21 @@ class RepCountingPageState extends State<RepCountingPage> {
               '$_seconds',
               style: const TextStyle(fontSize: 136, color: Colors.white),
             ),
+            !_isInFrame
+                ? const SizedBox(
+                    width: 250,
+                    child: Flexible(
+                        child: Text(
+                      'Make sure your whole body is in frame!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          height: 1.2),
+                    )),
+                  )
+                : Container()
           ]),
         ),
       ),
@@ -187,6 +203,7 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void completeExercise() {
+    _canProcess = false;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -304,8 +321,9 @@ class RepCountingPageState extends State<RepCountingPage> {
         if (_repCounter.reps >= widget.reps) {
           completeExercise();
         }
+      } else if (poses.isNotEmpty) {
+        _isInFrame = _repCounter.isInFrame(poses.first);
       }
-
       setState(() {});
     }
     _isBusy = false;

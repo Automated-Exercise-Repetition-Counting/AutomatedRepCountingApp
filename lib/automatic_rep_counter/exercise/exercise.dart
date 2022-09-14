@@ -16,6 +16,15 @@ abstract class Exercise {
   Enum get currentState => _exerciseStateMachine.currentState;
   String get name => _name;
 
+  bool checkInFrame(Pose pose) {
+    try {
+      _thresholds.getMovementPhase(pose);
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
+
   StateMachineResult updateStateMachinePose(
       Pose pose, OpticalFlowDirection flowDirection) {
     MovementPhase latestPhase = _thresholds.getMovementPhase(pose);

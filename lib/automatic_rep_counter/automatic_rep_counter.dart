@@ -17,6 +17,7 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   int get reps => _reps;
   Enum get phase => exercise.currentState;
+  bool isInFrame(Pose pose) => exercise.checkInFrame(pose);
   bool get isPaused => _isPaused;
 
   StateMachineResult updateStateMachine(
