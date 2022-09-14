@@ -9,14 +9,14 @@
  */
 
 // Time after which to pause counting if PD is failing
-const int noPoseDetectionTimeout = 1000;
+const int noPoseDetectionTimeout = 1500;
 
 /*
  * Pose Detection Hyperparams
  */
 
 /// Minimum likelihood of a keypoint being in the image
-const double minPoseLikelihoodPD = 0.7;
+const double minPoseLikelihoodPD = 0.9;
 
 /// Sliding window size
 const double windowSizePD = 1;
