@@ -164,7 +164,7 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   Widget buildCountingPaused() {
     return Visibility(
-      visible: _repCounter.isPaused,
+      visible: (_repCounter.isPaused || !_isInFrame) && !_timerActive,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         body: Center(
