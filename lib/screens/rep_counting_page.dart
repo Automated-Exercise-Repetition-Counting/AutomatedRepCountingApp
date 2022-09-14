@@ -86,7 +86,9 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void stopTimer() {
-    timer?.cancel();
+    setState(() {
+      timer?.cancel();
+    });
   }
 
   void goBack() {
@@ -109,93 +111,89 @@ class RepCountingPageState extends State<RepCountingPage> {
               processImage(inputImage, cameraImage);
             },
           ),
-          buildTimer(),
-          buildCountingPaused(),
-          Visibility(
-            visible: !_timerActive,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
-              child: Column(
-                children: <Widget>[
-                  buildButtons(),
-                  const Spacer(),
-                  buildDisplay(),
-                ],
-              ),
-            ),
-          ),
+          (_repCounter.isPaused || !_isInFrame) && !_timerActive
+              ? buildCountingPaused()
+              : const SizedBox.shrink(),
+          _timerActive
+              ? buildTimer()
+              : Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
+                  child: Column(
+                    children: <Widget>[
+                      buildButtons(),
+                      const Spacer(),
+                      buildDisplay(),
+                    ],
+                  ),
+                ),
         ],
       )));
 
   Widget buildTimer() {
-    return Visibility(
-      visible: _timerActive,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Text('Ready in',
-                style: TextStyle(fontSize: 36, color: Colors.white)),
-            Text(
-              '$_seconds',
-              style: const TextStyle(fontSize: 136, color: Colors.white),
-            ),
-            !_isInFrame
-                ? const SizedBox(
-                    width: 250,
-                    child: Flexible(
-                        child: Text(
-                      'Make sure your whole body is in frame!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                          height: 1.2),
-                    )),
-                  )
-                : Container()
-          ]),
-        ),
+    return Container(
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      child: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Text('Ready in',
+              style: TextStyle(fontSize: 36, color: Colors.white)),
+          Text(
+            '$_seconds',
+            style: const TextStyle(fontSize: 136, color: Colors.white),
+          ),
+          !_isInFrame
+              ? const SizedBox(
+                  width: 250,
+                  child: Flexible(
+                      child: Text(
+                    'Make sure your whole body is in frame!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                        height: 1.2),
+                  )),
+                )
+              : const SizedBox.shrink()
+        ]),
       ),
     );
   }
 
   Widget buildCountingPaused() {
-    return Visibility(
-      visible: (_repCounter.isPaused || !_isInFrame) && !_timerActive,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-        body: Center(
-            child: SizedBox(
-          width: 250,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Stack(alignment: AlignmentDirectional.center, children: [
-              const Icon(Icons.accessibility_rounded,
-                  color: Colors.white, size: 150),
-              Lottie.asset("assets/lottie/scan.json", width: 150)
-            ]),
-            const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Text("We've lost you!",
-                    style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600))),
-            const Flexible(
-                child: Text(
-              'Make sure your whole body is in frame, and the workout will automatically continue',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300,
-                  height: 1.2),
-            )),
+    return Container(
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      child: Center(
+          child: SizedBox(
+        width: 250,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Stack(alignment: AlignmentDirectional.center, children: [
+            const Icon(Icons.accessibility_rounded,
+                color: Colors.white, size: 150),
+            Lottie.asset("assets/lottie/scan.json", width: 150)
           ]),
-        )),
-      ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text("We've lost you!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 36,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600)),
+          ),
+          const Flexible(
+              child: Text(
+            'Make sure your whole body is in frame, and the workout will automatically continue',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.w300,
+                height: 1.2),
+          )),
+        ]),
+      )),
     );
   }
 
