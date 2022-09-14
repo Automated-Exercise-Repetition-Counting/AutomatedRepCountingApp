@@ -9,7 +9,7 @@ import '../../../hyperparameters.dart';
 class PullUpThresholds extends Thresholds {
   /// Internal angle of the hip, knee, and ankle
   static const num _lowerThreshold = pullUpLowerAngle * (pi / 180);
-  static const num _upperThreshold = pullUpLowerAngle * (pi / 180);
+  static const num _upperThreshold = pullUpUpperAngle * (pi / 180);
 
   @override
   MovementPhase getMovementPhase(Pose pose) {
