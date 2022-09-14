@@ -16,7 +16,7 @@ const int noPoseDetectionTimeout = 1500;
  */
 
 /// Minimum likelihood of a keypoint being in the image
-const double minPoseLikelihoodPD = 0.9;
+const double minPoseLikelihoodPD = 0.75;
 
 /// Sliding window size
 const double windowSizePD = 1;
