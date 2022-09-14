@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:puioio/models/exercise_model.dart';
+import 'package:puioio/screens/start_workout_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -51,7 +54,7 @@ class HomePageState extends State<HomePage> {
                 ),
                 buildWorkout(),
                 const SizedBox(
-                  height: 100,
+                  height: 150,
                 ),
               ],
             )));
@@ -64,48 +67,63 @@ class HomePageState extends State<HomePage> {
         const Text('Recommended Workout',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
         const SizedBox(height: 10),
-        Container(
-          width: 315,
-          height: 180,
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-              borderRadius: const BorderRadius.all(Radius.circular(20.0))),
-          child: Stack(
-            children: [
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                      padding: const EdgeInsets.all(30),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Legs Killer',
-                                style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .tertiary)),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Text('3 exercises | 9 sets',
+        GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StartWorkoutPage(
+                          workoutTitle: "Leg Day",
+                          exerciseList: legDayExercises)));
+            },
+            child: Container(
+              width: 315,
+              height: 180,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0))),
+              child: Stack(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Leg Day',
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .primary))),
-                          ]))),
-              Align(
-                  alignment: Alignment.bottomRight,
-                  child: Image.asset(
-                    "assets/img/Leg-workout.png",
-                    width: 220,
-                  ))
-            ],
-          ),
-        )
+                                            .tertiary)),
+                                Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Text('3 exercises | 9 sets',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary))),
+                              ]))),
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: Image.asset(
+                        "assets/img/Leg-workout.png",
+                        width: 220,
+                      ))
+                ],
+              ),
+            ))
       ],
     );
   }
+
+  final legDayExercises = <ExerciseModel>[
+    ExerciseModel(exercise: SquatExercise(), reps: 10),
+    ExerciseModel(exercise: SquatExercise(), reps: 8),
+    ExerciseModel(exercise: SquatExercise(), reps: 5),
+  ];
 }

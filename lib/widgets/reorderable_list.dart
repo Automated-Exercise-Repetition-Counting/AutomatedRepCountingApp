@@ -18,10 +18,14 @@ class ReorderableExerciseListState extends State<ReorderableExerciseList> {
       padding: const EdgeInsets.symmetric(horizontal: 40),
       children: [
         for (int index = 0; index < exerciseList.length; index += 1)
-          Column(key: Key('$index'), children: [
-            ListTile(
+          Card(
+            key: ValueKey(index),
+            color: Colors.transparent,
+            elevation: 0,
+            margin: const EdgeInsets.all(5),
+            child: ListTile(
                 leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
                         'assets/img/${exerciseList[index].exercise.name}.png')),
                 tileColor: Colors.white,
@@ -30,11 +34,8 @@ class ReorderableExerciseListState extends State<ReorderableExerciseList> {
                 trailing: const Icon(Icons.drag_handle),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
-                contentPadding: const EdgeInsets.all(10)),
-            const SizedBox(
-              height: 10,
-            )
-          ]),
+                contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
+          )
       ],
       onReorder: (int oldIndex, int newIndex) {
         setState(() {
