@@ -57,6 +57,7 @@ class HomeNavState extends State<HomeNav> {
         ),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: BottomNavyBar(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           selectedIndex: widget.currentIndex,
           showElevation: false,
           containerHeight: 65,
@@ -78,20 +79,20 @@ class HomeNavState extends State<HomeNav> {
               activeColor: Colors.white,
               textAlign: TextAlign.center,
             ),
-            BottomNavyBarItem(
-              icon: const Icon(CustomIcons.dumbbell),
-              title: const Text(
-                'Workouts',
-              ),
-              activeColor: Colors.white,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(CustomIcons.user),
-              title: const Text('Profile'),
-              activeColor: Colors.white,
-              textAlign: TextAlign.center,
-            ),
+            // BottomNavyBarItem(
+            //   icon: const Icon(CustomIcons.dumbbell),
+            //   title: const Text(
+            //     'Workouts',
+            //   ),
+            //   activeColor: Colors.white,
+            //   textAlign: TextAlign.center,
+            // ),
+            // BottomNavyBarItem(
+            //   icon: const Icon(CustomIcons.user),
+            //   title: const Text('Profile'),
+            //   activeColor: Colors.white,
+            //   textAlign: TextAlign.center,
+            // ),
           ],
         ),
       ),
