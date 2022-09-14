@@ -3,13 +3,8 @@ import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'rep_counting_page.dart';
 
 class SetUpPage extends StatefulWidget {
-  const SetUpPage(
-      {Key? key,
-      required this.exerciseName,
-      required this.reps,
-      required this.exerciseType})
+  const SetUpPage({Key? key, required this.reps, required this.exerciseType})
       : super(key: key);
-  final String exerciseName;
   final int reps;
   final Exercise exerciseType;
 
@@ -142,11 +137,10 @@ class SetUpPageState extends State<SetUpPage> {
                 ),
                 padding: const EdgeInsets.fromLTRB(70, 10, 70, 10)),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => RepCountingPage(
-                          exerciseName: widget.exerciseName,
                           reps: widget.reps,
                           exerciseType: widget.exerciseType,
                         )),

@@ -52,7 +52,7 @@ class HomeNavState extends State<HomeNav> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
           color: Theme.of(context).colorScheme.primary,
         ),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),

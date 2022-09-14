@@ -4,4 +4,7 @@ import '../exercise.dart';
 
 class PushUpExercise extends Exercise {
   PushUpExercise() : super(PushUpStateMachine(), PushUpThresholds());
+
+  @override
+  String get name => "Push-ups";
 }

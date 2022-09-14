@@ -17,6 +17,7 @@ class AutomaticRepCounter extends ChangeNotifier {
 
   int get reps => _reps;
   Enum get phase => exercise.currentState;
+  bool isInFrame(Pose pose) => exercise.checkInFrame(pose);
   bool get isPaused => _isPaused;
 
   StateMachineResult updateStateMachine(
@@ -29,7 +30,7 @@ class AutomaticRepCounter extends ChangeNotifier {
       _lastPDTime = currentTime;
       _isPaused = false;
     } on StateError {
-      if (currentTime - (_lastPDTime ?? currentTime) > noPoseDetectionTimeout) {
+      if (currentTime - (_lastPDTime ?? 0) > noPoseDetectionTimeout) {
         _isPaused = true;
         notifyListeners();
       } else {

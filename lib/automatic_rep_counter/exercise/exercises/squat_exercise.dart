@@ -4,4 +4,7 @@ import '../thresholds/exercises/squat_thresholds.dart';
 
 class SquatExercise extends Exercise {
   SquatExercise() : super(SquatStateMachine(), SquatThresholds());
+
+  @override
+  String get name => "Squats";
 }
