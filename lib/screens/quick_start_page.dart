@@ -41,12 +41,18 @@ class QuickStartPageState extends State<QuickStartPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          const SizedBox(
+            height: 80,
+          ),
           const TitleBlock(
             title: 'Quick Start',
             subtitle: 'Choose an Exercise',
           ),
           ExerciseCarousel(exerciseIndex: _exerciseIndex),
           buildRepSetter(),
+          const SizedBox(
+            height: 50,
+          ),
         ],
       ),
     );

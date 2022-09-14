@@ -24,6 +24,9 @@ class HomeNavState extends State<HomeNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: IndexedStack(index: widget.currentIndex, children: pages),
       appBar: AppBar(
         toolbarHeight: 100,
@@ -45,14 +48,16 @@ class HomeNavState extends State<HomeNav> {
             ]),
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
           color: Theme.of(context).colorScheme.primary,
         ),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
