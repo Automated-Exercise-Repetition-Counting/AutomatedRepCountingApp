@@ -136,7 +136,7 @@ class SetUpPageState extends State<SetUpPage> {
                 ),
                 padding: const EdgeInsets.fromLTRB(70, 10, 70, 10)),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => RepCountingPage(

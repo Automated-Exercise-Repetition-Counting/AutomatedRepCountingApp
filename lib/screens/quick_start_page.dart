@@ -96,7 +96,7 @@ class QuickStartPageState extends State<QuickStartPage> {
           buttonTextColor: Colors.white,
           buttonColor: Theme.of(context).colorScheme.primary,
           callback: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => SetUpPage(
