@@ -318,7 +318,8 @@ class RepCountingPageState extends State<RepCountingPage> {
         if (_repCounter.reps >= widget.reps) {
           completeExercise();
         }
-      } else if (poses.isNotEmpty) {
+      }
+      if (poses.isNotEmpty) {
         _isInFrame = _repCounter.isInFrame(poses.first);
       }
       setState(() {});
