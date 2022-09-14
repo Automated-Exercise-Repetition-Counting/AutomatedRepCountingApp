@@ -259,6 +259,7 @@ class RepCountingPageState extends State<RepCountingPage> {
           child: Row(children: [
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(widget.exerciseType.name,
                       style: const TextStyle(
@@ -266,10 +267,10 @@ class RepCountingPageState extends State<RepCountingPage> {
                           fontSize: 40,
                           fontWeight: FontWeight.w300)),
                   Text(
-                    "Movement Phase: ${_repCounter.phase.titleName}",
+                    _repCounter.phase.titleName,
                     style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                 ]),
