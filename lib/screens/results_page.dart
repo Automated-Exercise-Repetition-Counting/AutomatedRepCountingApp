@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/circular_progress_with_image.dart';
+import 'package:puioio/icons/custom_icons.dart';
+import 'package:puioio/widgets/circular_progress.dart';
 import 'home_nav.dart';
 
 class ResultsPage extends StatefulWidget {
@@ -21,51 +22,74 @@ class ResultsPageState extends State<ResultsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 100,
+          flexibleSpace: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Icon(
+                      CustomIcons.dumbbell,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    )),
+                Text('Pūioio',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 25))
+              ]),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        ),
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 60.0, 0, 20.0),
-            child: Text(
-              'Ka pai!',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              const Text(
+                'Ka pai!',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+              ),
+              const Text(
+                'Well done!',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey),
+              ),
+              const SizedBox(height: 10),
+              CircularProgress(
+                  countedReps: widget.countedReps,
+                  desiredReps: widget.desiredReps,
+                  exerciseName: widget.exerciseName),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      textStyle: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w500),
+                      padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomeNav(currentIndex: 1)));
+                  },
+                  child: const Text('Done'),
+                ),
+              ),
+              const SizedBox(height: 20)
+            ],
           ),
-          CircularProgressWithImage(
-              countedReps: widget.countedReps,
-              desiredReps: widget.desiredReps,
-              exerciseType: widget.exerciseName),
-          Column(children: <Widget>[
-            Text('Number of reps counted',
-                style: Theme.of(context).textTheme.headline6),
-            Text(widget.countedReps.toString(),
-                style: Theme.of(context).textTheme.headline2),
-            Text('out of ${widget.desiredReps}',
-                style: Theme.of(context).textTheme.subtitle2),
-          ]),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  textStyle: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w500),
-                  padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeNav(currentIndex: 1)));
-              },
-              child: const Text('Done'),
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }
