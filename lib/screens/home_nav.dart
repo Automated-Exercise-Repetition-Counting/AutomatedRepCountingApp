@@ -73,7 +73,9 @@ class HomeNavState extends State<HomeNav> {
               setState(() => widget.currentIndex = index),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
-              icon: const Icon(CustomIcons.home),
+              icon: const Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Icon(CustomIcons.home)),
               title: const Text('Home'),
               activeColor: Colors.white,
               textAlign: TextAlign.center,

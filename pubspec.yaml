@@ -25,6 +25,7 @@ dependencies:
   native_opencv:
     path: native_opencv
   vector_math: ^2.1.2
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -41,3 +42,8 @@ flutter:
     - assets/
     - assets/img/
     - assets/lottie/
+
+flutter_icons:
+  image_path: "assets/app_icon/App-icon.png"
+  android: true
+  ios: true
