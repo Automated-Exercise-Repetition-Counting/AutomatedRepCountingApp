@@ -31,7 +31,8 @@ class ReorderableExerciseListState extends State<ReorderableExerciseList> {
                 tileColor: Colors.white,
                 title: Text(exerciseList[index].exercise.name),
                 subtitle: Text('${exerciseList[index].reps} reps'),
-                trailing: const Icon(Icons.drag_handle),
+                trailing: ReorderableDragStartListener(
+                    index: index, child: const Icon(Icons.drag_handle)),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
