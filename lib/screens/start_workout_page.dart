@@ -17,27 +17,31 @@ class StartWorkoutPageState extends State<StartWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        toolbarHeight: 100,
-        flexibleSpace: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.all(30), child: buildAppBar())),
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        const SizedBox(height: 50),
-        buildTitle(),
-        const SizedBox(height: 50),
-        SizedBox(
-            height: 400,
-            child: ReorderableExerciseList(exerciseList: widget.exerciseList)),
-      ])),
-    );
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          toolbarHeight: 100,
+          flexibleSpace: SafeArea(
+              child: Padding(
+                  padding: const EdgeInsets.all(30), child: buildAppBar())),
+          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            const SizedBox(height: 50),
+            buildTitle(),
+            const SizedBox(height: 50),
+            SizedBox(
+                height: 400,
+                child:
+                    ReorderableExerciseList(exerciseList: widget.exerciseList)),
+          ])),
+        ));
   }
 
   Widget buildTitle() {

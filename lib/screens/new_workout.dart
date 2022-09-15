@@ -8,8 +8,6 @@ import 'package:puioio/screens/add_exercise_page.dart';
 import 'package:puioio/widgets/app_button.dart';
 // import 'package:puioio/widgets/reorderable_list.dart';
 
-import 'home_nav.dart';
-
 class NewWorkoutPage extends StatefulWidget {
   const NewWorkoutPage({Key? key, required this.workoutTitle})
       : super(key: key);
