@@ -3,14 +3,9 @@ import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.d
 import 'package:puioio/models/exercise_model.dart';
 import 'package:puioio/screens/start_workout_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  HomePage({Key? key}) : super(key: key);
 
-  @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +17,7 @@ class HomePageState extends State<HomePage> {
                 height: 80,
               ),
               buildHeader(),
-              buildContentBox(),
+              buildContentBox(context),
             ])));
   }
 
@@ -32,7 +27,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildContentBox() {
+  Widget buildContentBox(BuildContext context) {
     return Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -52,7 +47,7 @@ class HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 20,
                 ),
-                buildWorkout(),
+                buildWorkout(context),
                 const SizedBox(
                   height: 150,
                 ),
@@ -60,7 +55,7 @@ class HomePageState extends State<HomePage> {
             )));
   }
 
-  Widget buildWorkout() {
+  Widget buildWorkout(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

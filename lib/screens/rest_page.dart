@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:puioio/icons/custom_icons.dart';
-import 'package:puioio/widgets/app_button.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class RestPage extends StatefulWidget {

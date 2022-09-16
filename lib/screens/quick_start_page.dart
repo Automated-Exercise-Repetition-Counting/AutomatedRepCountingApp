@@ -38,23 +38,22 @@ class QuickStartPageState extends State<QuickStartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(
-            height: 80,
-          ),
-          const TitleBlock(
-            title: 'Quick Start',
-            subtitle: 'Choose an Exercise',
-          ),
-          ExerciseCarousel(exerciseIndex: _exerciseIndex),
-          buildRepSetter(),
-          const SizedBox(
-            height: 50,
-          ),
-        ],
-      ),
+      body: Padding(
+          padding: const EdgeInsets.only(top: 120),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TitleBlock(
+                title: 'Quick Start',
+                subtitle: 'Choose an Exercise',
+              ),
+              ExerciseCarousel(exerciseIndex: _exerciseIndex),
+              buildRepSetter(),
+              const SizedBox(
+                height: 50,
+              ),
+            ],
+          )),
     );
   }
 

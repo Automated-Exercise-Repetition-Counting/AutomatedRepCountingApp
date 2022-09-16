@@ -2,19 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:puioio/widgets/title_block.dart';
 import '../widgets/add_workout_dialog.dart';
 
-class WorkoutPage extends StatefulWidget {
+class WorkoutPage extends StatelessWidget {
   const WorkoutPage({Key? key}) : super(key: key);
-
-  @override
-  WorkoutPageState createState() => WorkoutPageState();
-}
-
-class WorkoutPageState extends State<WorkoutPage> {
-  Future<String?> openDialog() => showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AddWorkoutDialog();
-      });
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +11,24 @@ class WorkoutPageState extends State<WorkoutPage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
           child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 120),
               child: Column(children: [
                 const TitleBlock(
                   title: 'Workouts',
                   subtitle: '',
                 ),
-                buildCreateWorkout()
+                buildCreateWorkout(context)
               ]))),
     );
   }
 
-  Widget buildCreateWorkout() {
+  Future<String?> openDialog(BuildContext context) => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddWorkoutDialog();
+      });
+
+  Widget buildCreateWorkout(BuildContext context) {
     return Stack(children: [
       Center(
           child: Padding(
@@ -65,7 +60,7 @@ class WorkoutPageState extends State<WorkoutPage> {
                       iconSize: 30,
                       color: Colors.white,
                       onPressed: () async {
-                        openDialog();
+                        openDialog(context);
                       },
                     ))),
               ))),

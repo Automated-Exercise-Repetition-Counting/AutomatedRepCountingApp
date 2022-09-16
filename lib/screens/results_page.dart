@@ -3,7 +3,7 @@ import 'package:puioio/icons/custom_icons.dart';
 import 'package:puioio/widgets/circular_progress.dart';
 import 'home_nav.dart';
 
-class ResultsPage extends StatefulWidget {
+class ResultsPage extends StatelessWidget {
   const ResultsPage(
       {Key? key,
       required this.exerciseName,
@@ -14,11 +14,6 @@ class ResultsPage extends StatefulWidget {
   final int desiredReps;
   final int countedReps;
 
-  @override
-  ResultsPageState createState() => ResultsPageState();
-}
-
-class ResultsPageState extends State<ResultsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,9 +59,9 @@ class ResultsPageState extends State<ResultsPage> {
               ),
               const SizedBox(height: 10),
               CircularProgress(
-                  countedReps: widget.countedReps,
-                  desiredReps: widget.desiredReps,
-                  exerciseName: widget.exerciseName),
+                  countedReps: countedReps,
+                  desiredReps: desiredReps,
+                  exerciseName: exerciseName),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30.0),
                 child: ElevatedButton(

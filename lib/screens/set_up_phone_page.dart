@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'rep_counting_page.dart';
 
-class SetUpPage extends StatefulWidget {
+class SetUpPage extends StatelessWidget {
   const SetUpPage({Key? key, required this.reps, required this.exerciseType})
       : super(key: key);
   final int reps;
   final Exercise exerciseType;
 
-  @override
-  SetUpPageState createState() => SetUpPageState();
-}
-
-class SetUpPageState extends State<SetUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +18,7 @@ class SetUpPageState extends State<SetUpPage> {
         actions: [
           IconButton(
             onPressed: () {
-              setState(() {
-                Navigator.pop(context);
-              });
+              Navigator.pop(context);
             },
             icon: const Icon(Icons.close),
             color: Colors.white,
@@ -141,8 +134,8 @@ class SetUpPageState extends State<SetUpPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => RepCountingPage(
-                          reps: widget.reps,
-                          exerciseType: widget.exerciseType,
+                          reps: reps,
+                          exerciseType: exerciseType,
                         )),
               );
             },

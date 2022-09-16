@@ -64,9 +64,7 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
           iconSize: 25,
           color: Colors.white,
           onPressed: () {
-            setState(() {
-              Navigator.pop(context);
-            });
+            Navigator.pop(context);
           },
         ),
         const Spacer(),
