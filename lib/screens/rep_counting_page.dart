@@ -3,22 +3,28 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lottie/lottie.dart';
-
 import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/screens/finished_workout_page.dart';
+import 'package:puioio/screens/rest_page.dart';
 import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
 import 'package:puioio/utils/utils.dart';
+import 'package:puioio/workout_tracker/workout_tracker.dart';
 
 import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
-  const RepCountingPage(
-      {Key? key, required this.reps, required this.exerciseType})
+  RepCountingPage(
+      {Key? key,
+      required this.reps,
+      required this.exerciseType,
+      this.workoutTracker})
       : super(key: key);
   final int reps;
   final Exercise exerciseType;
+  WorkoutTracker? workoutTracker;
 
   @override
   RepCountingPageState createState() => RepCountingPageState();
@@ -201,14 +207,32 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   void completeExercise() {
     _canProcess = false;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ResultsPage(
-              exerciseName: widget.exerciseType.name,
-              desiredReps: widget.reps,
-              countedReps: _repCounter.reps)),
-    );
+    widget.workoutTracker?.completedExercise(_repCounter.reps);
+    (widget.workoutTracker != null)
+        ? (widget.workoutTracker!.nextExercise())
+            ? Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RestPage(
+                        exerciseName: widget.exerciseType.name,
+                        desiredReps: widget.reps,
+                        countedReps: _repCounter.reps,
+                        workoutTracker: widget.workoutTracker)),
+              )
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FinishedWorkoutPage(
+                          workoutTracker: widget.workoutTracker,
+                        )))
+        : Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ResultsPage(
+                    exerciseName: widget.exerciseType.name,
+                    desiredReps: widget.reps,
+                    countedReps: _repCounter.reps)),
+          );
   }
 
   Widget buildButtons() {

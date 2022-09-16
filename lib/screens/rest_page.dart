@@ -2,17 +2,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:puioio/icons/custom_icons.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:puioio/screens/rep_counting_page.dart';
+import 'package:puioio/workout_tracker/workout_tracker.dart';
 
 class RestPage extends StatefulWidget {
-  const RestPage(
+  RestPage(
       {Key? key,
       required this.exerciseName,
       required this.desiredReps,
-      required this.countedReps})
+      required this.countedReps,
+      this.workoutTracker})
       : super(key: key);
   final String exerciseName;
   final int desiredReps;
   final int countedReps;
+  WorkoutTracker? workoutTracker;
 
   @override
   RestState createState() => RestState();
@@ -21,24 +25,33 @@ class RestPage extends StatefulWidget {
 class RestState extends State<RestPage> {
   int _maxSeconds = 60;
   int _seconds = 60;
-  late bool isRunning;
+  late bool _isRunning;
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
     startTimer();
-    isRunning = true;
+    _isRunning = true;
+    widget.workoutTracker!.completedExercise(widget.countedReps);
   }
 
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
-        isRunning = true;
+        _isRunning = true;
         if (_seconds > 0) {
           _seconds--;
         } else {
           stopTimer();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => RepCountingPage(
+                        exerciseType: widget.workoutTracker!.exercise,
+                        reps: widget.workoutTracker!.reps,
+                        workoutTracker: widget.workoutTracker,
+                      )));
         }
       });
     });
@@ -46,7 +59,7 @@ class RestState extends State<RestPage> {
 
   void stopTimer() {
     setState(() {
-      isRunning = false;
+      _isRunning = false;
     });
     timer?.cancel();
   }
@@ -129,7 +142,7 @@ class RestState extends State<RestPage> {
                     child: const Text('-15',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500))),
-                isRunning
+                _isRunning
                     ? IconButton(
                         icon: const Icon(Icons.pause,
                             color: Colors.black, size: 32),
@@ -182,11 +195,20 @@ class RestState extends State<RestPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('NEXT 1/3',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.tertiary)),
+                Row(children: [
+                  const Text('NEXT',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey)),
+                  const SizedBox(width: 10),
+                  Text(
+                      '${widget.workoutTracker!.index + 1}/${widget.workoutTracker!.workoutLength}',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.tertiary)),
+                ]),
                 const SizedBox(height: 20),
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,12 +226,12 @@ class RestState extends State<RestPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(widget.exerciseName,
+                                  Text(widget.workoutTracker!.exercise.name,
                                       style: const TextStyle(
                                           fontSize: 36,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600)),
-                                  Text('${widget.desiredReps} reps',
+                                  Text('${widget.workoutTracker!.reps} reps',
                                       style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.grey,

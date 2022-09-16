@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/workout_tracker/workout_tracker.dart';
 import 'rep_counting_page.dart';
 
 class SetUpPage extends StatelessWidget {
-  const SetUpPage({Key? key, required this.reps, required this.exerciseType})
+  SetUpPage(
+      {Key? key,
+      required this.reps,
+      required this.exerciseType,
+      this.workoutTracker})
       : super(key: key);
   final int reps;
   final Exercise exerciseType;
+  WorkoutTracker? workoutTracker;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +142,7 @@ class SetUpPage extends StatelessWidget {
                     builder: (context) => RepCountingPage(
                           reps: reps,
                           exerciseType: exerciseType,
+                          workoutTracker: workoutTracker,
                         )),
               );
             },

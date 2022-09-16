@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:puioio/models/exercise_model.dart';
+import 'package:puioio/screens/set_up_phone_page.dart';
 import 'package:puioio/widgets/reorderable_list.dart';
+import 'package:puioio/workout_tracker/workout_tracker.dart';
 
-class StartWorkoutPage extends StatefulWidget {
+class StartWorkoutPage extends StatelessWidget {
   const StartWorkoutPage(
       {Key? key, required this.workoutTitle, required this.exerciseList})
       : super(key: key);
   final String workoutTitle;
   final List<ExerciseModel> exerciseList;
 
-  @override
-  StartWorkoutPageState createState() => StartWorkoutPageState();
-}
-
-class StartWorkoutPageState extends State<StartWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +19,8 @@ class StartWorkoutPageState extends State<StartWorkoutPage> {
           toolbarHeight: 100,
           flexibleSpace: SafeArea(
               child: Padding(
-                  padding: const EdgeInsets.all(30), child: buildAppBar())),
+                  padding: const EdgeInsets.all(30),
+                  child: buildAppBar(context))),
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),
           automaticallyImplyLeading: false,
           elevation: 0,
@@ -34,17 +32,16 @@ class StartWorkoutPageState extends State<StartWorkoutPage> {
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             const SizedBox(height: 50),
-            buildTitle(),
+            buildTitle(context),
             const SizedBox(height: 50),
             SizedBox(
                 height: 400,
-                child:
-                    ReorderableExerciseList(exerciseList: widget.exerciseList)),
+                child: ReorderableExerciseList(exerciseList: exerciseList)),
           ])),
         ));
   }
 
-  Widget buildTitle() {
+  Widget buildTitle(BuildContext context) {
     return Column(children: [
       Padding(
         padding: const EdgeInsets.only(bottom: 10.0),
@@ -53,12 +50,12 @@ class StartWorkoutPageState extends State<StartWorkoutPage> {
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
-      Text(widget.workoutTitle,
+      Text(workoutTitle,
           style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w300)),
     ]);
   }
 
-  Widget buildAppBar() {
+  Widget buildAppBar(BuildContext context) {
     return Row(
       children: <Widget>[
         TextButton(
@@ -72,7 +69,14 @@ class StartWorkoutPageState extends State<StartWorkoutPage> {
             child: const Text('Start',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SetUpPage(
+                          reps: exerciseList[0].reps,
+                          exerciseType: exerciseList[0].exercise,
+                          workoutTracker:
+                              WorkoutTracker(exerciseList: exerciseList))));
             }),
       ],
     );
