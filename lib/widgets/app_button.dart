@@ -24,8 +24,7 @@ class AppButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          side: BorderSide(
-              width: 3, color: Theme.of(context).colorScheme.primary)),
+          side: BorderSide(width: 3, color: buttonColor)),
       onPressed: callback,
       child: Text(buttonText,
           style: TextStyle(fontSize: 20, color: buttonTextColor)),
