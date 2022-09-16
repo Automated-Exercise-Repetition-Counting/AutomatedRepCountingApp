@@ -33,7 +33,6 @@ class RestState extends State<RestPage> {
     super.initState();
     startTimer();
     _isRunning = true;
-    widget.workoutTracker!.completedExercise(widget.countedReps);
   }
 
   void startTimer() {
