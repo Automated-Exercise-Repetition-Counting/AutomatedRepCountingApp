@@ -5,8 +5,9 @@ import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise
 import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
 import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/widgets/exercise_carousel.dart';
+import 'package:puioio/widgets/incrementer.dart';
 import 'package:puioio/widgets/title_block.dart';
-import '../models/exercise_index.dart';
+import '../models/index.dart';
 import 'set_up_phone_page.dart';
 
 class QuickStartPage extends StatefulWidget {
@@ -22,16 +23,13 @@ class QuickStartPageState extends State<QuickStartPage> {
     PullUpExercise(),
     PushUpExercise()
   ];
-  var _reps = 1;
-  late final ExerciseIndex _exerciseIndex;
+  final Index _reps = Index();
+  late final Index _exerciseIndex = Index();
 
   @override
   void initState() {
     super.initState();
-    _exerciseIndex = ExerciseIndex();
-    _exerciseIndex.addListener(() {
-      setState(() {});
-    });
+    _reps.set(1);
   }
 
   @override
@@ -59,41 +57,8 @@ class QuickStartPageState extends State<QuickStartPage> {
 
   Widget buildRepSetter() {
     return Column(children: [
-      Text('Select a number of reps',
-          style: Theme.of(context).textTheme.subtitle2),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.remove),
-              iconSize: 30,
-              onPressed: () {
-                setState(() {
-                  if (_reps > 1) {
-                    _reps -= 1;
-                  }
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text('$_reps',
-                  style: const TextStyle(color: Colors.black, fontSize: 44)),
-            ),
-            IconButton(
-              icon: const Icon(Icons.add),
-              iconSize: 30,
-              onPressed: () {
-                setState(() {
-                  _reps += 1;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
+      const Text('Select a number of reps', style: TextStyle(fontSize: 16)),
+      Incrementer(reps: _reps),
       Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: AppButton(
@@ -105,9 +70,8 @@ class QuickStartPageState extends State<QuickStartPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => SetUpPage(
-                        reps: _reps,
-                        exerciseType: _exerciseTypes[
-                            _exerciseIndex.getChosenExerciseIndex],
+                        reps: _reps.index,
+                        exerciseType: _exerciseTypes[_exerciseIndex.index],
                       )),
             );
           },

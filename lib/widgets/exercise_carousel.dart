@@ -1,16 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
-import 'package:puioio/models/exercise_index.dart';
+import 'package:puioio/models/index.dart';
+import 'indicator.dart';
 
 class ExerciseCarousel extends StatefulWidget {
   const ExerciseCarousel({Key? key, required this.exerciseIndex})
       : super(key: key);
-  final ExerciseIndex exerciseIndex;
+  final Index exerciseIndex;
 
   @override
   ExerciseCarouselState createState() => ExerciseCarouselState();
@@ -87,19 +87,9 @@ class ExerciseCarouselState extends State<ExerciseCarousel> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: DotsIndicator(
-          dotsCount: 3,
-          position: widget.exerciseIndex.getChosenExerciseIndex.toDouble(),
-          decorator: DotsDecorator(
-            activeColor: Theme.of(context).colorScheme.primary,
-            size: const Size.square(9.0),
-            activeSize: const Size(18.0, 9.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.only(top: 10),
+          child: Indicator(
+              dotsCount: _exerciseTypes.length, index: widget.exerciseIndex)),
     ]);
     ;
   }
