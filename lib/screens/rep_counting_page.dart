@@ -10,9 +10,8 @@ import 'package:puioio/screens/finished_workout_page.dart';
 import 'package:puioio/screens/rest_page.dart';
 import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
-import 'package:puioio/utils/utils.dart';
 import 'package:puioio/workout_tracker/workout_tracker.dart';
-
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
@@ -34,7 +33,9 @@ class RepCountingPageState extends State<RepCountingPage> {
   late final AutomaticRepCounter _repCounter;
   static const _maxSeconds = 10;
   int _seconds = _maxSeconds;
-  Timer? timer;
+  Timer? countdownTimer;
+  final stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+  late String elapsedTime;
 
   final PoseDetector _poseDetector =
       PoseDetector(options: PoseDetectorOptions());
@@ -46,7 +47,7 @@ class RepCountingPageState extends State<RepCountingPage> {
   OpticalFlowDirection _flowDirection = OpticalFlowDirection.none;
   bool _isInFrame = true;
 
-  bool get _timerActive => timer?.isActive ?? true;
+  bool get _timerActive => countdownTimer?.isActive ?? true;
 
   @override
   void initState() {
@@ -80,23 +81,25 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (_seconds > 1) {
           _seconds--;
         } else {
           stopTimer();
+          stopWatchTimer.onStartTimer();
         }
       });
     });
   }
 
   void stopTimer() {
-    timer?.cancel();
+    countdownTimer?.cancel();
   }
 
   void goBack() {
     stopTimer();
+    stopWatchTimer.onStopTimer();
     Navigator.pop(context);
   }
 
@@ -205,8 +208,34 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
+  Widget buildStopwatch() {
+    return StreamBuilder<int>(
+      stream: stopWatchTimer.rawTime,
+      initialData: 0,
+      builder: (context, snap) {
+        final value = snap.data;
+        final minutes = StopWatchTimer.getDisplayTimeMinute(value!);
+        final seconds = StopWatchTimer.getDisplayTimeSecond(value);
+        final milliseconds = StopWatchTimer.getDisplayTimeMillisecond(value);
+        elapsedTime = '$minutes:$seconds.$milliseconds';
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                elapsedTime,
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void completeExercise() {
     _canProcess = false;
+    stopWatchTimer.onStopTimer();
     widget.workoutTracker?.completedExercise(_repCounter.reps);
     (widget.workoutTracker != null)
         ? (widget.workoutTracker!.nextExercise())
@@ -231,7 +260,8 @@ class RepCountingPageState extends State<RepCountingPage> {
                 builder: (context) => ResultsPage(
                     exerciseName: widget.exerciseType.name,
                     desiredReps: widget.reps,
-                    countedReps: _repCounter.reps)),
+                    countedReps: _repCounter.reps,
+                    timeElapsed: elapsedTime)),
           );
   }
 
@@ -240,7 +270,7 @@ class RepCountingPageState extends State<RepCountingPage> {
       children: <Widget>[
         CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.white.withOpacity(0.6),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: IconButton(
             icon: const Icon(Icons.chevron_left),
             iconSize: 30,
@@ -253,7 +283,7 @@ class RepCountingPageState extends State<RepCountingPage> {
         const Spacer(),
         CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.white.withOpacity(0.6),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: IconButton(
             icon: const Icon(Icons.check),
             iconSize: 25,
@@ -272,7 +302,7 @@ class RepCountingPageState extends State<RepCountingPage> {
         width: 380,
         height: 120,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.6),
+          color: Colors.white.withOpacity(0.8),
           borderRadius: const BorderRadius.all(
             Radius.circular(16.0),
           ),
@@ -288,24 +318,32 @@ class RepCountingPageState extends State<RepCountingPage> {
                   Text(widget.exerciseType.name,
                       style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w300)),
-                  Text(
-                    _repCounter.phase.titleName,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
+                          fontSize: 34,
+                          fontWeight: FontWeight.w400)),
+                  // Text(
+                  //   _repCounter.phase.titleName,
+                  //   style: const TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                  buildStopwatch(),
                 ]),
             const Spacer(),
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(_repCounter.reps.toString(),
-                      style: Theme.of(context).textTheme.headline3),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 45,
+                          fontWeight: FontWeight.w400)),
                   Text('out of ${widget.reps}',
-                      style: Theme.of(context).textTheme.subtitle2),
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600)),
                 ]),
           ]),
         )),

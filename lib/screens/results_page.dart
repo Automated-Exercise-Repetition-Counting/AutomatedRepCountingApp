@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:puioio/icons/custom_icons.dart';
+import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/widgets/circular_progress.dart';
 import 'home_nav.dart';
 
@@ -8,11 +9,13 @@ class ResultsPage extends StatelessWidget {
       {Key? key,
       required this.exerciseName,
       required this.desiredReps,
-      required this.countedReps})
+      required this.countedReps,
+      required this.timeElapsed})
       : super(key: key);
   final String exerciseName;
   final int desiredReps;
   final int countedReps;
+  final String timeElapsed;
 
   @override
   Widget build(BuildContext context) {
@@ -62,24 +65,19 @@ class ResultsPage extends StatelessWidget {
                   countedReps: countedReps,
                   desiredReps: desiredReps,
                   exerciseName: exerciseName),
+              Text(timeElapsed, style: const TextStyle(fontSize: 16)),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      textStyle: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.w500),
-                      padding: const EdgeInsets.fromLTRB(80, 10, 80, 10)),
-                  onPressed: () {
+                child: AppButton(
+                  buttonColor: Theme.of(context).colorScheme.primary,
+                  buttonText: 'Done',
+                  buttonTextColor: Colors.white,
+                  callback: () {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => HomeNav(currentIndex: 1)));
                   },
-                  child: const Text('Done'),
                 ),
               ),
               const SizedBox(height: 20)
