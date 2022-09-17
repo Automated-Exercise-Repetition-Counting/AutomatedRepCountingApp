@@ -218,16 +218,10 @@ class RepCountingPageState extends State<RepCountingPage> {
         final seconds = StopWatchTimer.getDisplayTimeSecond(value);
         final milliseconds = StopWatchTimer.getDisplayTimeMillisecond(value);
         elapsedTime = '$minutes:$seconds.$milliseconds';
-        return Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                elapsedTime,
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ),
-          ],
+        return Text(
+          elapsedTime,
+          style: const TextStyle(
+              fontSize: 24, color: Colors.black, fontWeight: FontWeight.w400),
         );
       },
     );
@@ -319,7 +313,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 34,
-                          fontWeight: FontWeight.w400)),
+                          fontWeight: FontWeight.w500)),
                   // Text(
                   //   _repCounter.phase.titleName,
                   //   style: const TextStyle(
@@ -327,22 +321,23 @@ class RepCountingPageState extends State<RepCountingPage> {
                   //       fontSize: 20,
                   //       fontWeight: FontWeight.bold),
                   // ),
+                  const SizedBox(height: 5),
                   buildStopwatch(),
                 ]),
             const Spacer(),
-            Column(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(_repCounter.reps.toString(),
                       style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 45,
+                          fontSize: 76,
                           fontWeight: FontWeight.w400)),
-                  Text('out of ${widget.reps}',
+                  Text(' / ${widget.reps}',
                       style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
+                          color: Colors.black,
+                          fontSize: 26,
                           fontWeight: FontWeight.w600)),
                 ]),
           ]),
