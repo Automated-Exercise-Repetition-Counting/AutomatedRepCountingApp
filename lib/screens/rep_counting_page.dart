@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lottie/lottie.dart';
+import 'package:puioio/automatic_rep_counter/exercise/state_machines/vertical_exercise_phase.dart';
 import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
@@ -12,6 +13,7 @@ import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
 import 'package:puioio/workout_tracker/workout_tracker.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:steps_indicator/steps_indicator.dart';
 import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
@@ -49,6 +51,9 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   bool get _timerActive => countdownTimer?.isActive ?? true;
 
+  int phaseIndex = 0;
+  List<VerticalExercisePhase> allPhases = [];
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +64,7 @@ class RepCountingPageState extends State<RepCountingPage> {
       }
     });
     startTimer();
+    getPhases();
   }
 
   @override
@@ -103,6 +109,12 @@ class RepCountingPageState extends State<RepCountingPage> {
     Navigator.pop(context);
   }
 
+  void getPhases() {
+    for (var phase in VerticalExercisePhase.values) {
+      allPhases.add(phase);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: () async {
@@ -129,6 +141,11 @@ class RepCountingPageState extends State<RepCountingPage> {
                 children: <Widget>[
                   buildButtons(),
                   const Spacer(),
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Visibility(
+                        visible: _isInFrame, child: buildPhaseIndicator())
+                  ]),
+                  const Spacer(),
                   buildDisplay(),
                 ],
               ),
@@ -137,11 +154,47 @@ class RepCountingPageState extends State<RepCountingPage> {
         ],
       )));
 
+  Widget buildPhaseIndicator() {
+    for (var phase in allPhases) {
+      if (_repCounter.phase == phase) {
+        phase.index == 3 ? phaseIndex = 1 : phaseIndex = phase.index;
+      }
+    }
+
+    return StepsIndicator(
+      selectedStep: phaseIndex,
+      nbSteps: 3,
+      isHorizontal: false,
+      lineLength: 100,
+      undoneLineThickness: 3,
+      doneLineThickness: 5,
+      unselectedStepSize: 20,
+      selectedStepSize: 30,
+      doneStepSize: 20,
+      selectedStepBorderSize: 3,
+      selectedStepColorOut: Colors.white,
+      selectedStepColorIn: Colors.white,
+      selectedStepWidget: CircleAvatar(
+        child: const Icon(
+          Icons.check,
+          color: Colors.white,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      unselectedStepColorIn: Colors.white,
+      unselectedStepColorOut: Colors.white,
+      unselectedStepBorderSize: 3,
+      undoneLineColor: Colors.white,
+      doneLineColor: Theme.of(context).colorScheme.primary,
+      doneStepColor: Theme.of(context).colorScheme.primary,
+    );
+  }
+
   Widget buildTimer() {
     return Visibility(
       visible: _timerActive,
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.4),
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Text('Ready in',
@@ -175,7 +228,7 @@ class RepCountingPageState extends State<RepCountingPage> {
     return Visibility(
       visible: (_repCounter.isPaused || !_isInFrame) && !_timerActive,
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.4),
         body: Center(
             child: SizedBox(
           width: 250,
@@ -186,7 +239,7 @@ class RepCountingPageState extends State<RepCountingPage> {
               Lottie.asset("assets/lottie/scan.json", width: 150)
             ]),
             const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text("We've lost you!",
                     style: TextStyle(
                         fontSize: 36,
@@ -199,7 +252,7 @@ class RepCountingPageState extends State<RepCountingPage> {
               style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                   height: 1.2),
             )),
           ]),
@@ -315,7 +368,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                           fontSize: 34,
                           fontWeight: FontWeight.w500)),
                   // Text(
-                  //   _repCounter.phase.titleName,
+                  // _repCounter.phase.titleName,
                   //   style: const TextStyle(
                   //       color: Colors.black,
                   //       fontSize: 20,
