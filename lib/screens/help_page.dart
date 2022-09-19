@@ -11,9 +11,9 @@ class _HelpPagesState extends State<HelpPages> {
   int pageIndex = 0;
   // import vectors to use in the app
   List<String> images = [
-    "select_workout.svg",
-    "time_workout.svg",
-    "count_reps.svg"
+    "select_workout.png",
+    "time_workouts.png",
+    "count_reps.png"
   ];
   List<String> titles = [
     "Select an exercise and the number of reps from the Quick Start page.",
@@ -24,8 +24,13 @@ class _HelpPagesState extends State<HelpPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          const SizedBox(
+            height: 50,
+          ),
           buildTitle(context),
           buildHelpPage(context, pageIndex),
         ],
@@ -34,23 +39,24 @@ class _HelpPagesState extends State<HelpPages> {
   }
 
   Widget buildTitle(BuildContext context) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            "HOW TO USE",
-            style: Theme.of(context).textTheme.subtitle1,
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-          ),
-          Text(
-            "Pūioio",
-            style: Theme.of(context).textTheme.headline1,
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-          ),
-        ]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Text(
+        "HOW TO USE",
+        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      ),
+      Text(
+        "Pūioio",
+        style: Theme.of(context).textTheme.headline4!.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      ),
+    ]);
   }
 
   Widget buildHelpPage(BuildContext context, int pageIndex) {
@@ -83,7 +89,14 @@ class _HelpPagesState extends State<HelpPages> {
           child: image,
         ),
         // text
-        Text(title, style: Theme.of(context).textTheme.bodyText1),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 50),
       ],
     );
   }
