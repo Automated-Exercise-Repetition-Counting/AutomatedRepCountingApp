@@ -26,21 +26,34 @@ class _HelpPagesState extends State<HelpPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const SizedBox.shrink(),
-          buildTitle(context),
-          buildHelpPage(context),
-          DotsIndicator(
-            dotsCount: 3,
-            position: pageIndex.toDouble(),
-            decorator: DotsDecorator(
-                activeColor: Theme.of(context).colorScheme.onPrimary,
-                color: Theme.of(context).disabledColor),
+      body: Stack(children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const SizedBox.shrink(),
+            buildTitle(context),
+            buildHelpPage(context),
+            DotsIndicator(
+              dotsCount: 3,
+              position: pageIndex.toDouble(),
+              decorator: DotsDecorator(
+                  activeColor: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).disabledColor),
+            ),
+          ],
+        ),
+        Positioned(
+          top: 50,
+          right: 20,
+          child: IconButton(
+            icon: const Icon(Icons.close),
+            color: Theme.of(context).colorScheme.onPrimary,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 
