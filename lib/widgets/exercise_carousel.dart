@@ -101,6 +101,5 @@ class ExerciseCarouselState extends State<ExerciseCarousel> {
         ),
       ),
     ]);
-    ;
   }
 }
