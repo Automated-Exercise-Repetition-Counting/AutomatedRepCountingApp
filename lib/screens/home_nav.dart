@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import '../icons/custom_icons.dart';
+import 'help_page.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 import 'quick_start_page.dart';
@@ -35,21 +36,42 @@ class HomeNavState extends State<HomeNav> {
       appBar: AppBar(
         toolbarHeight: 100,
         flexibleSpace: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          child: Stack(
+            children: [
               Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Icon(
-                    CustomIcons.dumbbell,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 30,
-                  )),
-              Text('Pūioio',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 25))
-            ]),
+                padding: const EdgeInsets.only(top: 40),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(
+                        CustomIcons.dumbbell,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 30,
+                      )),
+                  Text('Pūioio',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 25)),
+                ]),
+              ),
+              Positioned(
+                top: 29,
+                right: 20,
+                child: IconButton(
+                  icon: const Icon(Icons.help),
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HelpPages(),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
