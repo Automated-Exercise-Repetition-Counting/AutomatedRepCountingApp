@@ -15,7 +15,7 @@ class HomeNav extends StatefulWidget {
 
 class HomeNavState extends State<HomeNav> {
   final pages = [
-    HomePage(),
+    const HomePage(),
     const QuickStartPage(),
     const WorkoutPage(),
     const ProfilePage()

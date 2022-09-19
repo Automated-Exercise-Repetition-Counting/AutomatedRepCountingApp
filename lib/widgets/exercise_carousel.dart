@@ -91,6 +91,5 @@ class ExerciseCarouselState extends State<ExerciseCarousel> {
           child: Indicator(
               dotsCount: _exerciseTypes.length, index: widget.exerciseIndex)),
     ]);
-    ;
   }
 }

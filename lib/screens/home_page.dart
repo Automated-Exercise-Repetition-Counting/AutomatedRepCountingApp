@@ -1,10 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
-import 'package:puioio/models/exercise_model.dart';
-import 'package:puioio/screens/start_workout_page.dart';
+import 'package:puioio/widgets/workout_card.dart';
+import 'package:puioio/data/workout_data.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,90 +35,60 @@ class HomePage extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 topRight: Radius.circular(30.0))),
-        child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Kia ora!',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            const Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: Text('Kia ora!',
                     style:
-                        TextStyle(fontSize: 40, fontWeight: FontWeight.w500)),
-                const SizedBox(
-                  height: 20,
-                ),
-                buildWorkout(context),
-                const SizedBox(
-                  height: 150,
-                ),
-              ],
-            )));
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.w500))),
+            const SizedBox(
+              height: 30,
+            ),
+            buildWorkout(context),
+            const SizedBox(
+              height: 150,
+            ),
+          ],
+        ));
   }
 
   Widget buildWorkout(BuildContext context) {
+    final CarouselController _controller = CarouselController();
+    final workoutList = [legDay, pullDay, pushDay];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Recommended Workout',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+        const Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Text('Recommended Workouts',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
         const SizedBox(height: 10),
-        GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => StartWorkoutPage(
-                          workoutTitle: "Leg Day",
-                          exerciseList: legDayExercises)));
-            },
-            child: Container(
-              width: 315,
-              height: 180,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: const BorderRadius.all(Radius.circular(20.0))),
-              child: Stack(
-                children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Leg Day',
-                                    style: TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary)),
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text('3 exercises | 9 sets',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary))),
-                              ]))),
-                  Align(
-                      alignment: Alignment.bottomRight,
-                      child: Image.asset(
-                        "assets/img/Leg-workout.png",
-                        width: 220,
-                      ))
-                ],
-              ),
-            ))
+        CarouselSlider(
+          options: CarouselOptions(
+              height: 220, viewportFraction: 0.9, enableInfiniteScroll: false),
+          items: workoutList
+              .map(
+                (workout) => Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: WorkoutCard(
+                      workoutTitle: workout.workoutTitle,
+                      workoutSubtitle: workout.workoutSubtitle,
+                      exerciseList: workout.exerciseList,
+                      workoutImg: workout.workoutImg,
+                      numberOfStars: workout.numberOfStars),
+                ),
+              )
+              .toList(),
+          carouselController: _controller,
+        ),
       ],
     );
   }
-
-  final legDayExercises = <ExerciseModel>[
-    ExerciseModel(exercise: SquatExercise(), reps: 10),
-    ExerciseModel(exercise: SquatExercise(), reps: 8),
-    ExerciseModel(exercise: SquatExercise(), reps: 5),
-  ];
 }
