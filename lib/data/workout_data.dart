@@ -4,6 +4,8 @@ import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.d
 import 'package:puioio/models/exercise_model.dart';
 import 'package:puioio/models/workout_model.dart';
 
+final List<WorkoutModel> createdWorkouts = [];
+
 final legDay = WorkoutModel(
     workoutTitle: "Leg Day",
     workoutSubtitle: "3 sets | 23 reps",

@@ -3,6 +3,7 @@ import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:puioio/widgets/app_bar.dart';
 import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/widgets/exercise_carousel.dart';
 import 'package:puioio/widgets/incrementer.dart';
@@ -35,9 +36,10 @@ class QuickStartPageState extends State<QuickStartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
-          padding: const EdgeInsets.only(top: 120),
+          padding: const EdgeInsets.only(top: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

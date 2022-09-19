@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:puioio/icons/custom_icons.dart';
 
 class PuioioAppBar {
-  static getAppBar(BuildContext context) {
+  static getAppBar(BuildContext context, Color backgroundColor) {
     return AppBar(
-      toolbarHeight: 100,
+      toolbarHeight: 80,
       flexibleSpace: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 30),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
                 padding: const EdgeInsets.only(right: 10),
@@ -22,7 +22,7 @@ class PuioioAppBar {
           ]),
         ),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor,
       automaticallyImplyLeading: false,
       elevation: 0,
     );

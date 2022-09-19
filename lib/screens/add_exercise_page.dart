@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:puioio/models/exercise_model.dart';
 import 'package:puioio/widgets/exercise_carousel.dart';
 import 'package:puioio/widgets/incrementer.dart';
 import 'package:puioio/widgets/title_block.dart';
@@ -14,6 +19,12 @@ class AddExercisePage extends StatefulWidget {
 class AddExercisePageState extends State<AddExercisePage> {
   final Index _reps = Index();
   late final Index exerciseIndex;
+
+  final List<Exercise> _exerciseTypes = [
+    SquatExercise(),
+    PullUpExercise(),
+    PushUpExercise()
+  ];
 
   @override
   void initState() {
@@ -66,7 +77,11 @@ class AddExercisePageState extends State<AddExercisePage> {
             child: const Text('Save',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                  context,
+                  ExerciseModel(
+                      exercise: _exerciseTypes[exerciseIndex.index],
+                      reps: _reps.index));
             }),
       ],
     );

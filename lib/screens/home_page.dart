@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:puioio/widgets/workout_card.dart';
+import 'package:puioio/widgets/app_bar.dart';
+import 'package:puioio/widgets/home_workout_card.dart';
 import 'package:puioio/data/workout_data.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,13 +10,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(children: [
-              const SizedBox(
-                height: 80,
-              ),
               buildHeader(),
               buildContentBox(context),
             ])));
@@ -77,7 +76,7 @@ class HomePage extends StatelessWidget {
               .map(
                 (workout) => Container(
                   margin: const EdgeInsets.only(right: 10),
-                  child: WorkoutCard(
+                  child: HomeWorkoutCard(
                       workoutTitle: workout.workoutTitle,
                       workoutSubtitle: workout.workoutSubtitle,
                       exerciseList: workout.exerciseList,

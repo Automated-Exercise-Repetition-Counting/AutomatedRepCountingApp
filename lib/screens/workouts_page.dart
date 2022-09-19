@@ -1,25 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/widgets/app_bar.dart';
 import 'package:puioio/widgets/title_block.dart';
+import 'package:puioio/data/workout_data.dart';
+import 'package:puioio/widgets/workout_card_.dart';
 import '../widgets/add_workout_dialog.dart';
 
-class WorkoutPage extends StatelessWidget {
+class WorkoutPage extends StatefulWidget {
   const WorkoutPage({Key? key}) : super(key: key);
+
+  @override
+  WorkoutState createState() => WorkoutState();
+}
+
+class WorkoutState extends State<WorkoutPage> {
+  refresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.only(top: 120),
+              padding: const EdgeInsets.only(top: 10),
               child: Column(children: [
                 const TitleBlock(
                   title: 'Workouts',
                   subtitle: '',
                 ),
-                buildCreateWorkout(context)
-              ]))),
-    );
+                buildCreateWorkout(context),
+                const SizedBox(height: 20),
+                Column(
+                    children: createdWorkouts
+                        .map((e) => Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: WorkoutCard(
+                                notifyParent: refresh,
+                                workout: e,
+                                onTap: () {
+                                  createdWorkouts.remove(e);
+                                  setState(() {});
+                                })))
+                        .toList()),
+                const SizedBox(height: 100)
+              ])),
+        ));
   }
 
   Future<String?> openDialog(BuildContext context) => showDialog(

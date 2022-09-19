@@ -38,7 +38,7 @@ class AddWorkoutDialogState extends State<AddWorkoutDialog> {
   Widget contentBox(context) {
     return SizedBox(
       width: 300,
-      height: 300,
+      height: 280,
       child: Column(
         children: <Widget>[
           Padding(padding: const EdgeInsets.all(5), child: buildButtons()),
