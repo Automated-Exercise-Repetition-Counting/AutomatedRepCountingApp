@@ -99,7 +99,7 @@ class _HelpPagesState extends State<HelpPages> {
 
   Widget getHelpPage(BuildContext context, int pageIndex) {
     Image image = Image.asset(
-      "assets/vectors/${images[pageIndex]}",
+      "assets/img/${images[pageIndex]}",
       fit: BoxFit.contain,
     );
     String title = titles[pageIndex];
