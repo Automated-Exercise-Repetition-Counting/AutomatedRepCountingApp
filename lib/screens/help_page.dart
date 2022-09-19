@@ -1,3 +1,4 @@
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 
 class HelpPages extends StatefulWidget {
@@ -32,7 +33,14 @@ class _HelpPagesState extends State<HelpPages> {
             height: 50,
           ),
           buildTitle(context),
-          buildHelpPage(context, pageIndex),
+          buildHelpPage(context),
+          DotsIndicator(
+            dotsCount: 3,
+            position: pageIndex.toDouble(),
+            decorator: DotsDecorator(
+                activeColor: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).disabledColor),
+          ),
         ],
       ),
     );
@@ -59,8 +67,9 @@ class _HelpPagesState extends State<HelpPages> {
     ]);
   }
 
-  Widget buildHelpPage(BuildContext context, int pageIndex) {
-    return Expanded(
+  Widget buildHelpPage(BuildContext context) {
+    return SizedBox.square(
+      dimension: MediaQuery.of(context).size.width,
       child: PageView(
         onPageChanged: (index) {
           setState(() {
