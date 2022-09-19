@@ -5,7 +5,6 @@ import 'package:puioio/data/workout_data.dart';
 import 'package:puioio/models/workout_model.dart';
 import 'package:puioio/screens/add_exercise_page.dart';
 import 'package:puioio/screens/home_nav.dart';
-import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/widgets/reorderable_list.dart';
 
 class NewWorkoutPage extends StatefulWidget {
@@ -29,7 +28,6 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 100,
         flexibleSpace: SafeArea(
@@ -40,34 +38,35 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
         elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: FloatingActionButton.extended(
+            onPressed: () async {
+              final addedExercise = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddExercisePage()));
+              exerciseList.add(addedExercise);
+              setState(() {});
+              // Add your onPressed code here!
+            },
+            label: const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text("Add Exercise", style: TextStyle(fontSize: 18))),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          )),
       body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-            buildTitle(),
-            const SizedBox(height: 10),
-            exerciseList.isEmpty
-                ? buildEmptyAnimation()
-                : SizedBox(
-                    height: 400,
-                    child: ReorderableExerciseList(exerciseList: exerciseList)),
-            const SizedBox(height: 50),
-            Padding(
-                padding: const EdgeInsets.only(bottom: 70.0),
-                child: AppButton(
-                  buttonText: 'Add Exercise',
-                  buttonTextColor: Colors.white,
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  callback: () async {
-                    final addedExercise = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddExercisePage()));
-                    exerciseList.add(addedExercise);
-                    setState(() {});
-                  },
-                )),
-          ])),
+          child: Column(children: [
+        buildTitle(),
+        const SizedBox(height: 20),
+        exerciseList.isEmpty
+            ? buildEmptyAnimation()
+            : SizedBox(
+                height: 350,
+                child: ReorderableExerciseList(exerciseList: exerciseList)),
+        const SizedBox(height: 50),
+      ])),
     );
   }
 
