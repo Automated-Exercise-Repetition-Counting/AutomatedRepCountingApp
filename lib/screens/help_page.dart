@@ -29,9 +29,7 @@ class _HelpPagesState extends State<HelpPages> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const SizedBox(
-            height: 50,
-          ),
+          const SizedBox.shrink(),
           buildTitle(context),
           buildHelpPage(context),
           DotsIndicator(
@@ -47,24 +45,25 @@ class _HelpPagesState extends State<HelpPages> {
   }
 
   Widget buildTitle(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      Text(
-        "HOW TO USE",
-        style: Theme.of(context).textTheme.subtitle1!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      ),
-      Text(
-        "Pūioio",
-        style: Theme.of(context).textTheme.headline4!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      ),
-    ]);
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "HOW TO USE",
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            "Pūioio",
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ]);
   }
 
   Widget buildHelpPage(BuildContext context) {
@@ -98,14 +97,19 @@ class _HelpPagesState extends State<HelpPages> {
           child: image,
         ),
         // text
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-          textAlign: TextAlign.center,
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.125),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 15,
+                ),
+            textAlign: TextAlign.center,
+          ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
       ],
     );
   }
