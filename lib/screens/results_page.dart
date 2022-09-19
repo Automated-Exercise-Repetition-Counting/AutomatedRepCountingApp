@@ -59,7 +59,7 @@ class ResultsPageState extends State<ResultsPage> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => HomeNav(currentIndex: 1)));
+                        builder: (context) => const HomeNav(currentIndex: 1)));
               },
               child: const Text('Done'),
             ),

@@ -28,9 +28,7 @@ class MyAppState extends State<MyApp> {
               primary: const Color.fromRGBO(81, 191, 192, 1),
               background: const Color.fromARGB(255, 240, 240, 240)),
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: HomeNav(
-        currentIndex: 0,
-      ),
+      home: const HomeNav(),
       debugShowCheckedModeBanner: false,
     );
   }
