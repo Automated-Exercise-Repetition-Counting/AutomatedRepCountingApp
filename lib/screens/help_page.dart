@@ -23,11 +23,13 @@ class _HelpPagesState extends State<HelpPages> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildTitle(context),
-        buildHelpPage(context, pageIndex),
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          buildTitle(context),
+          buildHelpPage(context, pageIndex),
+        ],
+      ),
     );
   }
 
@@ -40,11 +42,13 @@ class _HelpPagesState extends State<HelpPages> {
             "HOW TO USE",
             style: Theme.of(context).textTheme.subtitle1,
             textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
           ),
           Text(
             "Pūioio",
             style: Theme.of(context).textTheme.headline1,
             textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
           ),
         ]);
   }
