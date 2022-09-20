@@ -73,14 +73,15 @@ class HomePage extends StatelessWidget {
           options: CarouselOptions(
               height: 200, viewportFraction: 0.8, enableInfiniteScroll: false),
           items: workoutList
-              .map(
-                (workout) => HomeWorkoutCard(
-                    workoutTitle: workout.workoutTitle,
-                    workoutSubtitle: workout.workoutSubtitle,
-                    exerciseList: workout.exerciseList,
-                    workoutImg: workout.workoutImg,
-                    numberOfStars: workout.numberOfStars),
-              )
+              .map((workout) => Container(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: HomeWorkoutCard(
+                        workoutTitle: workout.workoutTitle,
+                        workoutSubtitle: workout.workoutSubtitle,
+                        exerciseList: workout.exerciseList,
+                        workoutImg: workout.workoutImg,
+                        numberOfStars: workout.numberOfStars),
+                  ))
               .toList(),
           carouselController: _controller,
         ),

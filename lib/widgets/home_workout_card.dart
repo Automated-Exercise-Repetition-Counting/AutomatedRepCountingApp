@@ -50,7 +50,7 @@ class HomeWorkoutCard extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
                               child: Text(workoutTitle,
                                   style: TextStyle(
-                                      fontSize: 32,
+                                      fontSize: 28,
                                       fontWeight: FontWeight.w500,
                                       color: Theme.of(context)
                                           .colorScheme

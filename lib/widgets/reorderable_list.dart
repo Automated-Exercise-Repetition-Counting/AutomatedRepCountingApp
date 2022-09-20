@@ -39,7 +39,7 @@ class ReorderableExerciseListState extends State<ReorderableExerciseList> {
               ),
               child: Card(
                 color: Colors.transparent,
-                elevation: 1,
+                elevation: 0,
                 child: ListTile(
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
