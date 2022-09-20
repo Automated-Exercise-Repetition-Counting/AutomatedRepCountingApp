@@ -42,12 +42,12 @@ class HomePage extends StatelessWidget {
               height: 30,
             ),
             const Padding(
-                padding: EdgeInsets.only(left: 30),
+                padding: EdgeInsets.only(left: 50),
                 child: Text('Kia ora!',
                     style:
                         TextStyle(fontSize: 40, fontWeight: FontWeight.w500))),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             buildWorkout(context),
             const SizedBox(
@@ -65,24 +65,21 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-            padding: EdgeInsets.only(left: 30),
+            padding: EdgeInsets.only(left: 50),
             child: Text('Recommended Workouts',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
         const SizedBox(height: 10),
         CarouselSlider(
           options: CarouselOptions(
-              height: 220, viewportFraction: 0.9, enableInfiniteScroll: false),
+              height: 200, viewportFraction: 0.8, enableInfiniteScroll: false),
           items: workoutList
               .map(
-                (workout) => Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: HomeWorkoutCard(
-                      workoutTitle: workout.workoutTitle,
-                      workoutSubtitle: workout.workoutSubtitle,
-                      exerciseList: workout.exerciseList,
-                      workoutImg: workout.workoutImg,
-                      numberOfStars: workout.numberOfStars),
-                ),
+                (workout) => HomeWorkoutCard(
+                    workoutTitle: workout.workoutTitle,
+                    workoutSubtitle: workout.workoutSubtitle,
+                    exerciseList: workout.exerciseList,
+                    workoutImg: workout.workoutImg,
+                    numberOfStars: workout.numberOfStars),
               )
               .toList(),
           carouselController: _controller,
