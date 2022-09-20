@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:puioio/icons/custom_icons.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:puioio/screens/rep_counting_page.dart';
+import 'package:puioio/widgets/app_bar.dart';
+import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/workout_tracker/workout_tracker.dart';
 
 class RestPage extends StatefulWidget {
@@ -43,14 +44,7 @@ class RestState extends State<RestPage> {
           _seconds--;
         } else {
           stopTimer();
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => RepCountingPage(
-                        exerciseType: widget.workoutTracker!.exercise,
-                        reps: widget.workoutTracker!.reps,
-                        workoutTracker: widget.workoutTracker,
-                      )));
+          nextExercise();
         }
       });
     });
@@ -63,42 +57,37 @@ class RestState extends State<RestPage> {
     timer?.cancel();
   }
 
+  void nextExercise() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RepCountingPage(
+                  exerciseType: widget.workoutTracker!.exercise,
+                  reps: widget.workoutTracker!.reps,
+                  workoutTracker: widget.workoutTracker,
+                )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        appBar: AppBar(
-          toolbarHeight: 100,
-          flexibleSpace: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Icon(
-                      CustomIcons.dumbbell,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 30,
-                    )),
-                Text('Pūioio',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 25))
-              ]),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-        ),
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Padding(
+            padding: const EdgeInsets.all(15),
+            child: AppButton(
+                buttonText: 'Skip Rest',
+                buttonTextColor: Colors.white,
+                buttonColor: Theme.of(context).colorScheme.primary,
+                callback: nextExercise)),
         body:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           const SizedBox(
             height: 20,
           ),
           buildTimer(),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           Expanded(child: buildNextContent())
         ]));
   }
@@ -166,7 +155,7 @@ class RestState extends State<RestPage> {
                             fontSize: 20, fontWeight: FontWeight.w500))),
               ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             LinearPercentIndicator(
               animation: true,
               lineHeight: 20.0,

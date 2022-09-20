@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
               height: 200, viewportFraction: 0.8, enableInfiniteScroll: false),
           items: workoutList
               .map((workout) => Container(
-                    padding: const EdgeInsets.only(right: 5),
+                    padding: const EdgeInsets.only(right: 8),
                     child: HomeWorkoutCard(
                         workoutTitle: workout.workoutTitle,
                         workoutSubtitle: workout.workoutSubtitle,

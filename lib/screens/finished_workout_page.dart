@@ -39,7 +39,7 @@ class FinishedWorkoutState extends State<FinishedWorkoutPage> {
         body: Center(
             child: Stack(children: [
           Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 40),
               child: PageView.builder(
                 controller: _controller,
                 onPageChanged: (index) {

@@ -5,6 +5,7 @@ import 'package:puioio/data/workout_data.dart';
 import 'package:puioio/models/workout_model.dart';
 import 'package:puioio/screens/add_exercise_page.dart';
 import 'package:puioio/screens/home_nav.dart';
+import 'package:puioio/widgets/app_button.dart';
 import 'package:puioio/widgets/reorderable_list.dart';
 
 class NewWorkoutPage extends StatefulWidget {
@@ -41,8 +42,8 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: FloatingActionButton.extended(
-            onPressed: () async {
+          child: AppButton(
+            callback: () async {
               final addedExercise = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -50,10 +51,9 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
               exerciseList.add(addedExercise);
               setState(() {});
             },
-            label: const Padding(
-                padding: EdgeInsets.all(20),
-                child: Text("Add Exercise", style: TextStyle(fontSize: 18))),
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            buttonText: "Add Exercise",
+            buttonTextColor: Colors.white,
+            buttonColor: Theme.of(context).colorScheme.primary,
           )),
       body: Center(
           child: Column(children: [

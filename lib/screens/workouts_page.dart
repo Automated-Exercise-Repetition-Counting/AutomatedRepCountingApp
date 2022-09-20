@@ -24,7 +24,7 @@ class WorkoutState extends State<WorkoutPage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
               child: Column(children: [
                 const TitleBlock(
                   title: 'Workouts',
