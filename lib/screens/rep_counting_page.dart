@@ -141,10 +141,7 @@ class RepCountingPageState extends State<RepCountingPage> {
                 children: <Widget>[
                   buildButtons(),
                   const Spacer(),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Visibility(
-                        visible: _isInFrame, child: buildPhaseIndicator())
-                  ]),
+                  buildPhaseIndicator(),
                   const Spacer(),
                   buildDisplay(),
                 ],
@@ -161,33 +158,36 @@ class RepCountingPageState extends State<RepCountingPage> {
       }
     }
 
-    return StepsIndicator(
-      selectedStep: phaseIndex,
-      nbSteps: 3,
-      isHorizontal: false,
-      lineLength: 100,
-      undoneLineThickness: 3,
-      doneLineThickness: 5,
-      unselectedStepSize: 20,
-      selectedStepSize: 30,
-      doneStepSize: 20,
-      selectedStepBorderSize: 3,
-      selectedStepColorOut: Colors.white,
-      selectedStepColorIn: Colors.white,
-      selectedStepWidget: CircleAvatar(
-        child: const Icon(
-          Icons.check,
-          color: Colors.white,
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      unselectedStepColorIn: Colors.white,
-      unselectedStepColorOut: Colors.white,
-      unselectedStepBorderSize: 3,
-      undoneLineColor: Colors.white,
-      doneLineColor: Theme.of(context).colorScheme.primary,
-      doneStepColor: Theme.of(context).colorScheme.primary,
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Visibility(
+          visible: _isInFrame,
+          child: StepsIndicator(
+              selectedStep: phaseIndex,
+              nbSteps: 3,
+              isHorizontal: false,
+              lineLength: 100,
+              undoneLineThickness: 3,
+              doneLineThickness: 5,
+              unselectedStepSize: 20,
+              selectedStepSize: 30,
+              doneStepSize: 20,
+              selectedStepBorderSize: 3,
+              selectedStepColorOut: Colors.white,
+              selectedStepColorIn: Colors.white,
+              selectedStepWidget: CircleAvatar(
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+              unselectedStepColorIn: Colors.white,
+              unselectedStepColorOut: Colors.white,
+              unselectedStepBorderSize: 3,
+              undoneLineColor: Colors.white,
+              doneLineColor: Colors.white,
+              doneStepColor: Colors.white))
+    ]);
   }
 
   Widget buildTimer() {
