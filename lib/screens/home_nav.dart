@@ -7,13 +7,14 @@ import 'quick_start_page.dart';
 import 'workouts_page.dart';
 
 class HomeNav extends StatefulWidget {
-  HomeNav({Key? key, required this.currentIndex}) : super(key: key);
-  int currentIndex;
+  const HomeNav({Key? key, this.currentIndex = 0}) : super(key: key);
+  final int currentIndex;
   @override
   HomeNavState createState() => HomeNavState();
 }
 
 class HomeNavState extends State<HomeNav> {
+  late int _currentIndex;
   final pages = [
     const HomePage(),
     const QuickStartPage(),
@@ -22,12 +23,18 @@ class HomeNavState extends State<HomeNav> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.currentIndex;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
       backgroundColor: Colors.transparent,
-      body: IndexedStack(index: widget.currentIndex, children: pages),
+      body: IndexedStack(index: _currentIndex, children: pages),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
@@ -39,14 +46,13 @@ class HomeNavState extends State<HomeNav> {
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: BottomNavyBar(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          selectedIndex: widget.currentIndex,
+          selectedIndex: _currentIndex,
           showElevation: false,
           containerHeight: 65,
           backgroundColor: Theme.of(context).colorScheme.primary,
           itemCornerRadius: 24,
           curve: Curves.ease,
-          onItemSelected: (index) =>
-              setState(() => widget.currentIndex = index),
+          onItemSelected: (index) => setState(() => _currentIndex = index),
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
               icon: const Padding(

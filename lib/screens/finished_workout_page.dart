@@ -35,7 +35,7 @@ class FinishedWorkoutState extends State<FinishedWorkoutPage> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent, false),
         body: Center(
             child: Stack(children: [
           Padding(

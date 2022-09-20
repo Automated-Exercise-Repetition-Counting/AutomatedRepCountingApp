@@ -72,7 +72,7 @@ class RestState extends State<RestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent, false),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
             padding: const EdgeInsets.all(15),

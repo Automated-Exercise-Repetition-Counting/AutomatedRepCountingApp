@@ -36,7 +36,7 @@ class QuickStartPageState extends State<QuickStartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+      appBar: PuioioAppBar.getAppBar(context, Colors.transparent, true),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
           padding: const EdgeInsets.only(top: 10),

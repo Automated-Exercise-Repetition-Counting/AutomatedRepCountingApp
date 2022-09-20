@@ -62,7 +62,7 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
         exerciseList.isEmpty
             ? buildEmptyAnimation()
             : SizedBox(
-                height: 350,
+                height: 380,
                 child: ReorderableExerciseList(exerciseList: exerciseList)),
         const SizedBox(height: 50),
       ])),

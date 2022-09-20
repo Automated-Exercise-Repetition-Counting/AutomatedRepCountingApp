@@ -20,7 +20,7 @@ class WorkoutState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent, true),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           child: Padding(

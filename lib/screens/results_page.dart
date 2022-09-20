@@ -20,7 +20,7 @@ class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PuioioAppBar.getAppBar(context, Colors.transparent),
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent, false),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -52,7 +52,8 @@ class ResultsPage extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => HomeNav(currentIndex: 1)));
+                            builder: (context) =>
+                                const HomeNav(currentIndex: 1)));
                   },
                 ),
               ),
