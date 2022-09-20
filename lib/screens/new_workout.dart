@@ -49,7 +49,6 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
                       builder: (context) => const AddExercisePage()));
               exerciseList.add(addedExercise);
               setState(() {});
-              // Add your onPressed code here!
             },
             label: const Padding(
                 padding: EdgeInsets.all(20),

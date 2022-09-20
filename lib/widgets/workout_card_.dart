@@ -36,7 +36,7 @@ class WorkoutCardState extends State<WorkoutCard> {
                       exerciseList: workout.exerciseList)));
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 50),
           child: Card(
               color: Colors.transparent,
               elevation: 0,
