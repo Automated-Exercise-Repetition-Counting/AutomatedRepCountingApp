@@ -61,7 +61,7 @@ class ExerciseCarouselState extends State<ExerciseCarousel> {
                         child: Image.asset('assets/img/${item.name}.png',
                             width: double.infinity,
                             height: 250,
-                            fit: BoxFit.fill),
+                            fit: BoxFit.cover),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
