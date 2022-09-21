@@ -58,8 +58,10 @@ class ExerciseCarouselState extends State<ExerciseCarousel> {
                             stops: [0, 0.2, 0.5, 1],
                           ),
                         ),
-                        child: (Image.asset('assets/img/${item.name}.png',
-                            width: 250, height: 250, fit: BoxFit.fill)),
+                        child: Image.asset('assets/img/${item.name}.png',
+                            width: double.infinity,
+                            height: 250,
+                            fit: BoxFit.fill),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
