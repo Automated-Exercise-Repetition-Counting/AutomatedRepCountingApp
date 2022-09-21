@@ -41,7 +41,7 @@ flutter:
     - assets/
     - assets/img/
     - assets/lottie/
-    - assets/test/PushUps/Pushup1/
+    # - assets/test/PushUps/Pushup1/
     - assets/test/PushUps/Pushup2/
     - assets/test/PushUps/Pushup3/
     - assets/test/PushUps/Pushup4/
@@ -50,16 +50,16 @@ flutter:
     - assets/test/PushUps/Pushup7/
     - assets/test/PushUps/Pushup8/
     - assets/test/PushUps/Pushup9/
-    - assets/test/PushUps/Pushup10/
-    - assets/test/PushUps/Pushup11/
-    - assets/test/PushUps/Pushup12/
-    - assets/test/PushUps/Pushup13/
-    - assets/test/PushUps/Pushup14/
-    - assets/test/PushUps/Pushup15/
-    - assets/test/PushUps/Pushup16/
-    - assets/test/PushUps/Pushup17/
-    - assets/test/PushUps/Pushup18/
-    - assets/test/PushUps/Pushup19/
+    # - assets/test/PushUps/Pushup10/
+    # - assets/test/PushUps/Pushup11/
+    # # - assets/test/PushUps/Pushup12/
+    # - assets/test/PushUps/Pushup13/
+    # - assets/test/PushUps/Pushup14/
+    # - assets/test/PushUps/Pushup15/
+    # - assets/test/PushUps/Pushup16/
+    # - assets/test/PushUps/Pushup17/
+    # - assets/test/PushUps/Pushup18/
+    # - assets/test/PushUps/Pushup19/
     - assets/test/PushUps/Pushup20/
     - assets/test/PushUps/Pushup21/
     - assets/test/PushUps/Pushup22/
@@ -68,7 +68,7 @@ flutter:
     - assets/test/PushUps/Pushup25/
     - assets/test/PushUps/Pushup26/
     - assets/test/PushUps/Pushup27/
-    - assets/test/PushUps/Pushup28/
+    # - assets/test/PushUps/Pushup28/
     - assets/test/PushUps/Pushup29/
     - assets/test/PushUps/Pushup30/
 
