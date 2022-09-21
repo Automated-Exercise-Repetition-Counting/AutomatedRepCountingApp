@@ -3,22 +3,29 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:puioio/automatic_rep_counter/exercise/state_machines/vertical_exercise_phase.dart';
 import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/screens/finished_workout_page.dart';
+import 'package:puioio/screens/rest_page.dart';
 import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
-import 'package:puioio/utils/utils.dart';
-
+import 'package:puioio/workout_tracker/workout_tracker.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:steps_indicator/steps_indicator.dart';
 import 'results_page.dart';
 
 class RepCountingPage extends StatefulWidget {
-  const RepCountingPage(
-      {Key? key, required this.reps, required this.exerciseType})
+  RepCountingPage(
+      {Key? key,
+      required this.reps,
+      required this.exerciseType,
+      this.workoutTracker})
       : super(key: key);
   final int reps;
   final Exercise exerciseType;
+  WorkoutTracker? workoutTracker;
 
   @override
   RepCountingPageState createState() => RepCountingPageState();
@@ -28,7 +35,9 @@ class RepCountingPageState extends State<RepCountingPage> {
   late final AutomaticRepCounter _repCounter;
   static const _maxSeconds = 10;
   int _seconds = _maxSeconds;
-  Timer? timer;
+  Timer? countdownTimer;
+  final stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+  late String elapsedTime;
 
   final PoseDetector _poseDetector =
       PoseDetector(options: PoseDetectorOptions());
@@ -40,7 +49,10 @@ class RepCountingPageState extends State<RepCountingPage> {
   OpticalFlowDirection _flowDirection = OpticalFlowDirection.none;
   bool _isInFrame = true;
 
-  bool get _timerActive => timer?.isActive ?? true;
+  bool get _timerActive => countdownTimer?.isActive ?? true;
+
+  int phaseIndex = 0;
+  List<VerticalExercisePhase> allPhases = [];
 
   @override
   void initState() {
@@ -52,6 +64,7 @@ class RepCountingPageState extends State<RepCountingPage> {
       }
     });
     startTimer();
+    getPhases();
   }
 
   @override
@@ -74,12 +87,13 @@ class RepCountingPageState extends State<RepCountingPage> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (_seconds > 1) {
           _seconds--;
         } else {
           stopTimer();
+          stopWatchTimer.onStartTimer();
         }
       });
     });
@@ -87,13 +101,20 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   void stopTimer() {
     setState(() {
-      timer?.cancel();
+      countdownTimer?.cancel();
     });
   }
 
   void goBack() {
     stopTimer();
+    stopWatchTimer.onStopTimer();
     Navigator.pop(context);
+  }
+
+  void getPhases() {
+    for (var phase in VerticalExercisePhase.values) {
+      allPhases.add(phase);
+    }
   }
 
   @override
@@ -123,6 +144,8 @@ class RepCountingPageState extends State<RepCountingPage> {
                     children: <Widget>[
                       buildButtons(),
                       const Spacer(),
+                      buildPhaseIndicator(),
+                      const Spacer(),
                       buildDisplay(),
                     ],
                   ),
@@ -130,9 +153,48 @@ class RepCountingPageState extends State<RepCountingPage> {
         ],
       )));
 
+  Widget buildPhaseIndicator() {
+    for (var phase in allPhases) {
+      if (_repCounter.phase == phase) {
+        phase.index == 3 ? phaseIndex = 1 : phaseIndex = phase.index;
+      }
+    }
+
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Visibility(
+          visible: _isInFrame,
+          child: StepsIndicator(
+              selectedStep: phaseIndex,
+              nbSteps: 3,
+              isHorizontal: false,
+              lineLength: 100,
+              undoneLineThickness: 3,
+              doneLineThickness: 5,
+              unselectedStepSize: 20,
+              selectedStepSize: 30,
+              doneStepSize: 20,
+              selectedStepBorderSize: 3,
+              selectedStepColorOut: Colors.white,
+              selectedStepColorIn: Colors.white,
+              selectedStepWidget: CircleAvatar(
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+              unselectedStepColorIn: Colors.white,
+              unselectedStepColorOut: Colors.white,
+              unselectedStepBorderSize: 3,
+              undoneLineColor: Colors.white,
+              doneLineColor: Colors.white,
+              doneStepColor: Colors.white))
+    ]);
+  }
+
   Widget buildTimer() {
     return Container(
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Text('Ready in',
@@ -162,7 +224,7 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   Widget buildCountingPaused() {
     return Container(
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
       child: Center(
           child: SizedBox(
         width: 250,
@@ -173,7 +235,7 @@ class RepCountingPageState extends State<RepCountingPage> {
             Lottie.asset("assets/lottie/scan.json", width: 150)
           ]),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Text("We've lost you!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -188,7 +250,7 @@ class RepCountingPageState extends State<RepCountingPage> {
             style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w400,
                 height: 1.2),
           )),
         ]),
@@ -196,16 +258,55 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
+  Widget buildStopwatch() {
+    return StreamBuilder<int>(
+      stream: stopWatchTimer.rawTime,
+      initialData: 0,
+      builder: (context, snap) {
+        final value = snap.data;
+        final minutes = StopWatchTimer.getDisplayTimeMinute(value!);
+        final seconds = StopWatchTimer.getDisplayTimeSecond(value);
+        final milliseconds = StopWatchTimer.getDisplayTimeMillisecond(value);
+        elapsedTime = '$minutes:$seconds.$milliseconds';
+        return Text(
+          elapsedTime,
+          style: const TextStyle(
+              fontSize: 24, color: Colors.black, fontWeight: FontWeight.w400),
+        );
+      },
+    );
+  }
+
   void completeExercise() {
     _canProcess = false;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ResultsPage(
-              exerciseName: widget.exerciseType.name,
-              desiredReps: widget.reps,
-              countedReps: _repCounter.reps)),
-    );
+    stopWatchTimer.onStopTimer();
+    widget.workoutTracker?.completedExercise(_repCounter.reps);
+    (widget.workoutTracker != null)
+        ? (widget.workoutTracker!.nextExercise())
+            ? Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RestPage(
+                        exerciseName: widget.exerciseType.name,
+                        desiredReps: widget.reps,
+                        countedReps: _repCounter.reps,
+                        workoutTracker: widget.workoutTracker)),
+              )
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FinishedWorkoutPage(
+                          workoutTracker: widget.workoutTracker,
+                        )))
+        : Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ResultsPage(
+                    exerciseName: widget.exerciseType.name,
+                    desiredReps: widget.reps,
+                    countedReps: _repCounter.reps,
+                    timeElapsed: elapsedTime)),
+          );
   }
 
   Widget buildButtons() {
@@ -213,7 +314,7 @@ class RepCountingPageState extends State<RepCountingPage> {
       children: <Widget>[
         CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.white.withOpacity(0.6),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: IconButton(
             icon: const Icon(Icons.chevron_left),
             iconSize: 30,
@@ -226,7 +327,7 @@ class RepCountingPageState extends State<RepCountingPage> {
         const Spacer(),
         CircleAvatar(
           radius: 25,
-          backgroundColor: Colors.white.withOpacity(0.6),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: IconButton(
             icon: const Icon(Icons.check),
             iconSize: 25,
@@ -245,7 +346,7 @@ class RepCountingPageState extends State<RepCountingPage> {
         width: 380,
         height: 120,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.6),
+          color: Colors.white.withOpacity(0.8),
           borderRadius: const BorderRadius.all(
             Radius.circular(16.0),
           ),
@@ -261,24 +362,33 @@ class RepCountingPageState extends State<RepCountingPage> {
                   Text(widget.exerciseType.name,
                       style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w300)),
-                  Text(
-                    _repCounter.phase.titleName,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
+                          fontSize: 34,
+                          fontWeight: FontWeight.w500)),
+                  // Text(
+                  // _repCounter.phase.titleName,
+                  //   style: const TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                  const SizedBox(height: 5),
+                  buildStopwatch(),
                 ]),
             const Spacer(),
-            Column(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(_repCounter.reps.toString(),
-                      style: Theme.of(context).textTheme.headline3),
-                  Text('out of ${widget.reps}',
-                      style: Theme.of(context).textTheme.subtitle2),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 76,
+                          fontWeight: FontWeight.w400)),
+                  Text(' / ${widget.reps}',
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w600)),
                 ]),
           ]),
         )),

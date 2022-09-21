@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
-import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
-import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
 import 'package:puioio/models/exercise_model.dart';
+import 'package:puioio/data/workout_data.dart';
+import 'package:puioio/models/workout_model.dart';
 import 'package:puioio/screens/add_exercise_page.dart';
+import 'package:puioio/screens/home_nav.dart';
 import 'package:puioio/widgets/app_button.dart';
-// import 'package:puioio/widgets/reorderable_list.dart';
-
-import 'home_nav.dart';
+import 'package:puioio/widgets/reorderable_list.dart';
 
 class NewWorkoutPage extends StatefulWidget {
   const NewWorkoutPage({Key? key, required this.workoutTitle})
@@ -25,23 +23,12 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
   @override
   void initState() {
     super.initState();
-    exerciseList = <ExerciseModel>[
-      ExerciseModel(exercise: SquatExercise(), reps: 10),
-      ExerciseModel(exercise: PullUpExercise(), reps: 10),
-      ExerciseModel(exercise: PushUpExercise(), reps: 10),
-      ExerciseModel(exercise: SquatExercise(), reps: 10),
-      ExerciseModel(exercise: PullUpExercise(), reps: 10),
-      ExerciseModel(exercise: PushUpExercise(), reps: 10),
-      ExerciseModel(exercise: SquatExercise(), reps: 10),
-      ExerciseModel(exercise: PullUpExercise(), reps: 10),
-      ExerciseModel(exercise: PushUpExercise(), reps: 10)
-    ];
+    exerciseList = <ExerciseModel>[];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 100,
         flexibleSpace: SafeArea(
@@ -52,30 +39,33 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
         elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: AppButton(
+            callback: () async {
+              final addedExercise = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddExercisePage()));
+              exerciseList.add(addedExercise);
+              setState(() {});
+            },
+            buttonText: "Add Exercise",
+            buttonTextColor: Colors.white,
+            buttonColor: Theme.of(context).colorScheme.primary,
+          )),
       body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-            buildTitle(),
-            buildEmptyAnimation(),
-            const SizedBox(height: 50),
-            // SizedBox(
-            //     height: 300,
-            //     child: ReorderableExerciseList(exerciseList: exerciseList)),
-            Padding(
-                padding: const EdgeInsets.only(bottom: 70.0),
-                child: AppButton(
-                  buttonText: 'Add Exercise',
-                  buttonTextColor: Colors.white,
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  callback: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddExercisePage()));
-                  },
-                )),
-          ])),
+          child: Column(children: [
+        buildTitle(),
+        const SizedBox(height: 20),
+        exerciseList.isEmpty
+            ? buildEmptyAnimation()
+            : SizedBox(
+                height: 380,
+                child: ReorderableExerciseList(exerciseList: exerciseList)),
+        const SizedBox(height: 50),
+      ])),
     );
   }
 
@@ -101,13 +91,13 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
   }
 
   Widget buildAppBar() {
+    int count = 0;
     return Row(
       children: <Widget>[
         TextButton(
             child: const Text('Cancel',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              int count = 0;
               Navigator.popUntil(context, (route) {
                 return count++ == 2;
               });
@@ -117,10 +107,63 @@ class NewWorkoutPageState extends State<NewWorkoutPage> {
             child: const Text('Save',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              int count = 0;
-              Navigator.popUntil(context, (route) {
-                return count++ == 2;
-              });
+              if (exerciseList.isEmpty) {
+                showDialog(
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 50, horizontal: 10),
+                              child: const Text(
+                                "You need to add an exercise to save a workout",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 30,
+                                //color: primaryColor,
+                                child: Text(
+                                  "OKAY",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    context: context);
+              } else {
+                createdWorkouts.add(WorkoutModel(
+                    workoutTitle: widget.workoutTitle,
+                    workoutSubtitle: "${exerciseList.length} sets",
+                    exerciseList: exerciseList));
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeNav(currentIndex: 2)),
+                );
+              }
             }),
       ],
     );
