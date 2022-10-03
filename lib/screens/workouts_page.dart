@@ -1,39 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/widgets/app_bar.dart';
 import 'package:puioio/widgets/title_block.dart';
+import 'package:puioio/data/workout_data.dart';
+import 'package:puioio/widgets/workout_card_.dart';
 import '../widgets/add_workout_dialog.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({Key? key}) : super(key: key);
 
   @override
-  WorkoutPageState createState() => WorkoutPageState();
+  WorkoutState createState() => WorkoutState();
 }
 
-class WorkoutPageState extends State<WorkoutPage> {
-  Future<String?> openDialog() => showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AddWorkoutDialog();
-      });
+class WorkoutState extends State<WorkoutPage> {
+  refresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
+        appBar: PuioioAppBar.getAppBar(context, Colors.transparent, true),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
               child: Column(children: [
                 const TitleBlock(
                   title: 'Workouts',
                   subtitle: '',
                 ),
-                buildCreateWorkout()
-              ]))),
-    );
+                buildCreateWorkout(context),
+                const SizedBox(height: 20),
+                Column(
+                    children: createdWorkouts
+                        .map((e) => Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: WorkoutCard(
+                                notifyParent: refresh,
+                                workout: e,
+                                onTap: () {
+                                  createdWorkouts.remove(e);
+                                  setState(() {});
+                                })))
+                        .toList()),
+                const SizedBox(height: 100)
+              ])),
+        ));
   }
 
-  Widget buildCreateWorkout() {
+  Future<String?> openDialog(BuildContext context) => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddWorkoutDialog();
+      });
+
+  Widget buildCreateWorkout(BuildContext context) {
     return Stack(children: [
       Center(
           child: Padding(
@@ -65,7 +87,7 @@ class WorkoutPageState extends State<WorkoutPage> {
                       iconSize: 30,
                       color: Colors.white,
                       onPressed: () async {
-                        openDialog();
+                        openDialog(context);
                       },
                     ))),
               ))),

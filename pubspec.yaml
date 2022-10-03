@@ -18,13 +18,17 @@ dependencies:
   path_provider: ^2.0.11
   google_mlkit_pose_detection: ^0.4.0
   carousel_slider: ^4.1.1
-  syncfusion_flutter_gauges: ^20.2.46
   bottom_navy_bar: ^6.0.0
   dots_indicator: ^2.1.0
   lottie: ^1.4.2
   native_opencv:
     path: native_opencv
   vector_math: ^2.1.2
+  flutter_launcher_icons: ^0.10.0
+  percent_indicator: ^4.2.2
+  stop_watch_timer: ^2.0.0
+  steps_indicator: ^1.3.0
+  flutter_slidable: ^2.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -41,36 +45,41 @@ flutter:
     - assets/
     - assets/img/
     - assets/lottie/
-    # - assets/test/PushUps/Pushup1/
-    - assets/test/PushUps/Pushup2/
-    - assets/test/PushUps/Pushup3/
-    - assets/test/PushUps/Pushup4/
-    - assets/test/PushUps/Pushup5/
-    - assets/test/PushUps/Pushup6/
-    - assets/test/PushUps/Pushup7/
-    - assets/test/PushUps/Pushup8/
-    - assets/test/PushUps/Pushup9/
-    # - assets/test/PushUps/Pushup10/
-    # - assets/test/PushUps/Pushup11/
-    # # - assets/test/PushUps/Pushup12/
-    # - assets/test/PushUps/Pushup13/
-    # - assets/test/PushUps/Pushup14/
-    # - assets/test/PushUps/Pushup15/
-    # - assets/test/PushUps/Pushup16/
-    # - assets/test/PushUps/Pushup17/
-    # - assets/test/PushUps/Pushup18/
-    # - assets/test/PushUps/Pushup19/
-    - assets/test/PushUps/Pushup20/
-    - assets/test/PushUps/Pushup21/
-    - assets/test/PushUps/Pushup22/
-    - assets/test/PushUps/Pushup23/
-    - assets/test/PushUps/Pushup24/
-    - assets/test/PushUps/Pushup25/
-    - assets/test/PushUps/Pushup26/
-    - assets/test/PushUps/Pushup27/
-    # - assets/test/PushUps/Pushup28/
-    - assets/test/PushUps/Pushup29/
-    - assets/test/PushUps/Pushup30/
+    - assets/test/PullUps/PullUp1/
+    - assets/test/PullUps/PullUp2/
+    - assets/test/PullUps/PullUp3/
+    - assets/test/PullUps/PullUp4/
+    - assets/test/PullUps/PullUp5/
+    - assets/test/PullUps/PullUp6/
+    - assets/test/PullUps/PullUp7/
+    - assets/test/PullUps/PullUp8/
+    - assets/test/PullUps/PullUp9/
+    - assets/test/PullUps/PullUp10/
+    # - assets/test/PullUps/PullUp11/
+    # - assets/test/PullUps/PullUp12/
+    # - assets/test/PullUps/PullUp13/
+    # - assets/test/PullUps/PullUp14/
+    # - assets/test/PullUps/PullUp15/
+    # - assets/test/PullUps/PullUp16/
+    # - assets/test/PullUps/PullUp17/
+    # - assets/test/PullUps/PullUp18/
+    # - assets/test/PullUps/PullUp19/
+    # - assets/test/PullUps/PullUp20/
+    # - assets/test/PullUps/PullUp21/
+    # - assets/test/PullUps/PullUp22/
+    # - assets/test/PullUps/PullUp23/
+    # - assets/test/PullUps/PullUp24/
+    # - assets/test/PullUps/PullUp25/
+    # - assets/test/PullUps/PullUp26/
+    # - assets/test/PullUps/PullUp27/
+    # - assets/test/PullUps/PullUp28/
+    # - assets/test/PullUps/PullUp29/
+    # - assets/test/PullUps/PullUp30/
 
 
 
+
+flutter_icons:
+  image_path: "assets/app_icon/App-icon.png"
+  android: true
+  ios: true

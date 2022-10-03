@@ -28,7 +28,7 @@ class _HelpPagesState extends State<HelpPages> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Stack(children: [
         Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const SizedBox.shrink(),
             buildTitle(context),
@@ -65,14 +65,14 @@ class _HelpPagesState extends State<HelpPages> {
           Text(
             "HOW TO USE",
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
             textAlign: TextAlign.center,
           ),
           Text(
             "Pūioio",
             style: Theme.of(context).textTheme.headline4!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Colors.white,
                 ),
             textAlign: TextAlign.center,
           ),

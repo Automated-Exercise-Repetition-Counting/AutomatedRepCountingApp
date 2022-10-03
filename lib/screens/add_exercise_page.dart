@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/pull_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/push_up_exercise.dart';
+import 'package:puioio/automatic_rep_counter/exercise/exercises/squat_exercise.dart';
+import 'package:puioio/models/exercise_model.dart';
 import 'package:puioio/widgets/exercise_carousel.dart';
+import 'package:puioio/widgets/incrementer.dart';
 import 'package:puioio/widgets/title_block.dart';
-
-import '../models/exercise_index.dart';
+import '../models/index.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({Key? key}) : super(key: key);
@@ -12,13 +17,20 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class AddExercisePageState extends State<AddExercisePage> {
-  var _reps = 1;
-  late final ExerciseIndex exerciseIndex;
+  final Index _reps = Index();
+  late final Index exerciseIndex;
+
+  final List<Exercise> _exerciseTypes = [
+    SquatExercise(),
+    PullUpExercise(),
+    PushUpExercise()
+  ];
 
   @override
   void initState() {
     super.initState();
-    exerciseIndex = ExerciseIndex();
+    _reps.set(1);
+    exerciseIndex = Index();
     exerciseIndex.addListener(() {
       setState(() {});
     });
@@ -65,7 +77,11 @@ class AddExercisePageState extends State<AddExercisePage> {
             child: const Text('Save',
                 style: TextStyle(color: Colors.grey, fontSize: 20)),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                  context,
+                  ExerciseModel(
+                      exercise: _exerciseTypes[exerciseIndex.index],
+                      reps: _reps.index));
             }),
       ],
     );
@@ -73,41 +89,8 @@ class AddExercisePageState extends State<AddExercisePage> {
 
   Widget buildRepSetter() {
     return Column(children: [
-      Text('Select a number of reps',
-          style: Theme.of(context).textTheme.subtitle2),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.remove),
-              iconSize: 30,
-              onPressed: () {
-                setState(() {
-                  if (_reps > 1) {
-                    _reps -= 1;
-                  }
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text('$_reps',
-                  style: const TextStyle(color: Colors.black, fontSize: 44)),
-            ),
-            IconButton(
-              icon: const Icon(Icons.add),
-              iconSize: 30,
-              onPressed: () {
-                setState(() {
-                  _reps += 1;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
+      const Text('Select a number of reps', style: TextStyle(fontSize: 16)),
+      Incrementer(reps: _reps),
       const Padding(
         padding: EdgeInsets.only(bottom: 30),
       ),
