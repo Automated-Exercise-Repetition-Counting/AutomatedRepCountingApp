@@ -410,11 +410,11 @@ class RepCountingPageState extends State<RepCountingPage> {
     } else {
       _customPaint = null;
     }
-    if (cameraImage != null) {
-      OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
-          cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
-      _flowDirection = newDirection;
-    }
+    // if (cameraImage != null) {
+    //   OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
+    //       cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
+    //   _flowDirection = newDirection;
+    // }
 
     if (mounted) {
       if (!_timerActive) {
