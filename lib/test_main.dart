@@ -101,11 +101,12 @@ Future<void> main() async {
     print("FOR VIDEO: " + videos[i]);
     await testVideo(pathPrefix + videos[i], frames[i], directory);
   }
+  print("DONE!");
 }
 
 Future<void> testVideo(String path, int numImages, Directory directory) async {
   AutomaticRepCounter _repCounter =
-      AutomaticRepCounter(exercise: SquatExercise());
+      AutomaticRepCounter(exercise: PushUpExercise());
 
   for (int i = 0; i < numImages; i++) {
     // if (i % 50 == 0) {
