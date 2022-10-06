@@ -15,6 +15,7 @@ import 'package:puioio/workout_tracker/workout_tracker.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:steps_indicator/steps_indicator.dart';
 import 'results_page.dart';
+import 'package:wakelock/wakelock.dart';
 
 class RepCountingPage extends StatefulWidget {
   RepCountingPage(
@@ -65,24 +66,16 @@ class RepCountingPageState extends State<RepCountingPage> {
     });
     startTimer();
     getPhases();
-  }
-
-  @override
-  void deactivate() {
-    _canProcess = false;
-    super.deactivate();
-  }
-
-  @override
-  void activate() {
-    _canProcess = true;
-    super.activate();
+    // The following line will enable the Android and iOS wakelock.
+    Wakelock.enable();
   }
 
   @override
   void dispose() {
     _canProcess = false;
     _poseDetector.close();
+    // The next line disables the wakelock again.
+    Wakelock.disable();
     super.dispose();
   }
 
