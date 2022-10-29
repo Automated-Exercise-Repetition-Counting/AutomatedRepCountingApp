@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -50,6 +51,7 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   int phaseIndex = 0;
   List<VerticalExercisePhase> allPhases = [];
+  Queue<Pose> poses_for_avg = Queue();
 
   @override
   void initState() {
@@ -385,15 +387,77 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
+  Pose calculateWeightedAvg(List<Pose> poses) {
+    // performed weighted average of keypoints
+    double totalWeight = 0;
+    Map<PoseLandmarkType, double> xMap = {};
+    Map<PoseLandmarkType, double> yMap = {};
+    Map<PoseLandmarkType, double> zMap = {};
+    Map<PoseLandmarkType, double> likelihoodMap = {};
+
+    for (int i = 0; i < poses.length; i++) {
+      Pose pose = poses[i];
+      double weight = i + 1;
+      totalWeight += weight;
+
+      for (PoseLandmarkType landmarkType in PoseLandmarkType.values) {
+        double likelihood = pose.landmarks[landmarkType]!.likelihood;
+        likelihoodMap[landmarkType] =
+            (likelihoodMap[landmarkType] ?? 0) + (likelihood * weight);
+
+        xMap[landmarkType] = (xMap[landmarkType] ?? 0) +
+            pose.landmarks[landmarkType]!.x * weight * likelihood;
+        yMap[landmarkType] = (yMap[landmarkType] ?? 0) +
+            pose.landmarks[landmarkType]!.y * weight * likelihood;
+        zMap[landmarkType] = (zMap[landmarkType] ?? 0) +
+            pose.landmarks[landmarkType]!.z * weight * likelihood;
+        likelihoodMap[landmarkType] = (likelihoodMap[landmarkType] ?? 0) +
+            pose.landmarks[landmarkType]!.likelihood * weight;
+      }
+    }
+
+    Map<PoseLandmarkType, PoseLandmark> landmarks = {};
+    for (PoseLandmarkType landmarkType in PoseLandmarkType.values) {
+      xMap[landmarkType] =
+          xMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
+      yMap[landmarkType] =
+          yMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
+      zMap[landmarkType] =
+          zMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
+      likelihoodMap[landmarkType] = likelihoodMap[landmarkType]! / totalWeight;
+
+      landmarks[landmarkType] = PoseLandmark(
+          type: landmarkType,
+          x: xMap[landmarkType]!,
+          y: yMap[landmarkType]!,
+          z: zMap[landmarkType]!,
+          likelihood: likelihoodMap[landmarkType]!);
+    }
+
+    return Pose(landmarks: landmarks);
+  }
+
   Future<void> processImage(
       InputImage inputImage, CameraImage? cameraImage) async {
     if (!_canProcess) return;
     if (_isBusy) return;
     _isBusy = true;
     final poses = await _poseDetector.processImage(inputImage);
+
+    poses_for_avg.addAll(poses);
+    while (poses_for_avg.length > 10) {
+      poses_for_avg.removeFirst();
+    }
+
+    final List<Pose> weightedAvgPoses = [
+      calculateWeightedAvg(poses_for_avg.toList())
+    ];
+
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
-      final painter = PosePainter(poses, inputImage.inputImageData!.size,
+      final painter = PosePainter(
+          weightedAvgPoses,
+          inputImage.inputImageData!.size,
           inputImage.inputImageData!.imageRotation);
       _customPaint = CustomPaint(painter: painter);
     } else {
@@ -403,15 +467,15 @@ class RepCountingPageState extends State<RepCountingPage> {
     if (mounted) {
       if (!_timerActive) {
         _repCounter.updateRepCount(
-          poses,
+          weightedAvgPoses,
         );
 
         if (_repCounter.reps >= widget.reps) {
           completeExercise();
         }
       }
-      if (poses.isNotEmpty) {
-        _isInFrame = _repCounter.isInFrame(poses.first);
+      if (weightedAvgPoses.isNotEmpty) {
+        _isInFrame = _repCounter.isInFrame(weightedAvgPoses.first);
       }
       setState(() {});
     }
