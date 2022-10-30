@@ -51,7 +51,7 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   int phaseIndex = 0;
   List<VerticalExercisePhase> allPhases = [];
-  Queue<Pose> poses_for_avg = Queue();
+  Pose? previousAvg;
 
   @override
   void initState() {
@@ -387,54 +387,33 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
-  Pose calculateWeightedAvg(List<Pose> poses) {
+  double ema(double prevEMA, double current) {
+    return (current * (2 / 11)) + (prevEMA * (1 - (2 / 11)));
+  }
+
+  Pose calculateWeightedAvg(Pose pose) {
     // performed weighted average of keypoints
-    double totalWeight = 0;
-    Map<PoseLandmarkType, double> xMap = {};
-    Map<PoseLandmarkType, double> yMap = {};
-    Map<PoseLandmarkType, double> zMap = {};
-    Map<PoseLandmarkType, double> likelihoodMap = {};
 
-    for (int i = 0; i < poses.length; i++) {
-      Pose pose = poses[i];
-      double weight = i + 1;
-      totalWeight += weight;
-
-      for (PoseLandmarkType landmarkType in PoseLandmarkType.values) {
-        double likelihood = pose.landmarks[landmarkType]!.likelihood;
-        likelihoodMap[landmarkType] =
-            (likelihoodMap[landmarkType] ?? 0) + (likelihood * weight);
-
-        xMap[landmarkType] = (xMap[landmarkType] ?? 0) +
-            pose.landmarks[landmarkType]!.x * weight * likelihood;
-        yMap[landmarkType] = (yMap[landmarkType] ?? 0) +
-            pose.landmarks[landmarkType]!.y * weight * likelihood;
-        zMap[landmarkType] = (zMap[landmarkType] ?? 0) +
-            pose.landmarks[landmarkType]!.z * weight * likelihood;
-        likelihoodMap[landmarkType] = (likelihoodMap[landmarkType] ?? 0) +
-            pose.landmarks[landmarkType]!.likelihood * weight;
-      }
+    if (previousAvg == null) {
+      previousAvg = pose;
+      return pose;
     }
 
     Map<PoseLandmarkType, PoseLandmark> landmarks = {};
     for (PoseLandmarkType landmarkType in PoseLandmarkType.values) {
-      xMap[landmarkType] =
-          xMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
-      yMap[landmarkType] =
-          yMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
-      zMap[landmarkType] =
-          zMap[landmarkType]! / totalWeight / likelihoodMap[landmarkType]!;
-      likelihoodMap[landmarkType] = likelihoodMap[landmarkType]! / totalWeight;
-
       landmarks[landmarkType] = PoseLandmark(
+          x: ema(pose.landmarks[landmarkType]!.x,
+              previousAvg!.landmarks[landmarkType]!.x),
+          y: ema(pose.landmarks[landmarkType]!.y,
+              previousAvg!.landmarks[landmarkType]!.y),
+          z: ema(pose.landmarks[landmarkType]!.z,
+              previousAvg!.landmarks[landmarkType]!.z),
           type: landmarkType,
-          x: xMap[landmarkType]!,
-          y: yMap[landmarkType]!,
-          z: zMap[landmarkType]!,
-          likelihood: likelihoodMap[landmarkType]!);
+          likelihood: pose.landmarks[landmarkType]!.likelihood);
     }
-
-    return Pose(landmarks: landmarks);
+    Pose weightedPose = Pose(landmarks: landmarks);
+    previousAvg = weightedPose;
+    return weightedPose;
   }
 
   Future<void> processImage(
@@ -443,15 +422,11 @@ class RepCountingPageState extends State<RepCountingPage> {
     if (_isBusy) return;
     _isBusy = true;
     final poses = await _poseDetector.processImage(inputImage);
+    final List<Pose> weightedAvgPoses = [];
 
-    poses_for_avg.addAll(poses);
-    while (poses_for_avg.length > 10) {
-      poses_for_avg.removeFirst();
+    for (Pose pose in poses) {
+      weightedAvgPoses.add(calculateWeightedAvg(pose));
     }
-
-    final List<Pose> weightedAvgPoses = [
-      calculateWeightedAvg(poses_for_avg.toList())
-    ];
 
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
