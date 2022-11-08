@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lottie/lottie.dart';
 import 'package:puioio/automatic_rep_counter/exercise/state_machines/vertical_exercise_phase.dart';
-import 'package:puioio/automatic_rep_counter/optical_flow/optical_flow_calculator.dart';
 import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'package:puioio/screens/finished_workout_page.dart';
@@ -45,9 +44,6 @@ class RepCountingPageState extends State<RepCountingPage> {
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
-  final OpticalFlowCalculator _opticalFlowCalculator =
-      OpticalFlowCalculator(yOnly: true);
-  OpticalFlowDirection _flowDirection = OpticalFlowDirection.none;
   bool _isInFrame = true;
 
   bool get _timerActive => countdownTimer?.isActive ?? true;
@@ -403,17 +399,11 @@ class RepCountingPageState extends State<RepCountingPage> {
     } else {
       _customPaint = null;
     }
-    if (cameraImage != null) {
-      OpticalFlowDirection newDirection = _opticalFlowCalculator.determineFlow(
-          cameraImage, inputImage.inputImageData!.imageRotation.rawValue);
-      _flowDirection = newDirection;
-    }
 
     if (mounted) {
       if (!_timerActive) {
         _repCounter.updateRepCount(
           poses,
-          _flowDirection,
         );
 
         if (_repCounter.reps >= widget.reps) {

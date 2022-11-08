@@ -2,7 +2,6 @@ import 'movement_phase.dart';
 import 'state_machines/exercise_state_machine.dart';
 import 'state_machines/state_machine_result.dart';
 import 'thresholds/thresholds.dart';
-import '../optical_flow/optical_flow_calculator.dart';
 
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
@@ -25,16 +24,10 @@ abstract class Exercise {
     }
   }
 
-  StateMachineResult updateStateMachinePose(
-      Pose pose, OpticalFlowDirection flowDirection) {
+  StateMachineResult updateStateMachinePose(Pose pose) {
     MovementPhase latestPhase = _thresholds.getMovementPhase(pose);
     StateMachineResult result =
         _exerciseStateMachine.getStateMachineResultPD(latestPhase);
-    _exerciseStateMachine.opticalFlowDirection = flowDirection;
     return result;
-  }
-
-  StateMachineResult updateStateMachineOF(OpticalFlowDirection direction) {
-    return _exerciseStateMachine.getStateMachineResultOF(direction);
   }
 }

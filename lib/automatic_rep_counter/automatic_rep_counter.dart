@@ -5,7 +5,6 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'exercise/state_machines/state_machine_result.dart';
 import 'exercise/exercise.dart';
-import 'optical_flow/optical_flow_calculator.dart';
 import 'hyperparameters.dart';
 
 class AutomaticRepCounter extends ChangeNotifier {
@@ -20,31 +19,26 @@ class AutomaticRepCounter extends ChangeNotifier {
   bool isInFrame(Pose pose) => exercise.checkInFrame(pose);
   bool get isPaused => _isPaused;
 
-  StateMachineResult updateStateMachine(
-      Pose pose, OpticalFlowDirection flowDirection) {
+  StateMachineResult updateStateMachine(Pose pose) {
     StateMachineResult result =
         StateMachineResult(hasChangedPhase: false, hasCompletedRep: false);
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     try {
-      result = exercise.updateStateMachinePose(pose, flowDirection);
+      result = exercise.updateStateMachinePose(pose);
       _lastPDTime = currentTime;
       _isPaused = false;
     } on StateError {
       if (currentTime - (_lastPDTime ?? 0) > noPoseDetectionTimeout) {
         _isPaused = true;
         notifyListeners();
-      } else {
-        if (flowDirection != OpticalFlowDirection.none) {
-          result = exercise.updateStateMachineOF(flowDirection);
-        }
       }
     }
     return result;
   }
 
-  void updateRepCount(List<Pose> poses, OpticalFlowDirection flowDirection) {
+  void updateRepCount(List<Pose> poses) {
     for (Pose pose in poses) {
-      StateMachineResult result = updateStateMachine(pose, flowDirection);
+      StateMachineResult result = updateStateMachine(pose);
 
       if (result.hasChangedPhase) {
         if (result.hasCompletedRep) {
