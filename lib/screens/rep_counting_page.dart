@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -9,6 +8,7 @@ import 'package:puioio/automatic_rep_counter/automatic_rep_counter.dart';
 import 'package:puioio/automatic_rep_counter/exercise/exercise.dart';
 import 'package:puioio/screens/finished_workout_page.dart';
 import 'package:puioio/screens/rest_page.dart';
+import 'package:puioio/utils/average_calculator.dart';
 import 'package:puioio/vision_detector_views/camera_view.dart';
 import 'package:puioio/vision_detector_views/painters/pose_painter.dart';
 import 'package:puioio/workout_tracker/workout_tracker.dart';
@@ -51,7 +51,9 @@ class RepCountingPageState extends State<RepCountingPage> {
 
   int phaseIndex = 0;
   List<VerticalExercisePhase> allPhases = [];
-  Pose? previousAvg;
+  final Map<PoseLandmarkType, PoseAverageCalculator> _poseAverageCalculators = {
+    for (var e in PoseLandmarkType.values) e: PoseAverageCalculator()
+  };
 
   @override
   void initState() {
@@ -387,32 +389,14 @@ class RepCountingPageState extends State<RepCountingPage> {
     );
   }
 
-  double ema(double prevEMA, double current) {
-    return (current * (2 / 11)) + (prevEMA * (1 - (2 / 11)));
-  }
-
   Pose calculateWeightedAvg(Pose pose) {
     // performed weighted average of keypoints
-
-    if (previousAvg == null) {
-      previousAvg = pose;
-      return pose;
-    }
-
     Map<PoseLandmarkType, PoseLandmark> landmarks = {};
     for (PoseLandmarkType landmarkType in PoseLandmarkType.values) {
-      landmarks[landmarkType] = PoseLandmark(
-          x: ema(pose.landmarks[landmarkType]!.x,
-              previousAvg!.landmarks[landmarkType]!.x),
-          y: ema(pose.landmarks[landmarkType]!.y,
-              previousAvg!.landmarks[landmarkType]!.y),
-          z: ema(pose.landmarks[landmarkType]!.z,
-              previousAvg!.landmarks[landmarkType]!.z),
-          type: landmarkType,
-          likelihood: pose.landmarks[landmarkType]!.likelihood);
+      landmarks[landmarkType] = _poseAverageCalculators[landmarkType]!
+          .getAverageLandmark(pose.landmarks[landmarkType]!);
     }
     Pose weightedPose = Pose(landmarks: landmarks);
-    previousAvg = weightedPose;
     return weightedPose;
   }
 
